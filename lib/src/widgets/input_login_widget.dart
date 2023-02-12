@@ -1,0 +1,76 @@
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+class InputLoginWidget extends StatelessWidget {
+  final IconData icon;
+  final String placeholder;
+  final TextEditingController textController;
+  final TextInputType keyboardype;
+  final bool isPassword;
+  const InputLoginWidget({
+    super.key,
+    required this.icon,
+    required this.placeholder,
+    required this.textController,
+    this.keyboardype = TextInputType.text,
+    this.isPassword = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          margin: EdgeInsets.only(right: 40, left: 40, top: 10),
+          height: 50,
+          width: double.infinity,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.blue.withOpacity(0.1),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 4), // changes position of shadow
+                ),
+              ]),
+          child: Container(
+            margin: EdgeInsets.only(left: 85, right: 15),
+            child: TextField(
+              controller: textController,
+              autocorrect: false,
+              obscureText: isPassword,
+              keyboardType: keyboardype,
+              decoration: InputDecoration(
+                  focusedBorder: InputBorder.none,
+                  border: InputBorder.none,
+                  hintText: placeholder),
+            ),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 40),
+          width: 70,
+          height: 70,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(100),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.blue.withOpacity(0.1),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 4), // changes position of shadow
+                ),
+              ]),
+          child: Icon(
+            icon,
+            size: 30,
+            color: Colors.blue[300],
+          ),
+        ),
+      ],
+    );
+  }
+}
