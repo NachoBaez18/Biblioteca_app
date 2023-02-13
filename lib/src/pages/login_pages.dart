@@ -9,17 +9,18 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: const [
               _LogoInicio(),
-              SizedBox(
-                height: 50,
-              ),
+              SizedBox(height: 50),
               _FormLogin(),
-              _ButtonAccess()
+              SizedBox(height: 50),
+              _ButtonAccess(),
+              SizedBox(height: 150),
             ],
           ),
         ),
@@ -35,7 +36,12 @@ class _ButtonAccess extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return ButtonRedondeado(
+      color: Colors.blue.shade300,
+      onpreess: () {},
+      texto: 'Acceder',
+      alto: 40,
+    );
   }
 }
 
@@ -85,18 +91,26 @@ class _LogoInicio extends StatelessWidget {
     return Center(
       child: Container(
         width: 180,
-        margin: const EdgeInsets.all(20),
+        margin: const EdgeInsets.only(top: 150),
         child: Column(
           children: const [
             Image(
               image: AssetImage('assets/logoUninorte_azul.png'),
             ),
             Text(
+              'Biblioteca',
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Color(0xfff7c112),
+                  fontStyle: FontStyle.normal),
+            ),
+            SizedBox(height: 30),
+            Text(
               'Bienvenido',
               style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black38,
-                  fontStyle: FontStyle.italic),
+                fontSize: 25,
+                color: Colors.black54,
+              ),
             )
           ],
         ),
