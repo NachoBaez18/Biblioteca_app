@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class FilterListProvider with ChangeNotifier {
   int _filter = 0;
-  late AnimationController _controllerRotar;
-  int _rotar = 0;
+  bool _fadeInLeft = true;
+  bool _rotate = false;
 
   int get filter => _filter;
 
@@ -12,16 +12,18 @@ class FilterListProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  AnimationController get controllerRotar => _controllerRotar;
+  bool get fadeInLeft => _fadeInLeft;
 
-  set controllerRotar(AnimationController value) {
-    _controllerRotar = value;
-  }
-
-  int get rotar => _rotar;
-
-  set rotar(int value) {
-    _rotar = value;
+  set fadeInLeft(bool value){
+    _fadeInLeft = value;
     notifyListeners();
-  }
+  } 
+
+bool get rotate => _rotate;
+
+  set rotate(bool value){
+    _rotate = value;
+    notifyListeners();
+  } 
+
 }

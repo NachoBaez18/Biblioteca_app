@@ -32,16 +32,22 @@ class BooksListPage extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, 'login');
+        },
+      ),
     );
   }
 }
 
 class _ListBooks extends StatelessWidget {
   final List<String> items;
-  const _ListBooks({super.key, required this.items});
+  const _ListBooks({required this.items});
 
   @override
   Widget build(BuildContext context) {
+    final animationFade = Provider.of<FilterListProvider>(context);
     return Expanded(
         child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -49,46 +55,66 @@ class _ListBooks extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           itemCount: items.length,
           itemBuilder: (_, int i) {
-            return FadeInLeft(
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 30),
-                      height: 250,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 30,
-                    top: 25,
-                    child: RotateAnimation(
-                      controller: (controller) {
-                        Provider.of<FilterListProvider>(context, listen: false)
-                            .controllerRotar = controller;
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        height: 200,
-                        width: 170,
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            );
+            return animationFade.fadeInLeft
+                ? FadeInLeft(child: const _ListBooksinAnimation())
+                : const _ListBooksinAnimation();
           }),
     ));
+  }
+}
+
+class _ListBooksinAnimation extends StatelessWidget {
+  const _ListBooksinAnimation({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final animation = Provider.of<FilterListProvider>(context);
+    return Stack(
+      children: [
+        Align(
+          alignment: Alignment.centerRight,
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+            height: 250,
+            width: 200,
+            decoration: BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
+        Positioned(
+          left: 30,
+          top: 25,
+          child: animation.rotate
+              ? const RotateAnimation(
+                  child: _CardSecuandario(),
+                )
+              : const _CardSecuandario(),
+        )
+      ],
+    );
+  }
+}
+
+class _CardSecuandario extends StatelessWidget {
+  const _CardSecuandario({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      height: 200,
+      width: 170,
+      decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
   }
 }
 
@@ -102,6 +128,7 @@ class _ListFilterMaterial extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final filter = Provider.of<FilterListProvider>(context,listen: false);
     return Container(
       height: 30,
       margin: const EdgeInsets.only(left: 10),
@@ -110,7 +137,14 @@ class _ListFilterMaterial extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           itemCount: items.length,
           itemBuilder: (_, int i) {
-            return _ItemFilter(items[i], i);
+           
+            return GestureDetector(
+              onTap: () {
+              filter.filter = i;
+              filter.rotate = true;
+              },
+              child: _ItemFilter(items[i], i),
+            );
           }),
     );
   }
@@ -130,28 +164,22 @@ class _ItemFilter extends StatelessWidget {
     final filteSelected = Provider.of<FilterListProvider>(context);
     return Align(
       alignment: Alignment.topLeft,
-      child: GestureDetector(
-        onTap: () {
-          filteSelected.controllerRotar.forward(from: 0.0);
-          filteSelected.filter = i;
-        },
-        child: Container(
-          margin: const EdgeInsets.only(left: 10),
-          height: 30,
-          width: item.length * 10.0,
-          decoration: BoxDecoration(
-            color:
-                filteSelected.filter == i ? Colors.blue[300] : Colors.grey[300],
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Center(
-              child: Text(
-            item,
-            style: TextStyle(
-                color: filteSelected.filter == i ? Colors.white : Colors.grey,
-                fontWeight: FontWeight.bold),
-          )),
+      child: Container(
+        margin: const EdgeInsets.only(left: 10),
+        height: 30,
+        width: item.length * 10.0,
+        decoration: BoxDecoration(
+          color:
+              filteSelected.filter == i ? Colors.blue[300] : Colors.grey[300],
+          borderRadius: BorderRadius.circular(30),
         ),
+        child: Center(
+            child: Text(
+          item,
+          style: TextStyle(
+              color: filteSelected.filter == i ? Colors.white : Colors.grey,
+              fontWeight: FontWeight.bold),
+        )),
       ),
     );
   }

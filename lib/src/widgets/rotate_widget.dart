@@ -1,13 +1,15 @@
+
+import 'package:biblioteca_app/src/provider/ListView/filter_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 
 class RotateAnimation extends StatefulWidget {
   final Widget child;
-  final Function(AnimationController)? controller;
   final Duration duration;
   const RotateAnimation(
       {super.key,
       required this.child,
-      this.controller,
       this.duration = const Duration(milliseconds: 500)});
 
   @override
@@ -16,7 +18,7 @@ class RotateAnimation extends StatefulWidget {
 
 class _RotateAnimationState extends State<RotateAnimation>
     with SingleTickerProviderStateMixin {
-  AnimationController? controller;
+ late AnimationController controller;
 
   late Animation rotate;
 
@@ -25,25 +27,24 @@ class _RotateAnimationState extends State<RotateAnimation>
     controller = AnimationController(vsync: this, duration: widget.duration);
 
     rotate = Tween(begin: 0.0, end: 3.1)
-        .animate(CurvedAnimation(parent: controller!, curve: Curves.easeOut));
-
-    if (widget.controller is Function) {
-      widget.controller!(controller!);
-    }
+        .animate(CurvedAnimation(parent: controller, curve: Curves.easeOut));
     super.initState();
-  }
 
+
+  }
   @override
   void dispose() {
+    controller.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
+        controller.forward(from: 0.0);
     return AnimatedBuilder(
         animation: rotate,
         child: widget.child,
         builder: (BuildContext context, Widget? child) {
+          Provider.of<FilterListProvider>(context);
           return Transform(
             alignment: Alignment.center,
             transform: Matrix4.identity()

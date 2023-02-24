@@ -25,6 +25,9 @@ class LoginPage extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        Navigator.pushReplacementNamed(context, 'books_list');
+      }),
     );
   }
 }
