@@ -34,7 +34,7 @@ class ButtonRedondeado extends StatelessWidget {
             ]),
         child: MaterialButton(
           onPressed: () {},
-          shape: StadiumBorder(),
+          shape: const StadiumBorder(),
           elevation: 5,
           highlightElevation: 10,
           child: Center(

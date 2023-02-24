@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class InputLoginWidget extends StatelessWidget {
   final IconData icon;
@@ -21,7 +20,7 @@ class InputLoginWidget extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          margin: EdgeInsets.only(right: 40, left: 40, top: 10),
+          margin: const EdgeInsets.only(right: 40, left: 40, top: 10),
           height: 50,
           width: double.infinity,
           decoration: BoxDecoration(
@@ -32,11 +31,11 @@ class InputLoginWidget extends StatelessWidget {
                   color: Colors.blue.withOpacity(0.1),
                   spreadRadius: 5,
                   blurRadius: 7,
-                  offset: Offset(0, 4), // changes position of shadow
+                  offset: const Offset(0, 4), // changes position of shadow
                 ),
               ]),
           child: Container(
-            margin: EdgeInsets.only(left: 85, right: 15),
+            margin: const EdgeInsets.only(left: 85, right: 15),
             child: TextField(
               controller: textController,
               autocorrect: false,
@@ -50,7 +49,7 @@ class InputLoginWidget extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(left: 40),
+          margin: const EdgeInsets.only(left: 40),
           width: 70,
           height: 70,
           decoration: BoxDecoration(
@@ -61,7 +60,7 @@ class InputLoginWidget extends StatelessWidget {
                   color: Colors.blue.withOpacity(0.1),
                   spreadRadius: 5,
                   blurRadius: 7,
-                  offset: Offset(0, 4), // changes position of shadow
+                  offset: const Offset(0, 4), // changes position of shadow
                 ),
               ]),
           child: Icon(

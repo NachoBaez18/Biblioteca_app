@@ -1,3 +1,4 @@
+import 'package:biblioteca_app/src/provider/ListView/filter_provider.dart';
 import 'package:biblioteca_app/src/provider/loading_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -14,9 +15,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => LoadingProvider(),
-        )
+        ChangeNotifierProvider(create: (_) => LoadingProvider()),
+        ChangeNotifierProvider(create: (_) => FilterListProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
