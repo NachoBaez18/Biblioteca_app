@@ -49,9 +49,14 @@ class SearchBook extends SearchDelegate {
         physics: const BouncingScrollPhysics(),
         itemCount: matchQuery.length,
         itemBuilder: (context, i) {
-          return ListTile(
-            leading: const Image(image: AssetImage('assets/image2.jpg')),
-            title: Text(matchQuery[i]),
+          return GestureDetector(
+            onTap: () {
+              Navigator.pushReplacementNamed(context, 'book_detail');
+            },
+            child: ListTile(
+              leading: const Image(image: AssetImage('assets/image1.jpg')),
+              title: Text(matchQuery[i]),
+            ),
           );
         },
       );
@@ -77,9 +82,14 @@ class SearchBook extends SearchDelegate {
         physics: const BouncingScrollPhysics(),
         itemCount: matchQuery.length,
         itemBuilder: (context, i) {
-          return ListTile(
-            leading: const Image(image: AssetImage('assets/image2.jpg')),
-            title: Text(matchQuery[i]),
+          return GestureDetector(
+            onTap: () {
+              Navigator.pushReplacementNamed(context, 'book_detail');
+            },
+            child: ListTile(
+              leading: const Image(image: AssetImage('assets/image1.jpg')),
+              title: Text(matchQuery[i]),
+            ),
           );
         },
       );
