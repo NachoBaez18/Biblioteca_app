@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:biblioteca_app/src/provider/ListView/filter_provider.dart';
 import 'package:biblioteca_app/src/widgets/rotate_widget.dart';
+import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -52,7 +53,7 @@ class _ListBooks extends StatelessWidget {
           itemCount: items.length,
           itemBuilder: (_, int i) {
             return FadeInLeft(
-              child: const _ListBooksinAnimation(),
+              child: _ListBooksinAnimation(i),
             );
           }),
     ));
@@ -60,7 +61,9 @@ class _ListBooks extends StatelessWidget {
 }
 
 class _ListBooksinAnimation extends StatelessWidget {
-  const _ListBooksinAnimation({
+  final int i;
+  const _ListBooksinAnimation(
+    this.i, {
     super.key,
   });
 
@@ -69,9 +72,9 @@ class _ListBooksinAnimation extends StatelessWidget {
     final animation = Provider.of<FilterListProvider>(context);
     return Stack(
       children: [
-        const Align(
+        Align(
           alignment: Alignment.centerRight,
-          child: _CardPrimario(),
+          child: _CardPrimario(i),
         ),
         Positioned(
           left: 30,
@@ -88,22 +91,32 @@ class _ListBooksinAnimation extends StatelessWidget {
 }
 
 class _CardPrimario extends StatelessWidget {
-  const _CardPrimario({
+  final int i;
+  const _CardPrimario(
+    this.i, {
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-      height: 250,
-      width: 200,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          image: const DecorationImage(
-            fit: BoxFit.fill,
-            image: AssetImage('assets/image1.jpg'),
-          )),
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, 'book_detail');
+      },
+      child: Hero(
+        tag: 'dash$i',
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+          height: 250,
+          width: 200,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: const DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage('assets/image1.jpg'),
+              )),
+        ),
+      ),
     );
   }
 }
@@ -150,7 +163,7 @@ class _CardSecuandario extends StatelessWidget {
               textAlign: TextAlign.start,
             ),
             const SizedBox(height: 25),
-            const _StarIcons(3),
+            const StarIcons(3),
             const SizedBox(height: 30),
             Row(
               children: const [
@@ -180,34 +193,6 @@ class _CardSecuandario extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _StarIcons extends StatelessWidget {
-  final int cantidad;
-  const _StarIcons(
-    this.cantidad, {
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        for (int i = 0; i < 5; i++)
-          Icon(
-            Icons.star,
-            color: cantidad <= i ? Colors.amber[100] : Colors.amber,
-            size: 18,
-          ),
-        const SizedBox(width: 10),
-        Text(
-          '$cantidad.0',
-          style:
-              const TextStyle(color: Colors.amber, fontWeight: FontWeight.w900),
-        )
-      ],
     );
   }
 }
