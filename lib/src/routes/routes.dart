@@ -7,5 +7,6 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'loading': (_) => const LoadingPage(),
   'login': (_) => const LoginPage(),
   'books_list': (_) => const BooksListPage(),
-  'prueba': (_) => PruebaPage()
+  'prueba': (_) => PruebaPage(),
+  'book_detail': (_) => const BookDetailPage(),
 };

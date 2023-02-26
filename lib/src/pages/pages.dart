@@ -1,3 +1,5 @@
+export 'package:biblioteca_app/src/pages/book_detail_pages.dart';
+
 export 'package:biblioteca_app/src/pages/prueba_pages.dart';
 
 export 'package:biblioteca_app/src/pages/login_pages.dart';

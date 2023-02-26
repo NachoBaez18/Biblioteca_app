@@ -1,8 +1,6 @@
-
 import 'package:biblioteca_app/src/provider/ListView/filter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 
 class RotateAnimation extends StatefulWidget {
   final Widget child;
@@ -18,7 +16,7 @@ class RotateAnimation extends StatefulWidget {
 
 class _RotateAnimationState extends State<RotateAnimation>
     with SingleTickerProviderStateMixin {
- late AnimationController controller;
+  late AnimationController controller;
 
   late Animation rotate;
 
@@ -29,17 +27,17 @@ class _RotateAnimationState extends State<RotateAnimation>
     rotate = Tween(begin: 0.0, end: 3.1)
         .animate(CurvedAnimation(parent: controller, curve: Curves.easeOut));
     super.initState();
-
-
   }
+
   @override
   void dispose() {
     controller.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-        controller.forward(from: 0.0);
+    controller.forward(from: 0.0);
     return AnimatedBuilder(
         animation: rotate,
         child: widget.child,
