@@ -35,6 +35,12 @@ class BooksListPage extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, 'book_register_edit');
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
