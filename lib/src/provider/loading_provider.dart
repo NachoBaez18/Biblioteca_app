@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class LoadingProvider extends ChangeNotifier {
-  late AnimatedContainer loadingLogo;
-  AnimatedContainer get getLoadingLogo => loadingLogo;
+  late AnimationController _loadingLogo;
+  AnimationController get loadingLogo => _loadingLogo;
 
-  set setLoadingLogo(AnimatedContainer loadingLogo) =>
-      this.loadingLogo = loadingLogo;
+  set loadingLogo(AnimationController loadingLogo) =>
+      _loadingLogo = loadingLogo;
 }

@@ -1,5 +1,8 @@
+import 'package:biblioteca_app/src/services/auth_services.dart';
+import 'package:biblioteca_app/src/ui/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/widgets.dart';
 
@@ -19,31 +22,11 @@ class LoginPage extends StatelessWidget {
               SizedBox(height: 50),
               _FormLogin(),
               SizedBox(height: 50),
-              _ButtonAccess(),
               SizedBox(height: 150),
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        Navigator.pushReplacementNamed(context, 'books_list');
-      }),
-    );
-  }
-}
-
-class _ButtonAccess extends StatelessWidget {
-  const _ButtonAccess({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ButtonRedondeado(
-      color: Colors.blue.shade300,
-      onpreess: () {},
-      texto: 'Acceder',
-      alto: 40,
     );
   }
 }
@@ -62,6 +45,7 @@ class _FormLoginState extends State<_FormLogin> {
   final passwordCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final authServices = Provider.of<AuthServices>(context);
     return Column(
       children: [
         InputLoginWidget(
@@ -70,15 +54,37 @@ class _FormLoginState extends State<_FormLogin> {
           textController: emailCtrl,
           keyboardype: TextInputType.emailAddress,
         ),
-        const SizedBox(
-          height: 20,
-        ),
+        const SizedBox(height: 20),
         InputLoginWidget(
           icon: FontAwesomeIcons.unlock,
           placeholder: 'Contraseña',
           textController: passwordCtrl,
           isPassword: true,
-        )
+        ),
+        const SizedBox(height: 20),
+        ButtonRedondeado(
+          color: Colors.blue.shade300,
+          onpreess: authServices.autenticando
+              ? null
+              : () async {
+                  print(emailCtrl.text.trim());
+                  FocusScope.of(context).unfocus();
+                  final loginOk = await authServices.login(
+                    emailCtrl.text.trim(),
+                    passwordCtrl.text.trim(),
+                  );
+                  if (loginOk) {
+                    // ignore: use_build_context_synchronously
+                    Navigator.pushReplacementNamed(context, 'books_list');
+                  } else {
+                    // ignore: use_build_context_synchronously
+                    mostrarAlerta(context, 'Login incorrecto',
+                        'Revise sus credenciales nuevamente');
+                  }
+                },
+          texto: 'Acceder',
+          alto: 40,
+        ),
       ],
     );
   }

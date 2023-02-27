@@ -1,5 +1,6 @@
 import 'package:biblioteca_app/src/provider/ListView/filter_provider.dart';
 import 'package:biblioteca_app/src/provider/loading_provider.dart';
+import 'package:biblioteca_app/src/services/services.dart';
 import 'package:flutter/material.dart';
 
 //? Mis importaciones
@@ -17,11 +18,12 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => LoadingProvider()),
         ChangeNotifierProvider(create: (_) => FilterListProvider()),
+        ChangeNotifierProvider(create: (_) => AuthServices()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Biblioteca',
-        initialRoute: 'books_list',
+        initialRoute: 'loading',
         routes: appRoutes,
       ),
     );
