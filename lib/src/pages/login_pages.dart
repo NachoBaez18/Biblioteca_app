@@ -78,8 +78,7 @@ class _FormLoginState extends State<_FormLogin> {
                     Navigator.pushReplacementNamed(context, 'books_list');
                   } else {
                     // ignore: use_build_context_synchronously
-                    mostrarAlerta(context, 'Login incorrecto',
-                        'Revise sus credenciales nuevamente');
+                    mostrarAlerta(context, 'Login incorrecto',const Text('Revise sus credenciales nuevamente'));
                   }
                 },
           texto: 'Acceder',

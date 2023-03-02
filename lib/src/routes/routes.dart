@@ -10,5 +10,6 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'prueba': (_) => PruebaPage(),
   'book_detail': (_) => const BookDetailPage(),
   'book_register_edit': (_) => const RegisterEditPage(),
-  'home': (_) => const HomePage()
+  'home': (_) => const HomePage(),
+  'perfil':(_) => const PerfilUser()
 };

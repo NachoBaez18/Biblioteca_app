@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Biblioteca',
-        initialRoute: 'loading',
+        initialRoute: 'home',
         routes: appRoutes,
       ),
     );
