@@ -1,6 +1,10 @@
-import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+
+//Todo: Importaciones de terceros
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+//?Mis importaciones
+import 'package:biblioteca_app/src/widgets/widgets.dart';
 
 class BookDetailPage extends StatelessWidget {
   const BookDetailPage({super.key});

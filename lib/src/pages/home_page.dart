@@ -1,7 +1,11 @@
-import 'package:animate_do/animate_do.dart';
-import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+
+//Todo: Importaciones de terceros
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:animate_do/animate_do.dart';
+
+//?Mis importaciones
+import 'package:biblioteca_app/src/widgets/widgets.dart';
 
 class ItemBoton {
   final IconData icon;
@@ -42,7 +46,7 @@ class HomePage extends StatelessWidget {
         const Color(0xff66A9F2),
         const Color(0xff536CF6),
         onpress:() {
-          
+            
         },
       ),
       ItemBoton(
@@ -51,7 +55,7 @@ class HomePage extends StatelessWidget {
         const Color(0xffF2D572),
         const Color(0xffE06AA3),
         onpress: () {
-          
+          Navigator.pushNamed(context, 'notificaciones');
         },
       ),
       ItemBoton(
@@ -60,7 +64,7 @@ class HomePage extends StatelessWidget {
         const Color(0xff317183),
         const Color(0xff46997D),
         onpress: () {
-          Navigator.pushNamed(context, 'perfil');
+          Navigator.pushReplacementNamed(context, 'perfil');
         },
       ),
     ];

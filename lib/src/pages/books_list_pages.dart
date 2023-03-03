@@ -1,11 +1,13 @@
-import 'package:animate_do/animate_do.dart';
-import 'package:biblioteca_app/src/provider/ListView/filter_provider.dart';
-import 'package:biblioteca_app/src/widgets/rotate_widget.dart';
-import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
+//Todo: Importaciones de terceros
+import 'package:provider/provider.dart';
+import 'package:animate_do/animate_do.dart';
+
+//?Mis importaciones
 import '../delegates/searchBook_delegate.dart';
+import 'package:biblioteca_app/src/provider/ListView/filter_provider.dart';
+import 'package:biblioteca_app/src/widgets/widgets.dart';
 
 class BooksListPage extends StatelessWidget {
   const BooksListPage({super.key});
