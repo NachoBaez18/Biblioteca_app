@@ -1,3 +1,4 @@
+import 'package:biblioteca_app/src/pages/usuarios_pages.dart';
 import 'package:flutter/material.dart';
 
 //? Mis importaciones
@@ -12,5 +13,6 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'book_register_edit': (_) => const RegisterEditPage(),
   'home': (_) => const HomePage(),
   'perfil':(_) => const PerfilUser(),
-  'notificaciones':(_) =>const Notificaciones()
+  'notificaciones':(_) =>const Notificaciones(),
+  'usuarios':(_)=> const Usuarios()
 };

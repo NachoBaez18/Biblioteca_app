@@ -1,10 +1,13 @@
+
 import 'package:flutter/material.dart';
 
 //Todo: Importaciones de terceros
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 
 //?Mis importaciones
 import 'package:biblioteca_app/src/widgets/widgets.dart';
+import 'package:biblioteca_app/src/ui/alertas.dart';
 
 class BookDetailPage extends StatelessWidget {
   const BookDetailPage({super.key});
@@ -14,6 +17,7 @@ class BookDetailPage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               Row(
@@ -29,7 +33,31 @@ class BookDetailPage extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      mostrarAlerta(
+                        context,
+                        'Opciones a realizar',
+                        SizedBox(
+                          height: 130,
+                          child: Column(
+                            children: [
+                              ButtonRedondeado(
+                                onpreess: () {},
+                                texto:'Realizar reserva',
+                                color: Colors.red,
+                              ),
+                             const SizedBox(height: 30),
+                              ButtonRedondeado(
+                                onpreess: () {},
+                                texto:'Guardar',
+                              ),
+                            ],
+                          ),
+                        ),
+                        'Cancelar',
+                        ''
+                      );
+                    },
                     icon: const Icon(
                       FontAwesomeIcons.barsStaggered,
                       size: 25,
@@ -53,7 +81,9 @@ class BookDetailPage extends StatelessWidget {
                           Row(
                             children: [
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () async{
+                                 await Share.share('Este es un archivo',subject: 'No se que seria');
+                                },
                                 icon: const Icon(Icons.share),
                                 color: Colors.black26,
                               ),
@@ -63,9 +93,11 @@ class BookDetailPage extends StatelessWidget {
                               ),
                               const SizedBox(width: 20),
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                 
+                                },
                                 icon: const Icon(
-                                  FontAwesomeIcons.heart,
+                                  FontAwesomeIcons.solidHeart,
                                   color: Colors.black26,
                                 ),
                               ),
@@ -98,25 +130,6 @@ class BookDetailPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      height: 80,
-                      width: 200,
-                      decoration: const BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                        ),
-                      ),
-                      child: const Center(
-                          child: Text(
-                        'Reservar ahora',
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      )),
-                    ),
-                  )
                 ],
               )
             ],

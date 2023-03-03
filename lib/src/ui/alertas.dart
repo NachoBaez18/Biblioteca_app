@@ -1,9 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
-mostrarAlerta(BuildContext context, String titulo, Widget child) {
+mostrarAlerta(BuildContext context, String titulo, Widget child,String btnCancel,String btnOk) {
   if (Platform.isAndroid) {
     return showDialog(
       context: context,
@@ -20,31 +19,16 @@ mostrarAlerta(BuildContext context, String titulo, Widget child) {
             elevation: 5,
             textColor: Colors.blue,
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar',style: TextStyle(color: Colors.red),),
+            child: Text(btnCancel,style: const TextStyle(color: Colors.red),),
           ),
           MaterialButton(
             elevation: 5,
             textColor: Colors.blue,
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cambiar'),
+            child: Text(btnOk),
           )
         ],
       ),
     );
   }
-
-  showCupertinoDialog(
-    context: context,
-    builder: (_) => CupertinoAlertDialog(
-      title: Text(titulo),
-      content: child,
-      actions: [
-        CupertinoDialogAction(
-          isDefaultAction: true,
-          onPressed: () => Navigator.pop(context),
-          child: const Text('OK'),
-        )
-      ],
-    ),
-  );
 }

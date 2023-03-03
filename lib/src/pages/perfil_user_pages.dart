@@ -76,7 +76,9 @@ class _FromPerfilState extends State<_FromPerfil> {
             mostrarAlerta(
               context,
               'Cambio de contraseña',
-             const _CambioDeContrasena()
+             const _CambioDeContrasena(),
+             'Cancelar',
+             'OK'
             );
           },
         ),

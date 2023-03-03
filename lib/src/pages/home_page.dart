@@ -61,12 +61,21 @@ class HomePage extends StatelessWidget {
       ItemBoton(
         FontAwesomeIcons.user,
         'Perfil',
-        const Color(0xff317183),
-        const Color(0xff46997D),
+        const Color(0xffcbb4d4),
+        const Color(0xff20002c),
         onpress: () {
           Navigator.pushReplacementNamed(context, 'perfil');
         },
       ),
+      // ItemBoton(
+      //   FontAwesomeIcons.usersGear,
+      //   'Usuarios',
+      //   const Color(0xff317183),
+      //   const Color(0xff46997D),
+      //   onpress: () {
+      //     Navigator.pushReplacementNamed(context, 'usuarios');
+      //   },
+      // ),
     ];
 
     List<Widget> itemMap = items

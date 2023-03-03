@@ -19,23 +19,23 @@ class BotonGordo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: this.onpress,
+      onTap: onpress,
       child: Stack(
         children: [
           _botonGordoBackground(color1, color2, icon),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
+             const SizedBox(
                 height: 140,
                 width: 40,
               ),
               FaIcon(
-                this.icon,
+                icon,
                 color: Colors.white,
                 size: 40,
               ),
-              SizedBox(
+             const SizedBox(
                 width: 20,
               ),
               Expanded(
@@ -44,11 +44,11 @@ class BotonGordo extends StatelessWidget {
                   style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
               ),
-              FaIcon(
+             const FaIcon(
                 FontAwesomeIcons.chevronRight,
                 color: Colors.white,
               ),
-              SizedBox(
+             const SizedBox(
                 width: 40,
               )
             ],
@@ -68,6 +68,7 @@ class _botonGordoBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // ignore: sort_child_properties_last
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: Stack(
@@ -85,13 +86,13 @@ class _botonGordoBackground extends StatelessWidget {
       ),
       width: double.infinity,
       height: 100,
-      margin: EdgeInsets.all(20),
+      margin:const EdgeInsets.all(20),
       decoration: BoxDecoration(
           color: Colors.red,
           boxShadow: <BoxShadow>[
             BoxShadow(
                 color: Colors.black.withOpacity(0.2),
-                offset: Offset(4, 6),
+                offset:const Offset(4, 6),
                 blurRadius: 10),
           ],
           borderRadius: BorderRadius.circular(15),
