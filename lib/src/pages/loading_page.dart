@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 //todo: Importaciones de terceros
 import 'package:provider/provider.dart';
@@ -42,6 +43,9 @@ class LoadingPage extends StatelessWidget {
 
   Future checkLoginState(BuildContext context) async {
     final authService = Provider.of<AuthServices>(context, listen: false);
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'token');
+    print(token);
     //final sokectServices = Provider.of<SocketService>(context, listen: false);
     final autenticado = await authService.isLoggedIn();
     if (autenticado) {

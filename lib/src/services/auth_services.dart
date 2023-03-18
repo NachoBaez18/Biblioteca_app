@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import '../global/enviroment.dart';
 import 'package:biblioteca_app/src/models/loginResponse.dart';
 import 'package:biblioteca_app/src/models/usuario.dart';
+
 class AuthServices with ChangeNotifier {
   late Usuario usuario;
   bool _autenticando = false;
@@ -101,7 +102,6 @@ class AuthServices with ChangeNotifier {
             'x-token': token,
           },
         );
-        final data = resp.body;
 
         if (resp.statusCode == 200) {
           final loginResponse = loginResponseFromMap(resp.body);

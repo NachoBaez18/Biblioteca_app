@@ -32,7 +32,7 @@ class BooksListPage extends StatelessWidget {
             const SizedBox(height: 15),
             const _HeaderList(),
             const SizedBox(height: 15),
-            _ListFilterMaterial(items: items),
+            FilterListWidget(),
             _ListBooks(items: items)
           ],
         ),

@@ -37,11 +37,12 @@ class ImageRegisterEdit extends StatelessWidget {
           ]);
 
   Widget getImage(String? picture) {
-    if (picture == null)
+    if (picture == null) {
       return const Image(
         image: AssetImage('assets/no-image.png'),
         fit: BoxFit.cover,
       );
+    }
 
     // if (picture.startsWith('http'))
     //   return FadeInImage(

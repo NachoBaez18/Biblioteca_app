@@ -1,5 +1,6 @@
+export 'package:biblioteca_app/src/widgets/filter_list_widget.dart';
 
-export'package:biblioteca_app/src/widgets/rotate_widget.dart';
+export 'package:biblioteca_app/src/widgets/rotate_widget.dart';
 
 export 'package:biblioteca_app/src/widgets/icon_header_widget.dart';
 

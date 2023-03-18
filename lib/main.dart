@@ -5,25 +5,26 @@ import 'package:flutter/material.dart';
 
 //? Mis importaciones
 import 'package:biblioteca_app/src/routes/routes.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart' as Provider;
 
-void main() => runApp(const MyApp());
+void main() => runApp(const ProviderScope(child: MyApp()));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+    return Provider.MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => LoadingProvider()),
-        ChangeNotifierProvider(create: (_) => FilterListProvider()),
-        ChangeNotifierProvider(create: (_) => AuthServices()),
+        Provider.ChangeNotifierProvider(create: (_) => LoadingProvider()),
+        Provider.ChangeNotifierProvider(create: (_) => FilterListProvider()),
+        Provider.ChangeNotifierProvider(create: (_) => AuthServices()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Biblioteca',
-        initialRoute: 'home',
+        initialRoute: 'loading',
         routes: appRoutes,
       ),
     );
