@@ -67,15 +67,15 @@ class HomePage extends StatelessWidget {
           Navigator.pushReplacementNamed(context, 'perfil');
         },
       ),
-      // ItemBoton(
-      //   FontAwesomeIcons.usersGear,
-      //   'Usuarios',
-      //   const Color(0xff317183),
-      //   const Color(0xff46997D),
-      //   onpress: () {
-      //     Navigator.pushReplacementNamed(context, 'usuarios');
-      //   },
-      // ),
+      ItemBoton(
+        FontAwesomeIcons.qrcode,
+        'Reservas',
+        const Color(0xff317183),
+        const Color(0xff46997D),
+        onpress: () {
+          Navigator.pushReplacementNamed(context, 'reservas');
+        },
+      ),
     ];
 
     List<Widget> itemMap = items
