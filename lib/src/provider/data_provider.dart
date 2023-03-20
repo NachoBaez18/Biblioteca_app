@@ -6,8 +6,10 @@ final carreraDataProvider = FutureProvider<CarreraResponse?>((ref) async {
   return ref.watch(carreraProvider).carreras();
 });
 
+final carreraFilterProvider = StateProvider<Carrera>((ref) {
+  return Carrera(nombre: 'Informatica', uid: '11111111111');
+});
+
 final libroDataProvider = FutureProvider((ref) async {
-  final List<Carrera> carreraFirst =
-      ref.watch(carreraDataProvider).value!.carreras;
-  return ref.watch(libroProvider).get(carreraFirst.first);
+  return ref.watch(libroProvider).get(ref.watch(carreraFilterProvider));
 });

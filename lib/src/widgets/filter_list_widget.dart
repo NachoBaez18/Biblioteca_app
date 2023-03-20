@@ -1,5 +1,6 @@
 import 'package:biblioteca_app/src/provider/data_provider.dart';
 import 'package:biblioteca_app/src/provider/provider.dart';
+import 'package:biblioteca_app/src/services/libros_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as ProviderStatus;
@@ -12,6 +13,7 @@ class FilterListWidget extends ConsumerWidget {
     final filter =
         ProviderStatus.Provider.of<FilterListProvider>(context, listen: false);
     final carreras = ref.watch(carreraDataProvider);
+
     return carreras.when(
       data: (carreras) {
         return Container(
@@ -28,6 +30,10 @@ class FilterListWidget extends ConsumerWidget {
                     filter.rotate = true;
                     Future.delayed(const Duration(milliseconds: 500),
                         () => filter.rotate = false);
+
+                    ref
+                        .read(carreraFilterProvider.notifier)
+                        .update((state) => carreras.carreras[i]);
                   },
                   child: _ItemFilter(carreras.carreras[i].nombre, i),
                 );

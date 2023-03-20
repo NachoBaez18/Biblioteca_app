@@ -38,9 +38,7 @@ class ListBooks extends Riverpod.ConsumerWidget {
                     physics: const BouncingScrollPhysics(),
                     itemCount: libros.libros.length,
                     itemBuilder: (_, int i) {
-                      return FadeInLeft(
-                        child: _ListBooksinAnimation(i),
-                      );
+                      return _ListBooksinAnimation(i);
                     }),
               ));
       },
