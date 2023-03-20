@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:biblioteca_app/src/models/carreraResponse.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -24,7 +22,6 @@ class CarreraServices {
       });
 
       if (resp.statusCode == 200) {
-        print(resp.body);
         carrera = carreraResponseFromMap(resp.body);
         return carrera;
       } else {

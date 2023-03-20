@@ -1,4 +1,7 @@
+import 'package:biblioteca_app/src/models/libro.dart';
+import 'package:biblioteca_app/src/services/libros_services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //Todo: Importaciones de terceros
 
@@ -27,6 +30,20 @@ class BooksListPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          final libroServices =
+              Provider.of<LibroServices>(context, listen: false);
+
+          libroServices.selectedLibro = Libro(
+              nombre: '',
+              creador: '',
+              carrera: '',
+              descripcion: '',
+              imagen: '',
+              vistos: 0,
+              like: 0,
+              cantidad: 0,
+              uid: '');
+
           Navigator.pushNamed(context, 'book_register_edit');
         },
         child: const Icon(Icons.add),

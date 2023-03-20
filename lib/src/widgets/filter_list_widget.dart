@@ -20,7 +20,7 @@ class FilterListWidget extends ConsumerWidget {
           child: ListView.builder(
               physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemCount: carreras!.carreras!.length,
+              itemCount: carreras!.carreras.length,
               itemBuilder: (_, int i) {
                 return GestureDetector(
                   onTap: () {
@@ -29,7 +29,7 @@ class FilterListWidget extends ConsumerWidget {
                     Future.delayed(const Duration(milliseconds: 500),
                         () => filter.rotate = false);
                   },
-                  child: _ItemFilter(carreras.carreras![i].nombre, i),
+                  child: _ItemFilter(carreras.carreras[i].nombre, i),
                 );
               }),
         );

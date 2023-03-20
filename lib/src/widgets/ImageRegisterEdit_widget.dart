@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class ImageRegisterEdit extends StatelessWidget {
-  final String? url = null;
-  const ImageRegisterEdit({super.key});
+  final String? url;
+  const ImageRegisterEdit(this.url, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,19 +37,19 @@ class ImageRegisterEdit extends StatelessWidget {
           ]);
 
   Widget getImage(String? picture) {
-    if (picture == null) {
+    if (picture == null || picture == '') {
       return const Image(
         image: AssetImage('assets/no-image.png'),
         fit: BoxFit.cover,
       );
     }
-
-    // if (picture.startsWith('http'))
-    //   return FadeInImage(
-    //     image: NetworkImage(url!),
-    //     placeholder: AssetImage('assets/jar-loading.gif'),
-    //     fit: BoxFit.cover,
-    //   );
+    if (picture.startsWith('http')) {
+      return FadeInImage(
+        image: NetworkImage(url!),
+        placeholder: const AssetImage('assets/jar-loading.gif'),
+        fit: BoxFit.cover,
+      );
+    }
     return Image.file(
       File(picture),
       fit: BoxFit.cover,

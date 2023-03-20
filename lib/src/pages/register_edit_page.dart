@@ -1,8 +1,18 @@
+import 'package:biblioteca_app/src/models/carreraResponse.dart';
+import 'package:biblioteca_app/src/models/libroResponse.dart';
+import 'package:biblioteca_app/src/models/registerUpdateDeleteResponse.dart';
+import 'package:biblioteca_app/src/provider/data_provider.dart';
+import 'package:biblioteca_app/src/provider/provider.dart';
+import 'package:biblioteca_app/src/services/carrera_services.dart';
+import 'package:biblioteca_app/src/services/libros_services.dart';
+import 'package:biblioteca_app/src/ui/alertOperacional.dart';
 import 'package:biblioteca_app/src/ui/input_decoration.dart';
 import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart' as Provider;
 
 class RegisterEditPage extends StatelessWidget {
   final String? url = null;
@@ -10,13 +20,32 @@ class RegisterEditPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final libroServices = Provider.Provider.of<LibroServices>(context);
+    return Provider.ChangeNotifierProvider(
+        create: (_) => LibroFormProvider(libroServices.selectedLibro),
+        child: _LibroScreenBody(libroServices: libroServices));
+  }
+}
+
+class _LibroScreenBody extends StatelessWidget {
+  const _LibroScreenBody({
+    super.key,
+    required this.libroServices,
+  });
+
+  final LibroServices libroServices;
+
+  @override
+  Widget build(BuildContext context) {
+    final libroForm = Provider.Provider.of<LibroFormProvider>(context);
     return Scaffold(
         body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               Stack(
                 children: [
-                  const ImageRegisterEdit(),
+                  ImageRegisterEdit(libroServices.selectedLibro.imagen),
                   Positioned(
                       top: 60,
                       left: 20,
@@ -34,7 +63,7 @@ class RegisterEditPage extends StatelessWidget {
                       onPressed: () async {
                         final picker = ImagePicker();
                         final PickedFile? pickeFile = await picker.getImage(
-                            source: ImageSource.camera, imageQuality: 100);
+                            source: ImageSource.gallery, imageQuality: 100);
 
                         if (pickeFile == null) {
                           print('No selecciono nada');
@@ -42,60 +71,71 @@ class RegisterEditPage extends StatelessWidget {
                         }
                         print('Tenemos imagen ${pickeFile.path}');
 
-                        // productService
-                        //     .updateSelectedProductImage(pickeFile.path);
+                        libroServices
+                            .updateSelectedProductImage(pickeFile.path);
                       },
                       icon: const Icon(
-                        Icons.camera_alt,
+                        Icons.archive_outlined,
                         color: Colors.white,
+                        size: 30,
                       ),
                     ),
                   ),
                 ],
               ),
-              _producrForm()
+              _ProducrForm()
             ],
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         floatingActionButton: FloatingActionButton(
-            child: //productService.isSaving
-                //? CircularProgressIndicator(color: Colors.white)
-                Icon(Icons.save_alt_outlined),
-            onPressed: () {}
-            //  productService.isSaving
-            //     ? null
-            //     : () async {
-            //         if (!proudctFrom.isValidFrom()) return;
+          onPressed: libroForm.isSaving
+              ? null
+              : () async {
+                  print('${libroForm.isValidFrom()}');
+                  if (!libroForm.isValidFrom()) return;
 
-            //         final String? imageUrl = await productService.uploadImage();
-            //         if (imageUrl != null) proudctFrom.product.picture = imageUrl;
+                  final String? imageUrl = await libroServices.uploadImage();
 
-            //         await productService.saveOrCreate(proudctFrom.product);
-            //       },
-            ));
+                  if (imageUrl != null) libroForm.libro.imagen = imageUrl;
+                  final OperationResponse libroResponse;
+
+                  libroResponse =
+                      await libroServices.saveOrCreate(libroForm.libro);
+
+                  if (!context.mounted) return;
+                  if (!libroResponse.error) {
+                    mostrarAlertaOperacional(
+                        context,
+                        libroResponse.mensaje,
+                        const Icon(
+                          FontAwesomeIcons.circleExclamation,
+                          color: Colors.amber,
+                          size: 40,
+                        ));
+                  } else {
+                    mostrarAlertaOperacional(
+                        context,
+                        libroResponse.mensaje,
+                        const Icon(
+                          FontAwesomeIcons.circleXmark,
+                          color: Colors.red,
+                          size: 40,
+                        ));
+                  }
+                },
+          child: libroForm.isSaving
+              ? const CircularProgressIndicator(color: Colors.white)
+              : const Icon(Icons.save_alt_outlined),
+        ));
   }
 }
 
-class _producrForm extends StatelessWidget {
+class _ProducrForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final items = [
-      'Administracion',
-      'History',
-      'Fisica',
-      'Psicologia',
-      'Nutricion',
-      'Medicina',
-      'Enfermeria',
-      'Odontologia',
-      'Contaduria',
-    ];
-
-    String? _selectedVal = 'History';
-    // final productForm = Provider.of<ProductFormProvider>(context);
-
-    //final product = productForm.product;
+    final libroForm = Provider.Provider.of<LibroFormProvider>(context);
+    final libro = libroForm.libro;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Container(
@@ -103,60 +143,49 @@ class _producrForm extends StatelessWidget {
         width: double.infinity,
         decoration: _buildBoxDecoration(),
         child: Form(
-            //  key: productForm.formKey,
+            key: libroForm.formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               children: [
                 const SizedBox(height: 10),
                 TextFormField(
-                  // initialValue: product.name,
-                  // onChanged: (value) => product.name = value,
+                  initialValue: libro.nombre,
+                  onChanged: (value) => libro.nombre = value,
                   validator: (value) {
-                    if (value == null || value.length < 1)
+                    if (value == null || value.isEmpty) {
                       return 'El nombre es obligatorio';
+                    }
+                    return null;
                   },
                   decoration: InputDecorations.authInputDecoration(
                       hintText: 'Nombre del Libro', labelText: 'Libro'),
                 ),
                 const SizedBox(height: 30),
-                DropdownButtonFormField(
-                  value: _selectedVal,
-                  items: items
-                      .map(
-                        (e) => DropdownMenuItem(
-                          child: Text(e),
-                          value: e,
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (value) {
-                    print(value);
+                const _ListCarreras(),
+                const SizedBox(height: 30),
+                TextFormField(
+                  initialValue: libro.nombre,
+                  onChanged: (value) => libro.descripcion = value,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'La descripcion es obligatoria';
+                    }
                   },
-                  icon: const Icon(
-                    Icons.arrow_drop_down_circle,
-                    color: Colors.blue,
-                  ),
-                  decoration:
-                      const InputDecoration(labelText: 'Materia del libro'),
+                  decoration: InputDecorations.authInputDecoration(
+                      hintText: 'Descripción del Libro',
+                      labelText: 'Descripción'),
                 ),
                 const SizedBox(height: 30),
                 TextFormField(
-                  //  initialValue: '${product.price}',
-                  // inputFormatters: [
-                  //   FilteringTextInputFormatter.allow(
-                  //       RegExp(r'^(\d+)?\.?\d{0,2}'))
-                  // ],
-                  onChanged: (value) {
-                    if (double.tryParse(value) == null) {
-                      // product.price = 0;
-                    } else {
-                      // product.price = double.parse(value);
+                  initialValue: libro.creador,
+                  onChanged: (value) => libro.creador = value,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'El autor es obligatoria';
                     }
                   },
-                  keyboardType: TextInputType.multiline,
                   decoration: InputDecorations.authInputDecoration(
-                      hintText: 'Pequeña descripcion del libro',
-                      labelText: 'Descripción'),
+                      hintText: 'Autor del Libro', labelText: 'Autor'),
                 ),
                 const SizedBox(height: 30),
               ],
@@ -175,4 +204,36 @@ class _producrForm extends StatelessWidget {
                 color: Colors.black.withOpacity(0.05),
                 offset: const Offset(0, 5))
           ]);
+}
+
+class _ListCarreras extends ConsumerWidget {
+  const _ListCarreras({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final refcarreras = ref.watch(carreraDataProvider).value;
+    final libroForm = Provider.Provider.of<LibroFormProvider>(context);
+    final libro = libroForm.libro;
+    return DropdownButtonFormField(
+      value: refcarreras!.carreras.first.nombre,
+      items: refcarreras.carreras
+          .map(
+            (e) => DropdownMenuItem(
+              value: e.nombre,
+              child: Text(e.nombre),
+            ),
+          )
+          .toList(),
+      onChanged: (value) {
+        libro.carrera = value!;
+      },
+      icon: const Icon(
+        Icons.arrow_drop_down_circle,
+        color: Colors.blue,
+      ),
+      decoration: const InputDecoration(labelText: 'Materia del libro'),
+    );
+  }
 }

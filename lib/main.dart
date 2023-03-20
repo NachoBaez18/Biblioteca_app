@@ -1,4 +1,3 @@
-
 import 'package:biblioteca_app/src/provider/provider.dart';
 import 'package:biblioteca_app/src/services/services.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +19,7 @@ class MyApp extends StatelessWidget {
         Provider.ChangeNotifierProvider(create: (_) => LoadingProvider()),
         Provider.ChangeNotifierProvider(create: (_) => FilterListProvider()),
         Provider.ChangeNotifierProvider(create: (_) => AuthServices()),
+        Provider.ChangeNotifierProvider(create: (_) => LibroServices()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

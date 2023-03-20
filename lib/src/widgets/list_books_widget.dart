@@ -1,39 +1,54 @@
-
 import 'package:biblioteca_app/src/provider/ListView/filter_provider.dart';
+import 'package:biblioteca_app/src/provider/data_provider.dart';
 import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 //todo: Importaciones de terceros
 import 'package:animate_do/animate_do.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as Riverpod;
 
-class ListBooks extends StatelessWidget {
+class ListBooks extends Riverpod.ConsumerWidget {
+  const ListBooks({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final items = [
-      'Administracion',
-      'History',
-      'Fisica',
-      'Psicologia',
-      'Nutricion',
-      'Medicina',
-      'Enfermeria',
-      'Odontologia',
-      'Contaduria',
-    ];
-    return Expanded(
-        child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: ListView.builder(
-          physics: const BouncingScrollPhysics(),
-          itemCount: items.length,
-          itemBuilder: (_, int i) {
-            return FadeInLeft(
-              child: _ListBooksinAnimation(i),
-            );
-          }),
-    ));
+  Widget build(BuildContext context, ref) {
+    final libros = ref.watch(libroDataProvider);
+    return libros.when(
+      data: (libros) {
+        return libros!.libros.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    SizedBox(height: 200),
+                    Text(
+                      'No existen datos',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              )
+            : Expanded(
+                child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: libros.libros.length,
+                    itemBuilder: (_, int i) {
+                      return FadeInLeft(
+                        child: _ListBooksinAnimation(i),
+                      );
+                    }),
+              ));
+      },
+      error: (err, st) => Text(err.toString()),
+      loading: () => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
   }
 }
 
@@ -66,6 +81,7 @@ class _ListBooksinAnimation extends StatelessWidget {
     );
   }
 }
+
 class _CardPrimario extends StatelessWidget {
   final int i;
   const _CardPrimario(

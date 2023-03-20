@@ -12,11 +12,11 @@ String carreraResponseToMap(CarreraResponse data) => json.encode(data.toMap());
 class CarreraResponse {
   CarreraResponse({
     required this.error,
-    this.carreras,
+    required this.carreras,
   });
 
   bool error;
-  List<Carrera>? carreras;
+  List<Carrera> carreras;
 
   factory CarreraResponse.fromMap(Map<String, dynamic> json) => CarreraResponse(
         error: json["error"],
@@ -26,7 +26,7 @@ class CarreraResponse {
 
   Map<String, dynamic> toMap() => {
         "error": error,
-        "carreras": List<dynamic>.from(carreras!.map((x) => x.toMap())),
+        "carreras": List<dynamic>.from(carreras.map((x) => x.toMap())),
       };
 }
 
