@@ -13,17 +13,28 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: const [
-              _LogoInicio(),
-              SizedBox(height: 50),
-              _FormLogin(),
-              SizedBox(height: 50),
-              SizedBox(height: 150),
-            ],
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/fondo_login.jpg'),
+            opacity: 0.1,
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: const [
+                _LogoInicio(),
+                SizedBox(height: 50),
+                _FormLogin(),
+                SizedBox(height: 50),
+                SizedBox(height: 150),
+              ],
+            ),
           ),
         ),
       ),
@@ -67,7 +78,6 @@ class _FormLoginState extends State<_FormLogin> {
           onpreess: authServices.autenticando
               ? null
               : () async {
-                  print(emailCtrl.text.trim());
                   FocusScope.of(context).unfocus();
                   final loginOk = await authServices.login(
                     emailCtrl.text.trim(),
@@ -75,10 +85,15 @@ class _FormLoginState extends State<_FormLogin> {
                   );
                   if (loginOk) {
                     // ignore: use_build_context_synchronously
-                    Navigator.pushReplacementNamed(context, 'books_list');
+                    Navigator.pushReplacementNamed(context, 'home');
                   } else {
                     // ignore: use_build_context_synchronously
-                    mostrarAlerta(context, 'Login incorrecto',const Text('Revise sus credenciales nuevamente'),'','OK');
+                    mostrarAlerta(
+                        context,
+                        'Login incorrecto',
+                        const Text('Revise sus credenciales nuevamente'),
+                        '',
+                        'OK');
                   }
                 },
           texto: 'Acceder',

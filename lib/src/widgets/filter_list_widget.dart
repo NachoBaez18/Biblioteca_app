@@ -1,9 +1,8 @@
 import 'package:biblioteca_app/src/provider/data_provider.dart';
 import 'package:biblioteca_app/src/provider/provider.dart';
-import 'package:biblioteca_app/src/services/libros_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart' as ProviderStatus;
+import 'package:provider/provider.dart' as provider_status;
 
 class FilterListWidget extends ConsumerWidget {
   const FilterListWidget({super.key});
@@ -11,7 +10,7 @@ class FilterListWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final filter =
-        ProviderStatus.Provider.of<FilterListProvider>(context, listen: false);
+        provider_status.Provider.of<FilterListProvider>(context, listen: false);
     final carreras = ref.watch(carreraDataProvider);
 
     return carreras.when(
@@ -28,8 +27,12 @@ class FilterListWidget extends ConsumerWidget {
                   onTap: () {
                     filter.filter = i;
                     filter.rotate = true;
-                    Future.delayed(const Duration(milliseconds: 500),
-                        () => filter.rotate = false);
+                    filter.opacity = 0;
+                    filter.hero = false;
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      filter.opacity = 1;
+                      filter.rotate = false;
+                    });
 
                     ref
                         .read(carreraFilterProvider.notifier)
@@ -60,7 +63,7 @@ class _ItemFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final filteSelected =
-        ProviderStatus.Provider.of<FilterListProvider>(context);
+        provider_status.Provider.of<FilterListProvider>(context);
     return Align(
       alignment: Alignment.topLeft,
       child: Container(

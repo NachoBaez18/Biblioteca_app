@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 //Todo: Importaciones de terceros
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,7 +15,8 @@ class ItemBoton {
   final Color color2;
   final Function() onpress;
 
-  ItemBoton(this.icon, this.texto, this.color1, this.color2,{required this.onpress});
+  ItemBoton(this.icon, this.texto, this.color1, this.color2,
+      {required this.onpress});
 }
 
 class HomePage extends StatelessWidget {
@@ -30,24 +32,16 @@ class HomePage extends StatelessWidget {
     }
 
     final items = <ItemBoton>[
-      ItemBoton(
-        FontAwesomeIcons.magnifyingGlass,
-        'Buscar Libro',
-        const Color(0xff6989F5),
-        const Color(0xff906EF5),
-        onpress: (){
-            Navigator.pushNamed(context, 'books_list');
-        }
-        
-      ),
+      ItemBoton(FontAwesomeIcons.magnifyingGlass, 'Buscar Libro',
+          const Color(0xff6989F5), const Color(0xff906EF5), onpress: () {
+        Navigator.pushNamed(context, 'books_list');
+      }),
       ItemBoton(
         FontAwesomeIcons.clockRotateLeft,
         'Historial de libros ',
         const Color(0xff66A9F2),
         const Color(0xff536CF6),
-        onpress:() {
-            
-        },
+        onpress: () {},
       ),
       ItemBoton(
         FontAwesomeIcons.bell,
@@ -83,7 +77,7 @@ class HomePage extends StatelessWidget {
           (item) => FadeInLeft(
             child: BotonGordo(
               texto: item.texto,
-              onpress:item.onpress,
+              onpress: item.onpress,
               icon: item.icon,
               color1: item.color1,
               color2: item.color2,
@@ -101,13 +95,13 @@ class HomePage extends StatelessWidget {
             child: ListView(
               physics: const BouncingScrollPhysics(),
               children: [
-                if (isLarge)const SizedBox(height: 80),
+                if (isLarge) const SizedBox(height: 80),
                 ...itemMap,
               ],
             ),
           ),
         ),
-        if (isLarge)const _Encabezado()
+        if (isLarge) const _Encabezado()
       ],
     ));
   }
@@ -123,7 +117,7 @@ class _Encabezado extends StatelessWidget {
     const String user = 'Cristino Baez ';
     return Stack(
       children: [
-       const IconHeader(
+        const IconHeader(
           icon: FontAwesomeIcons.bookOpenReader,
           titulo: user,
           subTitulo: 'Bienvenido!',
@@ -134,10 +128,14 @@ class _Encabezado extends StatelessWidget {
             right: 0,
             top: 45,
             child: RawMaterialButton(
-              onPressed: () {},
-              shape:const CircleBorder(),
-              padding:const EdgeInsets.all(15.0),
-              child:const FaIcon(
+              onPressed: () async {
+                Navigator.pushReplacementNamed(context, 'login');
+                const storage = FlutterSecureStorage();
+                await storage.delete(key: 'token');
+              },
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(15.0),
+              child: const FaIcon(
                 FontAwesomeIcons.arrowRightFromBracket,
                 color: Colors.white,
                 size: 30,

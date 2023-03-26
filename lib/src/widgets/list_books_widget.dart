@@ -1,14 +1,15 @@
+import 'package:animate_do/animate_do.dart';
+import 'package:biblioteca_app/src/models/libro.dart';
 import 'package:biblioteca_app/src/provider/ListView/filter_provider.dart';
 import 'package:biblioteca_app/src/provider/data_provider.dart';
 import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 //todo: Importaciones de terceros
-import 'package:animate_do/animate_do.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart' as Riverpod;
+import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 
-class ListBooks extends Riverpod.ConsumerWidget {
+class ListBooks extends riverpod.ConsumerWidget {
   const ListBooks({super.key});
 
   @override
@@ -17,17 +18,22 @@ class ListBooks extends Riverpod.ConsumerWidget {
     return libros.when(
       data: (libros) {
         return libros!.libros.isEmpty
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    SizedBox(height: 200),
-                    Text(
-                      'No existen datos',
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                  ],
+            ? FadeInLeft(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      SizedBox(height: 200),
+                      Text(
+                        'No existen datos',
+                        style: TextStyle(
+                            fontSize: 25,
+                            color: Colors.black38,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Roboto'),
+                      ),
+                    ],
+                  ),
                 ),
               )
             : Expanded(
@@ -38,7 +44,9 @@ class ListBooks extends Riverpod.ConsumerWidget {
                     physics: const BouncingScrollPhysics(),
                     itemCount: libros.libros.length,
                     itemBuilder: (_, int i) {
-                      return _ListBooksinAnimation(i);
+                      return _ListBooksinAnimation(
+                        libros.libros[i],
+                      );
                     }),
               ));
       },
@@ -51,11 +59,8 @@ class ListBooks extends Riverpod.ConsumerWidget {
 }
 
 class _ListBooksinAnimation extends StatelessWidget {
-  final int i;
-  const _ListBooksinAnimation(
-    this.i, {
-    super.key,
-  });
+  final Libro libro;
+  const _ListBooksinAnimation(this.libro);
 
   @override
   Widget build(BuildContext context) {
@@ -64,16 +69,16 @@ class _ListBooksinAnimation extends StatelessWidget {
       children: [
         Align(
           alignment: Alignment.centerRight,
-          child: _CardPrimario(i),
+          child: _CardPrimario(libro),
         ),
         Positioned(
           left: 30,
           top: 25,
           child: animation.rotate
-              ? const RotateAnimation(
-                  child: _CardSecuandario(),
+              ? RotateAnimation(
+                  child: _CardSecuandario(libro),
                 )
-              : const _CardSecuandario(),
+              : _CardSecuandario(libro),
         )
       ],
     );
@@ -81,43 +86,65 @@ class _ListBooksinAnimation extends StatelessWidget {
 }
 
 class _CardPrimario extends StatelessWidget {
-  final int i;
+  final Libro libro;
   const _CardPrimario(
-    this.i, {
+    this.libro, {
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<FilterListProvider>(context);
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, 'book_detail');
+        provider.hero = true;
+        Navigator.pushNamed(context, 'book_detail', arguments: {libro: libro});
       },
       child: Hero(
-        tag: 'dash$i',
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-          height: 250,
-          width: 200,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              image: const DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage('assets/image1.jpg'),
-              )),
-        ),
+        tag: 'dash${libro.uid}',
+        child: provider.hero
+            ? Container(
+                margin:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                height: 250,
+                width: 200,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: FadeInImage(
+                    placeholder: const AssetImage('assets/jar-loading.gif'),
+                    image: NetworkImage(libro.imagen),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              )
+            : FadeInUp(
+                child: Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                  height: 250,
+                  width: 200,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: FadeInImage(
+                      placeholder: const AssetImage('assets/jar-loading.gif'),
+                      image: NetworkImage(libro.imagen),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+              ),
       ),
     );
   }
 }
 
 class _CardSecuandario extends StatelessWidget {
-  const _CardSecuandario({
-    super.key,
-  });
+  final Libro libro;
+  const _CardSecuandario(this.libro);
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<FilterListProvider>(context);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       height: 200,
@@ -133,54 +160,61 @@ class _CardSecuandario extends StatelessWidget {
               offset: const Offset(0, 4), // changes position of shadow
             ),
           ]),
-      child: Container(
-        margin: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Storia dei Fantasmi',
-              maxLines: 2,
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 5),
-            const Text(
-              'By Nombre Autor',
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black26),
-              textAlign: TextAlign.start,
-            ),
-            const SizedBox(height: 25),
-            const StarIcons(3),
-            const SizedBox(height: 30),
-            Row(
-              children: const [
+      child: Opacity(
+        opacity: provider.opacity,
+        child: FadeInDown(
+          from: 20,
+          child: Container(
+            margin: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Text(
-                  '1125',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.blue,
-                  ),
+                  libro.nombre,
+                  maxLines: 2,
+                  style: const TextStyle(
+                      fontSize: 17, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(width: 5),
+                const SizedBox(height: 5),
                 Text(
-                  'Visto',
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w900,
+                  libro.creador,
+                  style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
                       color: Colors.black26),
+                  textAlign: TextAlign.start,
                 ),
-                SizedBox(width: 30),
-                Icon(
-                  Icons.chevron_right,
-                  color: Colors.black26,
+                const SizedBox(height: 25),
+                const StarIcons(3),
+                const SizedBox(height: 30),
+                Row(
+                  children: [
+                    Text(
+                      '${libro.vistos}',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.blue,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    const Text(
+                      'Visto',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black26),
+                    ),
+                    const SizedBox(width: 30),
+                    const Icon(
+                      Icons.chevron_right,
+                      color: Colors.black26,
+                    )
+                  ],
                 )
               ],
-            )
-          ],
+            ),
+          ),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:biblioteca_app/src/provider/ListView/filter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -43,9 +44,12 @@ class LoadingPage extends StatelessWidget {
 
   Future checkLoginState(BuildContext context) async {
     final authService = Provider.of<AuthServices>(context, listen: false);
+
     const storage = FlutterSecureStorage();
     final token = await storage.read(key: 'token');
-    print(token);
+    if (!context.mounted) return;
+    Provider.of<FilterListProvider>(context, listen: false).opacity = 1;
+
     //final sokectServices = Provider.of<SocketService>(context, listen: false);
     final autenticado = await authService.isLoggedIn();
     if (autenticado) {

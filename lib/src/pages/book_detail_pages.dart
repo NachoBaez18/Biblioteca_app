@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 //Todo: Importaciones de terceros
@@ -6,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 //?Mis importaciones
+import 'package:biblioteca_app/src/models/libro.dart';
 import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:biblioteca_app/src/ui/alertas.dart';
 
@@ -14,6 +14,9 @@ class BookDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Map<Libro, Libro> mapa =
+        ModalRoute.of(context)!.settings.arguments as Map<Libro, Libro>;
+    final Libro libro = mapa.values.first;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -35,28 +38,27 @@ class BookDetailPage extends StatelessWidget {
                   IconButton(
                     onPressed: () {
                       mostrarAlerta(
-                        context,
-                        'Opciones a realizar',
-                        SizedBox(
-                          height: 130,
-                          child: Column(
-                            children: [
-                              ButtonRedondeado(
-                                onpreess: () {},
-                                texto:'Realizar reserva',
-                                color: Colors.red,
-                              ),
-                             const SizedBox(height: 30),
-                              ButtonRedondeado(
-                                onpreess: () {},
-                                texto:'Guardar',
-                              ),
-                            ],
+                          context,
+                          'Opciones a realizar',
+                          SizedBox(
+                            height: 130,
+                            child: Column(
+                              children: [
+                                ButtonRedondeado(
+                                  onpreess: () {},
+                                  texto: 'Realizar reserva',
+                                  color: Colors.red,
+                                ),
+                                const SizedBox(height: 30),
+                                ButtonRedondeado(
+                                  onpreess: () {},
+                                  texto: 'Guardar',
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        'Cancelar',
-                        ''
-                      );
+                          'Cancelar',
+                          '');
                     },
                     icon: const Icon(
                       FontAwesomeIcons.barsStaggered,
@@ -67,8 +69,8 @@ class BookDetailPage extends StatelessWidget {
               ),
               Stack(
                 children: [
-                  const _NombreYalgoMasBook(),
-                  const _ImageBook(),
+                  _NombreYalgoMasBook(libro),
+                  _ImageBook(libro),
                   Positioned(
                     left: 60,
                     top: 300,
@@ -81,8 +83,9 @@ class BookDetailPage extends StatelessWidget {
                           Row(
                             children: [
                               IconButton(
-                                onPressed: () async{
-                                 await Share.share('Este es un archivo',subject: 'No se que seria');
+                                onPressed: () async {
+                                  await Share.share(libro.nombre,
+                                      subject: 'No se que seria');
                                 },
                                 icon: const Icon(Icons.share),
                                 color: Colors.black26,
@@ -93,9 +96,7 @@ class BookDetailPage extends StatelessWidget {
                               ),
                               const SizedBox(width: 20),
                               IconButton(
-                                onPressed: () {
-                                 
-                                },
+                                onPressed: () {},
                                 icon: const Icon(
                                   FontAwesomeIcons.solidHeart,
                                   color: Colors.black26,
@@ -119,9 +120,9 @@ class BookDetailPage extends StatelessWidget {
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 15),
-                          const Text(
-                            'Elit non do esse ipsum aute cupidatat nostrud officia ea consectetur aute ipsum officia. Ullamco magna eiusmod eu magna eu laborum ipsum nostrud deserunt id nulla. Elit reprehenderit dolor enim voluptate elit mollit dolor occaecat ipsum quis nulla consequat minim veniam. Incididunt Lorem occaecat incididunt aliqua voluptate irure id exercitation ex. Aute aliquip non elit ut nostrud irure anim sunt minim occaecat culpa eu eu deserunt. Voluptate est nulla irure minim incididunt ut. Adipisicing dolore irure ex ex enim reprehenderit reprehenderit incididunt.',
-                            style: TextStyle(
+                          Text(
+                            libro.descripcion,
+                            style: const TextStyle(
                               color: Colors.black26,
                               fontWeight: FontWeight.bold,
                             ),
@@ -141,7 +142,9 @@ class BookDetailPage extends StatelessWidget {
 }
 
 class _ImageBook extends StatelessWidget {
-  const _ImageBook({
+  final Libro libro;
+  const _ImageBook(
+    this.libro, {
     Key? key,
   }) : super(key: key);
 
@@ -150,18 +153,18 @@ class _ImageBook extends StatelessWidget {
     return Positioned(
       top: 20,
       child: Hero(
-        tag: 'dash0',
-        child: Container(
+        tag: 'dash${libro.uid}',
+        child: SizedBox(
           height: 250,
           width: 170,
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(10),
-                  bottomRight: Radius.circular(10)),
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage('assets/image1.jpg'),
-              )),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: FadeInImage(
+              placeholder: const AssetImage('assets/jar-loading.gif'),
+              image: NetworkImage(libro.imagen),
+              fit: BoxFit.fill,
+            ),
+          ),
         ),
       ),
     );
@@ -169,7 +172,9 @@ class _ImageBook extends StatelessWidget {
 }
 
 class _NombreYalgoMasBook extends StatelessWidget {
-  const _NombreYalgoMasBook({
+  final Libro libro;
+  const _NombreYalgoMasBook(
+    this.libro, {
     Key? key,
   }) : super(key: key);
 
@@ -184,23 +189,23 @@ class _NombreYalgoMasBook extends StatelessWidget {
         margin: const EdgeInsets.only(left: 160, top: 70, right: 70),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              'Storia  asdada asasddd',
+              libro.nombre,
               maxLines: 2,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
-              'By Nombre Autor',
-              style: TextStyle(
+              libro.creador,
+              style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                   color: Colors.black26),
               textAlign: TextAlign.start,
             ),
-            SizedBox(height: 20),
-            StarIcons(3),
+            const SizedBox(height: 20),
+            const StarIcons(3),
           ],
         ),
       ),

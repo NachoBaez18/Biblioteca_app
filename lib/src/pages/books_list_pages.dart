@@ -14,18 +14,24 @@ class BooksListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 15),
-            const HeaderList(
-              titulo: 'Navegador',
-              subtitulo: 'Recomendadas',
-            ),
-            const SizedBox(height: 15),
-            const FilterListWidget(),
-            ListBooks()
-          ],
+      body: WillPopScope(
+        onWillPop: () async {
+          Navigator.pushReplacementNamed(context, 'home');
+          return false;
+        },
+        child: SafeArea(
+          child: Column(
+            children: const [
+              SizedBox(height: 15),
+              HeaderList(
+                titulo: 'Navegador',
+                subtitulo: 'Recomendadas',
+              ),
+              SizedBox(height: 15),
+              FilterListWidget(),
+              ListBooks()
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

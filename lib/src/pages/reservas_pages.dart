@@ -11,8 +11,8 @@ class ReservasPage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
           child: Column(
-        children: [
-          const HeaderList(titulo: 'Reservas', subtitulo: 'A generar'),
+        children: const [
+          HeaderList(titulo: 'Reservas', subtitulo: 'A generar'),
           ListBooks()
         ],
       )),
@@ -38,20 +38,22 @@ class ReservasPage extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      const  SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       const Text(
                         'Generador QR',
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold,color: Colors.white),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
-                    const  SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       QrImage(
                         data: 'hola',
                         version: QrVersions.auto,
                         size: 250,
                         backgroundColor: Colors.white,
                       ),
-                    const  SizedBox(height: 20)
+                      const SizedBox(height: 20)
                     ],
                   ),
                 ),
