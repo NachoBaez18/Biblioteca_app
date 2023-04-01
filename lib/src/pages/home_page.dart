@@ -1,4 +1,7 @@
+import 'package:biblioteca_app/src/models/carreraResponse.dart';
+import 'package:biblioteca_app/src/services/auth_services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 //Todo: Importaciones de terceros
@@ -7,6 +10,9 @@ import 'package:animate_do/animate_do.dart';
 
 //?Mis importaciones
 import 'package:biblioteca_app/src/widgets/widgets.dart';
+import 'package:provider/provider.dart' as provider;
+
+import '../provider/data_provider.dart';
 
 class ItemBoton {
   final IconData icon;
@@ -19,11 +25,11 @@ class ItemBoton {
       {required this.onpress});
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     bool isLarge;
     if (MediaQuery.of(context).size.height > 550) {
       isLarge = true;
@@ -66,7 +72,11 @@ class HomePage extends StatelessWidget {
         'Reservas',
         const Color(0xff317183),
         const Color(0xff46997D),
-        onpress: () {
+        onpress: () async {
+          final usuario =
+              provider.Provider.of<AuthServices>(context, listen: false);
+          ref.read(carreraFilterProvider.notifier).update((state) =>
+              Carrera(nombre: 'reservado', uid: usuario.usuario.uid));
           Navigator.pushReplacementNamed(context, 'reservas');
         },
       ),

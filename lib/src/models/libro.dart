@@ -40,7 +40,7 @@ class Libro {
         vistos: json["vistos"],
         like: json["like"],
         cantidad: json["cantidad"],
-        uid: json["uid"],
+        uid: json["uid"] ?? json["_id"],
       );
 
   Map<String, dynamic> toMap() => {

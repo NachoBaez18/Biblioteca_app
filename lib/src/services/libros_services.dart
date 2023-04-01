@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart' as Riverpod;
 import 'package:http/http.dart' as http;
 
 import '../global/enviroment.dart';
+import '../models/accionLibroResponse.dart';
 
 class LibroServices with ChangeNotifier {
   late LibroResponse libro;
@@ -42,7 +43,7 @@ class LibroServices with ChangeNotifier {
     return null;
   }
 
-  Future<LibroResponse?> get(Carrera carrera) async {
+  Future<LibroResponse> get(Carrera carrera) async {
     final token = await _storage.read(key: 'token');
     print('Con que va a filtrar${carrera.nombre}');
     final LibroResponse libros;
@@ -61,7 +62,7 @@ class LibroServices with ChangeNotifier {
         throw Exception(resp.reasonPhrase);
       }
     }
-    return null;
+    throw Exception('Por favor agregue sus credenciales');
   }
 
   Future<OperationResponse?> registrar(Libro libro) async {
@@ -193,6 +194,67 @@ class LibroServices with ChangeNotifier {
 
     final decodeData = json.decode(resp.body);
     return decodeData['secure_url'];
+  }
+
+  Future<AccionLibroResponse> accionLibrosXusuario(Carrera datosFiltros) async {
+    final token = await _storage.read(key: 'token');
+    final AccionLibroResponse accionesLibro;
+    final data = {
+      'tipoFiltro': 'accionXusuario',
+      'usuario': datosFiltros.uid,
+      'accion': datosFiltros.nombre
+    };
+    if (token != null) {
+      final uri = Uri.parse('${Enviroment.apiUrl}/accionLibro/listar');
+      final resp = await http.post(uri, body: jsonEncode(data), headers: {
+        'Content-Type': 'application/json',
+        'x-token': token,
+      });
+
+      if (resp.statusCode == 200) {
+        print(resp.body);
+        accionesLibro = accionLibroResponseFromMap(resp.body);
+        return accionesLibro;
+      } else {
+        throw Exception(resp.reasonPhrase);
+      }
+    }
+    throw Exception('Favor vuelva a ingresar sus credenciales');
+  }
+
+  Future<AccionLibroResponse> libroDinamico(Carrera datafiltro) async {
+    final AccionesDeLibro dataArmado;
+    try {
+      if (datafiltro.nombre == 'reservado' ||
+          datafiltro.nombre == 'entregado' ||
+          datafiltro.nombre == 'entregado') {
+        final response = await accionLibrosXusuario(datafiltro);
+
+        return response;
+      } else {
+        //?Respuesta armada cuando seria para lista de libros normales
+        final LibroResponse response = await get(datafiltro);
+        if (!response.error) {
+          dataArmado = AccionesDeLibro(
+              accion: '',
+              usuario: null,
+              libro: response.libros,
+              fecha: null,
+              deletedAt: null,
+              uid: null);
+
+          final AccionLibroResponse responseFinal =
+              AccionLibroResponse(error: false, accionesDeLibros: [dataArmado]);
+          print(responseFinal);
+
+          return responseFinal;
+        } else {
+          throw Exception('No exiten datos');
+        }
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }
 

@@ -15,6 +15,8 @@ class AuthServices with ChangeNotifier {
   late Usuario usuario;
   bool _autenticando = false;
 
+  bool admin = false;
+
   // Create storage
   final _storage = const FlutterSecureStorage();
 
@@ -25,13 +27,13 @@ class AuthServices with ChangeNotifier {
   }
 
   static Future<String?> getToken() async {
-    final _storage = FlutterSecureStorage();
+    const _storage = FlutterSecureStorage();
     final token = await _storage.read(key: 'token');
     return token;
   }
 
   static Future<void> deleteToken() async {
-    final _storage = new FlutterSecureStorage();
+    const _storage = FlutterSecureStorage();
     await _storage.delete(key: 'token');
   }
 
@@ -52,7 +54,7 @@ class AuthServices with ChangeNotifier {
     if (resp.statusCode == 200) {
       final loginResponse = loginResponseFromMap(resp.body);
       usuario = loginResponse.usuario;
-
+      admin = loginResponse.usuario.tipo == "administrador" ? true : false;
       await _guardarToken(loginResponse.token);
 
       return true;
@@ -106,8 +108,8 @@ class AuthServices with ChangeNotifier {
         if (resp.statusCode == 200) {
           final loginResponse = loginResponseFromMap(resp.body);
           usuario = loginResponse.usuario;
-
           await _guardarToken(loginResponse.token);
+
           autenticando = false;
 
           return true;

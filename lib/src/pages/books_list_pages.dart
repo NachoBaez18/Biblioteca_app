@@ -1,5 +1,3 @@
-import 'package:biblioteca_app/src/models/libro.dart';
-import 'package:biblioteca_app/src/services/libros_services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,12 +5,15 @@ import 'package:provider/provider.dart';
 
 //?Mis importaciones
 import 'package:biblioteca_app/src/widgets/widgets.dart';
+import '../services/services.dart';
+import 'package:biblioteca_app/src/models/libro.dart';
 
 class BooksListPage extends StatelessWidget {
   const BooksListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AuthServices>(context);
     return Scaffold(
       body: WillPopScope(
         onWillPop: () async {
@@ -34,25 +35,28 @@ class BooksListPage extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final libroServices =
-              Provider.of<LibroServices>(context, listen: false);
+      floatingActionButton: Visibility(
+        visible: provider.admin,
+        child: FloatingActionButton(
+          onPressed: () {
+            final libroServices =
+                Provider.of<LibroServices>(context, listen: false);
 
-          libroServices.selectedLibro = Libro(
-              nombre: '',
-              creador: '',
-              carrera: '',
-              descripcion: '',
-              imagen: '',
-              vistos: 0,
-              like: 0,
-              cantidad: 0,
-              uid: '');
+            libroServices.selectedLibro = Libro(
+                nombre: '',
+                creador: '',
+                carrera: '',
+                descripcion: '',
+                imagen: '',
+                vistos: 0,
+                like: 0,
+                cantidad: 0,
+                uid: '');
 
-          Navigator.pushNamed(context, 'book_register_edit');
-        },
-        child: const Icon(Icons.add),
+            Navigator.pushNamed(context, 'book_register_edit');
+          },
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }

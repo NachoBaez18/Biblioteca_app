@@ -11,5 +11,7 @@ final carreraFilterProvider = StateProvider<Carrera>((ref) {
 });
 
 final libroDataProvider = FutureProvider((ref) async {
-  return ref.watch(libroProvider).get(ref.watch(carreraFilterProvider));
+  return ref
+      .watch(libroProvider)
+      .libroDinamico(ref.watch(carreraFilterProvider));
 });

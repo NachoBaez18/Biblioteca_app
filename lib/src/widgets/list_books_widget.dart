@@ -1,7 +1,9 @@
 import 'package:animate_do/animate_do.dart';
+
 import 'package:biblioteca_app/src/models/libro.dart';
 import 'package:biblioteca_app/src/provider/ListView/filter_provider.dart';
 import 'package:biblioteca_app/src/provider/data_provider.dart';
+
 import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -15,9 +17,10 @@ class ListBooks extends riverpod.ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final libros = ref.watch(libroDataProvider);
+
     return libros.when(
       data: (libros) {
-        return libros!.libros.isEmpty
+        return libros.accionesDeLibros[0].libro.isEmpty
             ? FadeInLeft(
                 child: Center(
                   child: Column(
@@ -42,10 +45,10 @@ class ListBooks extends riverpod.ConsumerWidget {
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
-                    itemCount: libros.libros.length,
+                    itemCount: libros.accionesDeLibros[0].libro.length,
                     itemBuilder: (_, int i) {
                       return _ListBooksinAnimation(
-                        libros.libros[i],
+                        libros.accionesDeLibros[0].libro[i],
                       );
                     }),
               ));
