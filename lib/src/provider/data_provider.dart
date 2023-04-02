@@ -15,3 +15,6 @@ final libroDataProvider = FutureProvider((ref) async {
       .watch(libroProvider)
       .libroDinamico(ref.watch(carreraFilterProvider));
 });
+
+//estado para saber que tipo de boton agregar en el detalle;
+final botonReserva = StateProvider<bool>((ref) => false);

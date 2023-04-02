@@ -27,6 +27,7 @@ class BooksListPage extends StatelessWidget {
               HeaderList(
                 titulo: 'Navegador',
                 subtitulo: 'Recomendadas',
+                search: true,
               ),
               SizedBox(height: 15),
               FilterListWidget(),

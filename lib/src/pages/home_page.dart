@@ -40,15 +40,16 @@ class HomePage extends ConsumerWidget {
     final items = <ItemBoton>[
       ItemBoton(FontAwesomeIcons.magnifyingGlass, 'Buscar Libro',
           const Color(0xff6989F5), const Color(0xff906EF5), onpress: () {
+        ref.read(botonReserva.notifier).state = true;
         Navigator.pushNamed(context, 'books_list');
       }),
-      ItemBoton(
-        FontAwesomeIcons.clockRotateLeft,
-        'Historial de libros ',
-        const Color(0xff66A9F2),
-        const Color(0xff536CF6),
-        onpress: () {},
-      ),
+      // ItemBoton(
+      //   FontAwesomeIcons.clockRotateLeft,
+      //   'Historial de libros ',
+      //   const Color(0xff66A9F2),
+      //   const Color(0xff536CF6),
+      //   onpress: () {},
+      // ),
       ItemBoton(
         FontAwesomeIcons.bell,
         'Notificaciones',
@@ -75,6 +76,7 @@ class HomePage extends ConsumerWidget {
         onpress: () async {
           final usuario =
               provider.Provider.of<AuthServices>(context, listen: false);
+          ref.read(botonReserva.notifier).state = false;
           ref.read(carreraFilterProvider.notifier).update((state) =>
               Carrera(nombre: 'reservado', uid: usuario.usuario.uid));
           Navigator.pushReplacementNamed(context, 'reservas');

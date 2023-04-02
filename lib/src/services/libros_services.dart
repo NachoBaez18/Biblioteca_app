@@ -19,6 +19,7 @@ class LibroServices with ChangeNotifier {
   late OperationResponse operacion;
   final _storage = const FlutterSecureStorage();
   late Libro selectedLibro;
+  String reservado = '';
   bool isSaving = false;
   File? newPictureFile;
 
@@ -33,7 +34,6 @@ class LibroServices with ChangeNotifier {
       });
 
       if (resp.statusCode == 200) {
-        print(resp.body);
         libro = libroResponseFromMap(resp.body);
         return libro;
       } else {
@@ -45,11 +45,9 @@ class LibroServices with ChangeNotifier {
 
   Future<LibroResponse> get(Carrera carrera) async {
     final token = await _storage.read(key: 'token');
-    print('Con que va a filtrar${carrera.nombre}');
     final LibroResponse libros;
     if (token != null) {
       final uri = Uri.parse('${Enviroment.apiUrl}/libros/listar');
-      print(jsonEncode(carrera.toMap()));
       final resp =
           await http.post(uri, body: jsonEncode(carrera.toMap()), headers: {
         'Content-Type': 'application/json',
@@ -80,7 +78,6 @@ class LibroServices with ChangeNotifier {
       );
 
       if (resp.statusCode == 200) {
-        print(resp.body);
         operacion = operationResponseFromMap(resp.body);
         isSaving = true;
         return operacion;
@@ -106,7 +103,6 @@ class LibroServices with ChangeNotifier {
       );
 
       if (resp.statusCode == 200) {
-        print(resp.body);
         operacion = operationResponseFromMap(resp.body);
         return operacion;
       } else {
@@ -131,7 +127,6 @@ class LibroServices with ChangeNotifier {
       );
 
       if (resp.statusCode == 200) {
-        print(resp.body);
         operacion = operationResponseFromMap(resp.body);
         return operacion;
       } else {
@@ -164,7 +159,6 @@ class LibroServices with ChangeNotifier {
   }
 
   Future<String?> uploadImage() async {
-    print('estamos uploadImage');
     if (newPictureFile == null) return null;
 
     //this.isSaving = true;
@@ -185,8 +179,6 @@ class LibroServices with ChangeNotifier {
     final resp = await http.Response.fromStream(streamResponse);
 
     if (resp.statusCode != 200 && resp.statusCode != 201) {
-      print('algo salio mal');
-      print(resp.body);
       return null;
     }
 
@@ -210,9 +202,7 @@ class LibroServices with ChangeNotifier {
         'Content-Type': 'application/json',
         'x-token': token,
       });
-
       if (resp.statusCode == 200) {
-        print(resp.body);
         accionesLibro = accionLibroResponseFromMap(resp.body);
         return accionesLibro;
       } else {
@@ -230,7 +220,15 @@ class LibroServices with ChangeNotifier {
           datafiltro.nombre == 'entregado') {
         final response = await accionLibrosXusuario(datafiltro);
 
-        return response;
+        if (response.accionesDeLibros.isNotEmpty) {
+          reservado = response.accionesDeLibros[0].uid ?? '';
+
+          return response;
+        } else {
+          final data = AccionLibroResponse(
+              error: false, accionesDeLibros: [AccionesDeLibro(libro: [])]);
+          return data;
+        }
       } else {
         //?Respuesta armada cuando seria para lista de libros normales
         final LibroResponse response = await get(datafiltro);
@@ -245,8 +243,6 @@ class LibroServices with ChangeNotifier {
 
           final AccionLibroResponse responseFinal =
               AccionLibroResponse(error: false, accionesDeLibros: [dataArmado]);
-          print(responseFinal);
-
           return responseFinal;
         } else {
           throw Exception('No exiten datos');
@@ -255,6 +251,51 @@ class LibroServices with ChangeNotifier {
     } catch (e) {
       throw Exception(e);
     }
+  }
+
+  Future<AccionLibroResponse> realizarAccion(Carrera datosFiltros) async {
+    final token = await _storage.read(key: 'token');
+    final AccionLibroResponse accionesLibro;
+    final data = {
+      'tipoFiltro': 'accionXusuario',
+      'usuario': datosFiltros.uid,
+      'accion': datosFiltros.nombre
+    };
+    if (token != null) {
+      final uri = Uri.parse('${Enviroment.apiUrl}/accionLibro/listar');
+      final resp = await http.post(uri, body: jsonEncode(data), headers: {
+        'Content-Type': 'application/json',
+        'x-token': token,
+      });
+
+      if (resp.statusCode == 200) {
+        accionesLibro = accionLibroResponseFromMap(resp.body);
+        return accionesLibro;
+      } else {
+        throw Exception(resp.reasonPhrase);
+      }
+    }
+    throw Exception('Favor vuelva a ingresar sus credenciales');
+  }
+
+  Future<dynamic> elimarAccion(String uid) async {
+    final token = await _storage.read(key: 'token');
+    final data = {
+      'uid': uid,
+    };
+    if (token != null) {
+      final uri = Uri.parse('${Enviroment.apiUrl}/accionLibro/eliminar');
+      final resp = await http.post(uri, body: jsonEncode(data), headers: {
+        'Content-Type': 'application/json',
+        'x-token': token,
+      });
+      if (resp.statusCode == 200) {
+        return resp.body;
+      } else {
+        throw Exception(resp.reasonPhrase);
+      }
+    }
+    throw Exception('Favor vuelva a ingresar sus credenciales');
   }
 }
 

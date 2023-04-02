@@ -1,19 +1,26 @@
+import 'package:biblioteca_app/src/ui/alertOperacional.dart';
 import 'package:flutter/material.dart';
 
 //Todo: Importaciones de terceros
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart' as provider;
 
 //?Mis importaciones
 import 'package:biblioteca_app/src/models/libro.dart';
 import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:biblioteca_app/src/ui/alertas.dart';
+import '../provider/data_provider.dart';
+import '../services/services.dart';
 
-class BookDetailPage extends StatelessWidget {
+class BookDetailPage extends ConsumerWidget {
   const BookDetailPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    final reserva = ref.watch(botonReserva);
+
     final Map<Libro, Libro> mapa =
         ModalRoute.of(context)!.settings.arguments as Map<Libro, Libro>;
     final Libro libro = mapa.values.first;
@@ -28,7 +35,7 @@ class BookDetailPage extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, 'books_list');
+                      Navigator.pop(context);
                     },
                     icon: const Icon(
                       Icons.chevron_left,
@@ -41,18 +48,15 @@ class BookDetailPage extends StatelessWidget {
                           context,
                           'Opciones a realizar',
                           SizedBox(
-                            height: 130,
+                            height: 60,
                             child: Column(
                               children: [
                                 ButtonRedondeado(
-                                  onpreess: () {},
-                                  texto: 'Realizar reserva',
-                                  color: Colors.red,
-                                ),
-                                const SizedBox(height: 30),
-                                ButtonRedondeado(
-                                  onpreess: () {},
-                                  texto: 'Guardar',
+                                  onpreess: _reservarOrEliminar(context, ref),
+                                  texto: reserva
+                                      ? 'Realizar reserva'
+                                      : 'Eliminar reserva',
+                                  color: reserva ? Colors.green : Colors.red,
                                 ),
                               ],
                             ),
@@ -138,6 +142,42 @@ class BookDetailPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _reservarOrEliminar(context, ref) async {
+    final reserva = ref.watch(botonReserva);
+    final providerD = provider.Provider.of<LibroServices>(context);
+    if (reserva) {
+      if (providerD.reservado == '') {
+        //hacer la creacion de una reserva
+      } else {
+        //editar la reserva existente
+      }
+    } else {
+      //eliminacion
+
+      final response = await providerD.elimarAccion(providerD.reservado);
+
+      if (!response['error']) {
+        mostrarAlertaOperacional(
+            context,
+            response['mensaje'],
+            const Icon(
+              Icons.info_outline,
+              size: 30,
+              color: Colors.green,
+            ));
+      } else {
+        mostrarAlertaOperacional(
+            context,
+            response['mensaje'],
+            const Icon(
+              Icons.error_outline,
+              size: 30,
+              color: Colors.red,
+            ));
+      }
+    }
   }
 }
 

@@ -17,7 +17,11 @@ class ReservasPage extends StatelessWidget {
         body: SafeArea(
             child: Column(
           children: const [
-            HeaderList(titulo: 'Reservas', subtitulo: 'A generar'),
+            HeaderList(
+              titulo: 'Reservas',
+              subtitulo: 'A generar',
+              search: false,
+            ),
             ListBooks()
           ],
         )),
