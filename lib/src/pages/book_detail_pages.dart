@@ -52,7 +52,10 @@ class BookDetailPage extends ConsumerWidget {
                             child: Column(
                               children: [
                                 ButtonRedondeado(
-                                  onpreess: _reservarOrEliminar(context, ref),
+                                  onpreess: () async {
+                                    await _reservarOrEliminar(
+                                        context, ref, libro.uid);
+                                  },
                                   texto: reserva
                                       ? 'Realizar reserva'
                                       : 'Eliminar reserva',
@@ -144,14 +147,33 @@ class BookDetailPage extends ConsumerWidget {
     );
   }
 
-  _reservarOrEliminar(context, ref) async {
+  _reservarOrEliminar(context, ref, libro) async {
     final reserva = ref.watch(botonReserva);
-    final providerD = provider.Provider.of<LibroServices>(context);
+    final providerD =
+        provider.Provider.of<LibroServices>(context, listen: false);
     if (reserva) {
-      if (providerD.reservado == '') {
-        //hacer la creacion de una reserva
+      //editar or registrar reserva
+
+      final response = await providerD.realizarAccion(libro, context);
+
+      if (!response['error']) {
+        mostrarAlertaOperacional(
+            context,
+            response['mensaje'],
+            const Icon(
+              Icons.info_outline,
+              size: 30,
+              color: Colors.green,
+            ));
       } else {
-        //editar la reserva existente
+        mostrarAlertaOperacional(
+            context,
+            response['mensaje'],
+            const Icon(
+              Icons.error_outline,
+              size: 30,
+              color: Colors.red,
+            ));
       }
     } else {
       //eliminacion

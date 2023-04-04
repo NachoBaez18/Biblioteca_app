@@ -4,12 +4,15 @@ import 'dart:io';
 import 'package:biblioteca_app/src/models/carreraResponse.dart';
 import 'package:biblioteca_app/src/models/libroResponse.dart';
 import 'package:biblioteca_app/src/models/registerUpdateDeleteResponse.dart';
+import 'package:biblioteca_app/src/models/usuario.dart';
+import 'package:biblioteca_app/src/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:biblioteca_app/src/models/libro.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as Riverpod;
 
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import '../global/enviroment.dart';
 import '../models/accionLibroResponse.dart';
@@ -253,24 +256,23 @@ class LibroServices with ChangeNotifier {
     }
   }
 
-  Future<AccionLibroResponse> realizarAccion(Carrera datosFiltros) async {
+  Future<dynamic> realizarAccion(String libro, context) async {
+    final Usuario usuario =
+        Provider.of<AuthServices>(context, listen: false).usuario;
     final token = await _storage.read(key: 'token');
-    final AccionLibroResponse accionesLibro;
-    final data = {
-      'tipoFiltro': 'accionXusuario',
-      'usuario': datosFiltros.uid,
-      'accion': datosFiltros.nombre
-    };
+
+    final data = {'usuario': usuario.uid, 'libro': libro};
+
     if (token != null) {
-      final uri = Uri.parse('${Enviroment.apiUrl}/accionLibro/listar');
+      final uri =
+          Uri.parse('${Enviroment.apiUrl}/accionLibro/registrarOrEditar');
       final resp = await http.post(uri, body: jsonEncode(data), headers: {
         'Content-Type': 'application/json',
         'x-token': token,
       });
 
       if (resp.statusCode == 200) {
-        accionesLibro = accionLibroResponseFromMap(resp.body);
-        return accionesLibro;
+        return resp.body;
       } else {
         throw Exception(resp.reasonPhrase);
       }
