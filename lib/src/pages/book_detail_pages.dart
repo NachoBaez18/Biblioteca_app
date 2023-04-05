@@ -1,4 +1,3 @@
-import 'package:biblioteca_app/src/ui/alertOperacional.dart';
 import 'package:flutter/material.dart';
 
 //Todo: Importaciones de terceros
@@ -11,8 +10,11 @@ import 'package:provider/provider.dart' as provider;
 import 'package:biblioteca_app/src/models/libro.dart';
 import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:biblioteca_app/src/ui/alertas.dart';
+import '../models/carreraResponse.dart';
 import '../provider/data_provider.dart';
+import '../provider/provider.dart';
 import '../services/services.dart';
+import 'package:biblioteca_app/src/ui/alertOperacional.dart';
 
 class BookDetailPage extends ConsumerWidget {
   const BookDetailPage({super.key});
@@ -151,55 +153,71 @@ class BookDetailPage extends ConsumerWidget {
     final reserva = ref.watch(botonReserva);
     final providerD =
         provider.Provider.of<LibroServices>(context, listen: false);
+
     if (reserva) {
       //editar or registrar reserva
-
       final response = await providerD.realizarAccion(libro, context);
-
       if (!response['error']) {
-        mostrarAlertaOperacional(
-            context,
-            response['mensaje'],
-            const Icon(
-              Icons.info_outline,
-              size: 30,
-              color: Colors.green,
-            ));
+        _alertaCorrecta(context, response);
+        _regresarHome(ref, context);
       } else {
-        mostrarAlertaOperacional(
-            context,
-            response['mensaje'],
-            const Icon(
-              Icons.error_outline,
-              size: 30,
-              color: Colors.red,
-            ));
+        _alertaInCorrecta(context, response);
+        _regresarHome(ref, context);
       }
     } else {
-      //eliminacion
-
-      final response = await providerD.elimarAccion(providerD.reservado);
-
+      //eliminacion de libro en reserva
+      final response = await providerD.elimarAccion(libro, context);
       if (!response['error']) {
-        mostrarAlertaOperacional(
-            context,
-            response['mensaje'],
-            const Icon(
-              Icons.info_outline,
-              size: 30,
-              color: Colors.green,
-            ));
+        _alertaCorrecta(context, response);
+        _regresarReserva(ref, context);
       } else {
-        mostrarAlertaOperacional(
-            context,
-            response['mensaje'],
-            const Icon(
-              Icons.error_outline,
-              size: 30,
-              color: Colors.red,
-            ));
+        _alertaInCorrecta(context, response);
+        _regresarReserva(ref, context);
       }
     }
+  }
+
+  _regresarHome(ref, context) {
+    final filter =
+        provider.Provider.of<FilterListProvider>(context, listen: false);
+    ref
+        .read(carreraFilterProvider.notifier)
+        .update((state) => Carrera(nombre: 'Informatica', uid: '11111111111'));
+    filter.filter = 0;
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.pushReplacementNamed(context, 'books_list');
+    });
+  }
+
+  _regresarReserva(ref, context) {
+    final usuario = provider.Provider.of<AuthServices>(context, listen: false);
+    ref.read(carreraFilterProvider.notifier).update(
+        (state) => Carrera(nombre: 'reservado', uid: usuario.usuario.uid));
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.pushReplacementNamed(context, 'reservas');
+    });
+  }
+
+  _alertaCorrecta(context, response) {
+    mostrarAlertaOperacional(
+        context,
+        response['mensaje'],
+        const Icon(
+          Icons.info_outline,
+          size: 30,
+          color: Colors.green,
+        ));
+  }
+
+  _alertaInCorrecta(context, response) {
+    mostrarAlertaOperacional(
+        context,
+        response['mensaje'],
+        const Icon(
+          Icons.error_outline,
+          size: 30,
+          color: Colors.red,
+        ));
   }
 }
 

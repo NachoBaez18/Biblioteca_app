@@ -9,7 +9,7 @@ import 'package:biblioteca_app/src/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:biblioteca_app/src/models/libro.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart' as Riverpod;
+import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -272,7 +272,7 @@ class LibroServices with ChangeNotifier {
       });
 
       if (resp.statusCode == 200) {
-        return resp.body;
+        return jsonDecode(resp.body);
       } else {
         throw Exception(resp.reasonPhrase);
       }
@@ -280,19 +280,19 @@ class LibroServices with ChangeNotifier {
     throw Exception('Favor vuelva a ingresar sus credenciales');
   }
 
-  Future<dynamic> elimarAccion(String uid) async {
+  Future<dynamic> elimarAccion(String libro, context) async {
+    final Usuario usuario =
+        Provider.of<AuthServices>(context, listen: false).usuario;
     final token = await _storage.read(key: 'token');
-    final data = {
-      'uid': uid,
-    };
+    final data = {'usuario': usuario.uid, 'libro': libro};
     if (token != null) {
-      final uri = Uri.parse('${Enviroment.apiUrl}/accionLibro/eliminar');
+      final uri = Uri.parse('${Enviroment.apiUrl}/accionLibro/elimiarOrEditar');
       final resp = await http.post(uri, body: jsonEncode(data), headers: {
         'Content-Type': 'application/json',
         'x-token': token,
       });
       if (resp.statusCode == 200) {
-        return resp.body;
+        return jsonDecode(resp.body);
       } else {
         throw Exception(resp.reasonPhrase);
       }
@@ -302,4 +302,4 @@ class LibroServices with ChangeNotifier {
 }
 
 final libroProvider =
-    Riverpod.Provider<LibroServices>((ref) => LibroServices());
+    riverpod.Provider<LibroServices>((ref) => LibroServices());
