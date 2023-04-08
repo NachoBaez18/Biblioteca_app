@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../sokect/notificaciones_sokect.dart';
 import '../widgets/widgets.dart';
 
 class LoginPage extends StatelessWidget {
@@ -84,6 +85,9 @@ class _FormLoginState extends State<_FormLogin> {
                     passwordCtrl.text.trim(),
                   );
                   if (loginOk) {
+                    final socketService =
+                        Provider.of<SocketService>(context, listen: false);
+                    socketService.connect();
                     // ignore: use_build_context_synchronously
                     Navigator.pushReplacementNamed(context, 'home');
                   } else {
@@ -93,7 +97,8 @@ class _FormLoginState extends State<_FormLogin> {
                         'Login incorrecto',
                         const Text('Revise sus credenciales nuevamente'),
                         '',
-                        'OK');
+                        'OK',
+                        () => Navigator.pop(context));
                   }
                 },
           texto: 'Acceder',

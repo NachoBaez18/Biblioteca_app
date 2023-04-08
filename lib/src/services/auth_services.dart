@@ -11,6 +11,8 @@ import '../global/enviroment.dart';
 import 'package:biblioteca_app/src/models/loginResponse.dart';
 import 'package:biblioteca_app/src/models/usuario.dart';
 
+import '../models/usuarioEdicionResponse.dart';
+
 class AuthServices with ChangeNotifier {
   late Usuario usuario;
   bool _autenticando = false;
@@ -123,6 +125,80 @@ class AuthServices with ChangeNotifier {
       }
     }
     return false;
+  }
+
+  Future<UsuarioEdicionResponse> usuarioUpdate(
+      String nombre, String telefono, String email, String uid) async {
+    final token = await _storage.read(key: 'token');
+
+    if (token != null) {
+      final data = {
+        'uid': uid,
+        'nombre': nombre,
+        'email': email,
+        'telefono': telefono,
+      };
+      try {
+        final uri = Uri.parse('${Enviroment.apiUrl}/login/editar');
+        final resp = await http.post(
+          uri,
+          body: jsonEncode(data),
+          headers: {
+            'Content-Type': 'application/json',
+            'x-token': token,
+          },
+        );
+
+        if (resp.statusCode == 200) {
+          final UsuarioEdicionResponse updateResponse =
+              usuarioEdicionResponseFromMap(resp.body);
+
+          return updateResponse;
+        } else {
+          throw Exception('Error al actualizar usuario');
+        }
+      } catch (e) {
+        throw Exception(e);
+      }
+    }
+    throw Exception('Favor ingrese sus credenciales');
+  }
+
+  Future<UsuarioEdicionResponse> updatePassword(
+      String password, String passwordNew, uid) async {
+    final token = await _storage.read(key: 'token');
+
+    if (token != null) {
+      final data = {
+        'uid': uid,
+        'password': password,
+        'passwordNew': passwordNew,
+      };
+      try {
+        final uri = Uri.parse('${Enviroment.apiUrl}/login/passwordNew');
+        final resp = await http.post(
+          uri,
+          body: jsonEncode(data),
+          headers: {
+            'Content-Type': 'application/json',
+            'x-token': token,
+          },
+        );
+        print(resp.body);
+        if (resp.statusCode == 200) {
+          print('estado 200');
+          final UsuarioEdicionResponse updateResponse =
+              usuarioEdicionResponseFromMap(resp.body);
+          print('aqui puede ser');
+          return updateResponse;
+        } else {
+          throw Exception('Error al actualizar usuario');
+        }
+      } catch (e) {
+        throw Exception(e);
+      }
+    }
+    throw Exception('Favor ingrese sus credenciales');
   }
 
   Future _guardarToken(String token) async {

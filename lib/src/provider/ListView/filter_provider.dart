@@ -6,6 +6,30 @@ class FilterListProvider with ChangeNotifier {
   bool _rotate = false;
   late double _opacity = 0;
   bool _hero = false;
+  String _password = '';
+  String _passwordNew = '';
+  String _passwordNewRepit = '';
+
+  String get passwordNewRepit => _passwordNewRepit;
+
+  set passwordNewRepit(String valor) {
+    _passwordNewRepit = valor;
+    notifyListeners();
+  }
+
+  String get passwordNew => _passwordNew;
+
+  set passwordNew(String valor) {
+    _passwordNew = valor;
+    notifyListeners();
+  }
+
+  String get password => _password;
+
+  set password(String valor) {
+    _password = valor;
+    notifyListeners();
+  }
 
   bool get hero => _hero;
 

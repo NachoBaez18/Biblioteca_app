@@ -13,6 +13,7 @@ import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:provider/provider.dart' as provider;
 
 import '../provider/data_provider.dart';
+import '../sokect/notificaciones_sokect.dart';
 
 class ItemBoton {
   final IconData icon;
@@ -80,7 +81,7 @@ class HomePage extends ConsumerWidget {
               provider.Provider.of<AuthServices>(context, listen: false);
           ref.read(botonReserva.notifier).state = false;
           ref.read(carreraFilterProvider.notifier).update((state) =>
-              Carrera(nombre: 'reservado', uid: usuario.usuario.uid));
+              Carrera(nombre: 'reservado', uid: usuario.usuario.uid!));
           Navigator.pushReplacementNamed(context, 'reservas');
         },
       ),
@@ -101,23 +102,24 @@ class HomePage extends ConsumerWidget {
         .toList();
 
     return Scaffold(
-        body: Stack(
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: (isLarge) ? 220 : 10),
-          child: SafeArea(
-            child: ListView(
-              physics: const BouncingScrollPhysics(),
-              children: [
-                if (isLarge) const SizedBox(height: 80),
-                ...itemMap,
-              ],
+      body: Stack(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: (isLarge) ? 220 : 10),
+            child: SafeArea(
+              child: ListView(
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  if (isLarge) const SizedBox(height: 80),
+                  ...itemMap,
+                ],
+              ),
             ),
           ),
-        ),
-        if (isLarge) const _Encabezado()
-      ],
-    ));
+          if (isLarge) const _Encabezado()
+        ],
+      ),
+    );
   }
 }
 
@@ -128,21 +130,24 @@ class _Encabezado extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const String user = 'Cristino Baez ';
+    final authService = provider.Provider.of<AuthServices>(context);
     return Stack(
       children: [
-        const IconHeader(
+        IconHeader(
           icon: FontAwesomeIcons.bookOpenReader,
-          titulo: user,
+          titulo: authService.usuario.nombre!,
           subTitulo: 'Bienvenido!',
-          color2: Color(0xff66A9F2),
-          color1: Color(0xff536CF6),
+          color2: const Color(0xff66A9F2),
+          color1: const Color(0xff536CF6),
         ),
         Positioned(
             right: 0,
             top: 45,
             child: RawMaterialButton(
               onPressed: () async {
+                final socketService =
+                    provider.Provider.of<SocketService>(context, listen: false);
+                socketService.disconnect();
                 Navigator.pushReplacementNamed(context, 'login');
                 const storage = FlutterSecureStorage();
                 await storage.delete(key: 'token');

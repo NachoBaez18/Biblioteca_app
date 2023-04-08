@@ -1,11 +1,12 @@
 import 'package:biblioteca_app/src/provider/provider.dart';
 import 'package:biblioteca_app/src/services/services.dart';
+import 'package:biblioteca_app/src/sokect/notificaciones_sokect.dart';
 import 'package:flutter/material.dart';
 
 //? Mis importaciones
 import 'package:biblioteca_app/src/routes/routes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart' as Provider;
+import 'package:provider/provider.dart' as provider;
 
 void main() => runApp(const ProviderScope(child: MyApp()));
 
@@ -14,12 +15,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider.MultiProvider(
+    return provider.MultiProvider(
       providers: [
-        Provider.ChangeNotifierProvider(create: (_) => LoadingProvider()),
-        Provider.ChangeNotifierProvider(create: (_) => FilterListProvider()),
-        Provider.ChangeNotifierProvider(create: (_) => AuthServices()),
-        Provider.ChangeNotifierProvider(create: (_) => LibroServices()),
+        provider.ChangeNotifierProvider(create: (_) => LoadingProvider()),
+        provider.ChangeNotifierProvider(create: (_) => FilterListProvider()),
+        provider.ChangeNotifierProvider(create: (_) => AuthServices()),
+        provider.ChangeNotifierProvider(create: (_) => LibroServices()),
+        provider.ChangeNotifierProvider(create: (_) => SocketService()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

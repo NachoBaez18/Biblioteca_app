@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-
 //Todo: Importaciones de terceros
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as provider;
-
 //?Mis importaciones
-import 'package:biblioteca_app/src/models/libro.dart';
-import 'package:biblioteca_app/src/widgets/widgets.dart';
-import 'package:biblioteca_app/src/ui/alertas.dart';
+import '../models/libro.dart';
+import '../widgets/widgets.dart';
+import '../ui/alertas.dart';
 import '../models/carreraResponse.dart';
 import '../provider/data_provider.dart';
 import '../provider/provider.dart';
 import '../services/services.dart';
-import 'package:biblioteca_app/src/ui/alertOperacional.dart';
+import '../ui/alertas_new.dart';
 
 class BookDetailPage extends ConsumerWidget {
   const BookDetailPage({super.key});
@@ -67,7 +65,8 @@ class BookDetailPage extends ConsumerWidget {
                             ),
                           ),
                           'Cancelar',
-                          '');
+                          '',
+                          () {});
                     },
                     icon: const Icon(
                       FontAwesomeIcons.barsStaggered,
@@ -153,71 +152,52 @@ class BookDetailPage extends ConsumerWidget {
     final reserva = ref.watch(botonReserva);
     final providerD =
         provider.Provider.of<LibroServices>(context, listen: false);
+    final String navegar;
 
     if (reserva) {
       //editar or registrar reserva
+      navegar = 'books_list';
       final response = await providerD.realizarAccion(libro, context);
       if (!response['error']) {
-        _alertaCorrecta(context, response);
+        AlertasNew()
+            .alertaCorrectaNavegatoria(context, response['mensaje'], navegar);
         _regresarHome(ref, context);
       } else {
-        _alertaInCorrecta(context, response);
+        AlertasNew()
+            .alertaInCorrectaNavegatoria(context, response['mensaje'], navegar);
         _regresarHome(ref, context);
       }
     } else {
       //eliminacion de libro en reserva
+      navegar = 'reservas';
       final response = await providerD.elimarAccion(libro, context);
       if (!response['error']) {
-        _alertaCorrecta(context, response);
+        AlertasNew()
+            .alertaCorrectaNavegatoria(context, response['mensaje'], navegar);
         _regresarReserva(ref, context);
       } else {
-        _alertaInCorrecta(context, response);
+        AlertasNew()
+            .alertaInCorrectaNavegatoria(context, response['mensaje'], navegar);
         _regresarReserva(ref, context);
       }
     }
   }
 
   _regresarHome(ref, context) {
+    //!aqui cambiamos el estado de los proveedores para saber que va a mostrar
     final filter =
         provider.Provider.of<FilterListProvider>(context, listen: false);
     ref
         .read(carreraFilterProvider.notifier)
         .update((state) => Carrera(nombre: 'Informatica', uid: '11111111111'));
     filter.filter = 0;
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, 'books_list');
-    });
   }
 
   _regresarReserva(ref, context) {
+    //!aqui cambiamos el estado de los proveedores para saber que va a mostrar
     final usuario = provider.Provider.of<AuthServices>(context, listen: false);
     ref.read(carreraFilterProvider.notifier).update(
-        (state) => Carrera(nombre: 'reservado', uid: usuario.usuario.uid));
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, 'reservas');
-    });
-  }
-
-  _alertaCorrecta(context, response) {
-    mostrarAlertaOperacional(
-        context,
-        response['mensaje'],
-        const Icon(
-          Icons.info_outline,
-          size: 30,
-          color: Colors.green,
-        ));
-  }
-
-  _alertaInCorrecta(context, response) {
-    mostrarAlertaOperacional(
-        context,
-        response['mensaje'],
-        const Icon(
-          Icons.error_outline,
-          size: 30,
-          color: Colors.red,
-        ));
+        (state) => Carrera(nombre: 'reservado', uid: usuario.usuario.uid!));
   }
 }
 

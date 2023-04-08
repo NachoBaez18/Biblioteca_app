@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,16 +9,17 @@ class InputLoginWidget extends StatelessWidget {
   final TextInputType keyboardype;
   final bool isPassword;
   final Function()? onPressed;
-  const InputLoginWidget({
-    super.key,
-    required this.icon,
-    required this.placeholder,
-    required this.textController,
-    this.iconSecundario = false,
-    this.keyboardype = TextInputType.text,
-    this.isPassword = false,
-    this.onPressed
-  });
+  final bool? enable;
+  const InputLoginWidget(
+      {super.key,
+      required this.icon,
+      required this.placeholder,
+      required this.textController,
+      this.iconSecundario = false,
+      this.keyboardype = TextInputType.text,
+      this.isPassword = false,
+      this.onPressed,
+      this.enable = true});
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +43,7 @@ class InputLoginWidget extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.only(left: 85, right: 15),
             child: TextField(
+              enabled: enable,
               controller: textController,
               autocorrect: false,
               obscureText: isPassword,
@@ -80,7 +81,7 @@ class InputLoginWidget extends StatelessWidget {
             top: 13,
             right: 60,
             child: IconButton(
-              icon:const Icon(FontAwesomeIcons.upRightAndDownLeftFromCenter,
+              icon: const Icon(FontAwesomeIcons.upRightAndDownLeftFromCenter,
                   color: Colors.black26),
               onPressed: onPressed,
             ),
