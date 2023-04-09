@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "980847552983",
+    "project_id": "biblioteca-notificaciones",
+    "storage_bucket": "biblioteca-notificaciones.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980847552983:android:810268712a170f30564392",
+        "android_client_info": {
+          "package_name": "com.nachoNachito.biblioteca_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "980847552983-dcfi28lbed2ee5h96upv8ld2sihlsf89.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nachoNachito.biblioteca_app",
+            "certificate_hash": "cb63c8b85078814871dea710fd04a596c811d9ef"
+          }
+        },
+        {
+          "client_id": "980847552983-82hs8mc5pc2ie3n6untrns45rhtg5tm1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpONPcX4flxlwvK1UNxrRg6412snuDNTI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "980847552983-82hs8mc5pc2ie3n6untrns45rhtg5tm1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

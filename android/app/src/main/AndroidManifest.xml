@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.biblioteca_app">
+    package="com.nachoNachito.biblioteca_app">
    <application
         android:label="biblioteca_app"
         android:name="${applicationName}"

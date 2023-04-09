@@ -9,8 +9,6 @@ import 'package:animate_do/animate_do.dart';
 import 'package:biblioteca_app/src/pages/pages.dart';
 import 'package:biblioteca_app/src/services/services.dart';
 
-import '../sokect/notificaciones_sokect.dart';
-
 class LoadingPage extends StatelessWidget {
   const LoadingPage({super.key});
 
@@ -46,7 +44,7 @@ class LoadingPage extends StatelessWidget {
 
   Future checkLoginState(BuildContext context) async {
     final authService = Provider.of<AuthServices>(context, listen: false);
-    final socketService = Provider.of<SocketService>(context, listen: false);
+    //  final socketService = Provider.of<SocketService>(context, listen: false);
 
     const storage = FlutterSecureStorage();
     final token = await storage.read(key: 'token');
@@ -57,7 +55,7 @@ class LoadingPage extends StatelessWidget {
     final autenticado = await authService.isLoggedIn();
     if (autenticado) {
       //todo: comectar al sokect
-      socketService.connect();
+      // socketService.connect();
       //Navigator.pushReplacementNamed(context, 'usuarios');
       //* Por la transicion cambiamos la forma de como mandamos a llamar la ruta
       // ignore: use_build_context_synchronously
