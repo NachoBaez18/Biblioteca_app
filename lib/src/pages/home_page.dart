@@ -145,9 +145,9 @@ class _Encabezado extends StatelessWidget {
             top: 45,
             child: RawMaterialButton(
               onPressed: () async {
-                final socketService =
-                    provider.Provider.of<SocketService>(context, listen: false);
-                socketService.disconnect();
+                // final socketService =
+                //     provider.Provider.of<SocketService>(context, listen: false);
+                // socketService.disconnect();
                 Navigator.pushReplacementNamed(context, 'login');
                 const storage = FlutterSecureStorage();
                 await storage.delete(key: 'token');

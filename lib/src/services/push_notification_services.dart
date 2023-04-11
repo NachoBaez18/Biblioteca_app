@@ -5,7 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 class PushNotificationService {
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
-  static String? token;
+  static String? tokenDivice;
 
   static Future _backgroundHandler(RemoteMessage message) async {
     // print('background Handler ${message.messageId}');
@@ -22,7 +22,7 @@ class PushNotificationService {
   static Future initialezeApp() async {
     //Push notificacion
     await Firebase.initializeApp();
-    token = await FirebaseMessaging.instance.getToken();
+    tokenDivice = await FirebaseMessaging.instance.getToken();
 
     //Handlers
     FirebaseMessaging.onBackgroundMessage(_backgroundHandler);

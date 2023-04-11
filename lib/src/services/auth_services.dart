@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:biblioteca_app/src/services/push_notification_services.dart';
 import 'package:flutter/material.dart';
 
 //Todo: Importaciones de terceros
@@ -44,6 +45,7 @@ class AuthServices with ChangeNotifier {
     final data = {
       'email': email,
       'password': password,
+      'divice': PushNotificationService.tokenDivice
     };
 
     final uri = Uri.parse('${Enviroment.apiUrl}/login');

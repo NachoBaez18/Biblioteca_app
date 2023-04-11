@@ -1,7 +1,6 @@
 import 'package:biblioteca_app/src/provider/provider.dart';
 import 'package:biblioteca_app/src/services/push_notification_services.dart';
 import 'package:biblioteca_app/src/services/services.dart';
-import 'package:biblioteca_app/src/sokect/notificaciones_sokect.dart';
 import 'package:flutter/material.dart';
 
 //? Mis importaciones
@@ -26,7 +25,6 @@ class MyApp extends StatelessWidget {
         provider.ChangeNotifierProvider(create: (_) => FilterListProvider()),
         provider.ChangeNotifierProvider(create: (_) => AuthServices()),
         provider.ChangeNotifierProvider(create: (_) => LibroServices()),
-        provider.ChangeNotifierProvider(create: (_) => SocketService()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
