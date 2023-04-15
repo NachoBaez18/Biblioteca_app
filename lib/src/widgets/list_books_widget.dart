@@ -3,6 +3,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:biblioteca_app/src/models/libro.dart';
 import 'package:biblioteca_app/src/provider/ListView/filter_provider.dart';
 import 'package:biblioteca_app/src/provider/data_provider.dart';
+import 'package:biblioteca_app/src/services/services.dart';
 
 import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -98,45 +99,80 @@ class _CardPrimario extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<FilterListProvider>(context);
-    return GestureDetector(
-      onTap: () {
-        provider.hero = true;
-        Navigator.pushNamed(context, 'book_detail', arguments: {libro: libro});
-      },
-      child: Hero(
-        tag: 'dash${libro.uid}',
-        child: provider.hero
-            ? Container(
-                margin:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-                height: 250,
-                width: 200,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: FadeInImage(
-                    placeholder: const AssetImage('assets/jar-loading.gif'),
-                    image: NetworkImage(libro.imagen),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              )
-            : FadeInUp(
-                child: Container(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-                  height: 250,
-                  width: 200,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: FadeInImage(
-                      placeholder: const AssetImage('assets/jar-loading.gif'),
-                      image: NetworkImage(libro.imagen),
-                      fit: BoxFit.fill,
+    final user = Provider.of<AuthServices>(context);
+    final envio = Provider.of<LibroServices>(context);
+    return Stack(
+      children: [
+        GestureDetector(
+          onTap: () {
+            if (user.admin) {
+              provider.isEdit = true;
+              envio.selectedLibro = libro;
+              Navigator.pushNamed(context, 'book_register_edit');
+            } else {
+              provider.hero = true;
+              Navigator.pushNamed(context, 'book_detail',
+                  arguments: {libro: libro});
+            }
+          },
+          child: Hero(
+            tag: 'dash${libro.uid}',
+            child: provider.hero
+                ? Container(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 30),
+                    height: 250,
+                    width: 200,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: FadeInImage(
+                        placeholder: const AssetImage('assets/jar-loading.gif'),
+                        image: NetworkImage(libro.imagen),
+                        fit: BoxFit.fill,
+                      ),
                     ),
+                  )
+                : FadeInUp(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 30),
+                      height: 250,
+                      width: 200,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: FadeInImage(
+                          placeholder:
+                              const AssetImage('assets/jar-loading.gif'),
+                          image: NetworkImage(libro.imagen),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  ),
+          ),
+        ),
+        if (libro.cantidad == 0)
+          Positioned(
+            right: 40,
+            top: 20,
+            child: FadeInUp(
+              child: Container(
+                height: 30,
+                width: 100,
+                decoration: BoxDecoration(
+                    color: Colors.amber,
+                    borderRadius: BorderRadius.circular(10)),
+                child: const Center(
+                  child: Text(
+                    'No disponible',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
-      ),
+            ),
+          ),
+      ],
     );
   }
 }

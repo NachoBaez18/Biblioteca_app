@@ -1,13 +1,19 @@
+import 'dart:convert';
+
 import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class ReservasPage extends StatelessWidget {
+import '../provider/data_provider.dart';
+
+class ReservasPage extends ConsumerWidget {
   const ReservasPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    final libros = ref.watch(libroDataProvider);
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushReplacementNamed(context, 'home');
@@ -28,6 +34,7 @@ class ReservasPage extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.blueAccent,
           onPressed: () {
+            final String jsonString = jsonEncode(libros.value!.toMap());
             showModalBottomSheet<void>(
               context: context,
               builder: (BuildContext context) {
@@ -57,7 +64,7 @@ class ReservasPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
                         QrImage(
-                          data: 'hola',
+                          data: jsonString,
                           version: QrVersions.auto,
                           size: 250,
                           backgroundColor: Colors.white,

@@ -13,7 +13,6 @@ import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:provider/provider.dart' as provider;
 
 import '../provider/data_provider.dart';
-import '../sokect/notificaciones_sokect.dart';
 
 class ItemBoton {
   final IconData icon;
@@ -37,7 +36,7 @@ class HomePage extends ConsumerWidget {
     } else {
       isLarge = false;
     }
-
+    final auhtService = provider.Provider.of<AuthServices>(context);
     final items = <ItemBoton>[
       ItemBoton(FontAwesomeIcons.magnifyingGlass, 'Buscar Libro',
           const Color(0xff6989F5), const Color(0xff906EF5), onpress: () {
@@ -53,15 +52,17 @@ class HomePage extends ConsumerWidget {
       //   const Color(0xff536CF6),
       //   onpress: () {},
       // ),
-      ItemBoton(
-        FontAwesomeIcons.bell,
-        'Notificaciones',
-        const Color(0xffF2D572),
-        const Color(0xffE06AA3),
-        onpress: () {
-          Navigator.pushNamed(context, 'notificaciones');
-        },
-      ),
+      if (!auhtService.admin)
+        ItemBoton(
+          FontAwesomeIcons.bell,
+          'Notificaciones',
+          const Color(0xffF2D572),
+          const Color(0xffE06AA3),
+          onpress: () {
+            ref.refresh(notificacionDataProvider);
+            Navigator.pushNamed(context, 'notificaciones');
+          },
+        ),
       ItemBoton(
         FontAwesomeIcons.user,
         'Perfil',
@@ -71,20 +72,37 @@ class HomePage extends ConsumerWidget {
           Navigator.pushReplacementNamed(context, 'perfil');
         },
       ),
-      ItemBoton(
-        FontAwesomeIcons.qrcode,
-        'Reservas',
-        const Color(0xff317183),
-        const Color(0xff46997D),
-        onpress: () async {
-          final usuario =
-              provider.Provider.of<AuthServices>(context, listen: false);
-          ref.read(botonReserva.notifier).state = false;
-          ref.read(carreraFilterProvider.notifier).update((state) =>
-              Carrera(nombre: 'reservado', uid: usuario.usuario.uid!));
-          Navigator.pushReplacementNamed(context, 'reservas');
-        },
-      ),
+      if (!auhtService.admin)
+        ItemBoton(
+          FontAwesomeIcons.qrcode,
+          'Reservas',
+          const Color(0xff317183),
+          const Color(0xff46997D),
+          onpress: () async {
+            final usuario =
+                provider.Provider.of<AuthServices>(context, listen: false);
+            ref.read(botonReserva.notifier).state = false;
+            ref.read(carreraFilterProvider.notifier).update((state) =>
+                Carrera(nombre: 'reservado', uid: usuario.usuario.uid!));
+            Navigator.pushReplacementNamed(context, 'reservas');
+          },
+        ),
+      if (auhtService.admin)
+        ItemBoton(
+          FontAwesomeIcons.qrcode,
+          'Devolucion/Entrega',
+          const Color(0xff317183),
+          const Color(0xff46997D),
+          onpress: () async {},
+        ),
+      if (auhtService.admin)
+        ItemBoton(
+          FontAwesomeIcons.triangleExclamation,
+          'Fecha Expirada',
+          const Color(0xFFFFCCCB), // Color del lado izquierdo del gradiente
+          const Color.fromARGB(255, 218, 56, 56),
+          onpress: () async {},
+        ),
     ];
 
     List<Widget> itemMap = items

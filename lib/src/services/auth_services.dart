@@ -60,6 +60,7 @@ class AuthServices with ChangeNotifier {
       usuario = loginResponse.usuario;
       admin = loginResponse.usuario.tipo == "administrador" ? true : false;
       await _guardarToken(loginResponse.token);
+      await _guardarUid(loginResponse.usuario.uid!);
 
       return true;
     } else {
@@ -112,7 +113,9 @@ class AuthServices with ChangeNotifier {
         if (resp.statusCode == 200) {
           final loginResponse = loginResponseFromMap(resp.body);
           usuario = loginResponse.usuario;
+          admin = loginResponse.usuario.tipo == "administrador" ? true : false;
           await _guardarToken(loginResponse.token);
+          await _guardarUid(loginResponse.usuario.uid!);
 
           autenticando = false;
 
@@ -205,6 +208,10 @@ class AuthServices with ChangeNotifier {
 
   Future _guardarToken(String token) async {
     return await _storage.write(key: 'token', value: token);
+  }
+
+  Future _guardarUid(String uid) async {
+    return await _storage.write(key: 'uid', value: uid);
   }
 
   Future logout() async {

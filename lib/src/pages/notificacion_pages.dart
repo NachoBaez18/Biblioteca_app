@@ -1,113 +1,105 @@
+import 'package:animate_do/animate_do.dart';
+import 'package:biblioteca_app/src/services/notifications_services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Notificaciones extends StatelessWidget {
+import '../provider/data_provider.dart';
+
+class Notificaciones extends ConsumerWidget {
   const Notificaciones({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final notificaciones = <Notificacion>[
-      Notificacion(
-          'Entraga de Libro:',
-          'Su fecha de entrega de libro a llegado favor acercar a la biblioteca con el libro "Nombre del libro"',
-          '26 de feb. a las 20:45',
-          1,
-          false),
-      Notificacion(
-          'Reserva de Libro:',
-          'Su reserva del libro "Nombre del libro" ha sido cancelada por incumplimento de fecha de retiro',
-          '26 de feb. a las 20:45',
-          2,
-          false),
-      Notificacion(
-          'Entraga de Libro:',
-          'Su fecha de entrega de libro a llegado favor acercar a la biblioteca con el libro "Nombre del libro"',
-          '26 de feb. a las 20:45',
-          1,
-          false),
-      Notificacion(
-          'Reserva de Libro:',
-          'Su reserva del libro "Nombre del libro" ha sido cancelada por incumplimento de fecha de retiro',
-          '26 de feb. a las 20:45',
-          2,
-          true),
-      Notificacion(
-          'Entraga de Libro:',
-          'Su fecha de entrega de libro a llegado favor acercar a la biblioteca con el libro "Nombre del libro"',
-          '26 de feb. a las 20:45',
-          1,
-          true),
-      Notificacion(
-          'Reserva de Libro:',
-          'Su reserva del libro "Nombre del libro" ha sido cancelada por incumplimento de fecha de retiro',
-          '26 de feb. a las 20:45',
-          2,
-          true),
-      Notificacion(
-          'Entraga de Libro:',
-          'Su fecha de entrega de libro a llegado favor acercar a la biblioteca con el libro "Nombre del libro"',
-          '26 de feb. a las 20:45',
-          1,
-          true),
-    ];
+  Widget build(BuildContext context, ref) {
+    final notificacionesData = ref.watch(notificacionDataProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notificaciones'),
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        child: ListView.separated(
-            physics: const BouncingScrollPhysics(),
-            itemCount: notificaciones.length,
-            separatorBuilder: (BuildContext context, int i) => const Divider(),
-            itemBuilder: (BuildContext context, int i) {
-              return Container(
-                color:notificaciones[i].visto ? Colors.white : Colors.blue[50] ,
-                child: Row(
-                  children: [
-                    notificaciones[i].tipo == 1
-                        ? const FaIcon(FontAwesomeIcons.solidCircleXmark,
-                            color: Colors.redAccent, size: 45)
-                        : const FaIcon(FontAwesomeIcons.circleExclamation,
-                            color: Colors.orangeAccent, size: 45),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+    return notificacionesData.when(
+      data: (data) {
+        return WillPopScope(
+          onWillPop: () async {
+            await _editarNotificacion(context);
+            return true;
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Notificaciones'),
+              centerTitle: true,
+              elevation: 0,
+            ),
+            body: FadeInLeft(
+              child: Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: data.notificacion.length,
+                    itemBuilder: (BuildContext context, int i) {
+                      return Column(
                         children: [
-                          Text(notificaciones[i].titulo,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 18)),
-                          Text(
-                            notificaciones[i].mensaje,
-                            maxLines: 3,
-                            style: const TextStyle(fontSize: 16),
+                          Container(
+                            color: data.notificacion[i].visto == 'S'
+                                ? Colors.white
+                                : Colors.blue[50],
+                            child: Row(
+                              children: [
+                                data.notificacion[i].titulo !=
+                                        'Reserva Expirada'
+                                    ? const FaIcon(
+                                        FontAwesomeIcons.solidCircleXmark,
+                                        color: Colors.redAccent,
+                                        size: 45)
+                                    : const FaIcon(
+                                        FontAwesomeIcons.circleExclamation,
+                                        color: Colors.orangeAccent,
+                                        size: 45),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(data.notificacion[i].titulo,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18)),
+                                      Text(
+                                        data.notificacion[i].mensaje,
+                                        maxLines: 3,
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                      Text(
+                                        data.notificacion[i].fecha,
+                                        style: const TextStyle(
+                                            color: Colors.black45),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          Text(
-                            notificaciones[i].fecha,
-                            style: const TextStyle(color: Colors.black45),
-                          )
+                          const Divider(),
                         ],
-                      ),
-                    )
-                  ],
-                ),
-              );
-            }),
+                      );
+                    },
+                  )),
+            ),
+          ),
+        );
+      },
+      error: (err, st) => Text(err.toString()),
+      loading: () => const Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }
-}
 
-class Notificacion {
-  final String titulo;
-  final String mensaje;
-  final String fecha;
-  final int tipo;
-  final bool visto;
+  _editarNotificacion(BuildContext context) async {
+    final notifcationServices = NotificationsServices();
+    const storage = FlutterSecureStorage();
+    final String? uid = await storage.read(key: 'uid');
 
-  Notificacion(this.titulo, this.mensaje, this.fecha, this.tipo, this.visto);
+    await notifcationServices.editarNotificacion(uid!);
+  }
 }

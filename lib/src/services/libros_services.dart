@@ -98,7 +98,7 @@ class LibroServices with ChangeNotifier {
       final uri = Uri.parse('${Enviroment.apiUrl}/libros/editar');
       final resp = await http.post(
         uri,
-        body: jsonEncode(libro),
+        body: jsonEncode(libro.toMap()),
         headers: {
           'Content-Type': 'application/json',
           'x-token': token,
@@ -149,7 +149,6 @@ class LibroServices with ChangeNotifier {
   Future saveOrCreate(Libro libro) async {
     isSaving = true;
     notifyListeners();
-
     if (libro.uid.isEmpty) {
       isSaving = false;
       notifyListeners();

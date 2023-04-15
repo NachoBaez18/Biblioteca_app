@@ -9,6 +9,14 @@ class FilterListProvider with ChangeNotifier {
   String _password = '';
   String _passwordNew = '';
   String _passwordNewRepit = '';
+  bool _isEdit = false;
+
+  bool get isEdit => _isEdit;
+
+  set isEdit(bool valor) {
+    _isEdit = valor;
+    notifyListeners();
+  }
 
   String get passwordNewRepit => _passwordNewRepit;
 

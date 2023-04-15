@@ -44,6 +44,8 @@ class BookDetailPage extends ConsumerWidget {
                   ),
                   IconButton(
                     onPressed: () {
+                      final Color colorReserva =
+                          libro.cantidad > 0 ? Colors.green : Colors.grey;
                       mostrarAlerta(
                           context,
                           'Opciones a realizar',
@@ -53,13 +55,15 @@ class BookDetailPage extends ConsumerWidget {
                               children: [
                                 ButtonRedondeado(
                                   onpreess: () async {
-                                    await _reservarOrEliminar(
-                                        context, ref, libro.uid);
+                                    if (libro.cantidad > 0) {
+                                      await _reservarOrEliminar(
+                                          context, ref, libro.uid);
+                                    }
                                   },
                                   texto: reserva
                                       ? 'Realizar reserva'
                                       : 'Eliminar reserva',
-                                  color: reserva ? Colors.green : Colors.red,
+                                  color: reserva ? colorReserva : Colors.red,
                                 ),
                               ],
                             ),

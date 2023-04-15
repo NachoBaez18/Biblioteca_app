@@ -2,7 +2,8 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 
 class AlertasNew {
-  alertaCorrectaNavegatoria(context, mensaje, String navegar) {
+  alertaCorrectaNavegatoria(
+      BuildContext context, String mensaje, String navegar) {
     AwesomeDialog(
       context: context,
       dialogType: DialogType.success,
@@ -15,7 +16,7 @@ class AlertasNew {
     ).show();
   }
 
-  alertaInCorrectaNavegatoria(context, mensaje, navegar) {
+  alertaInCorrectaNavegatoria(BuildContext context, String mensaje, navegar) {
     AwesomeDialog(
       context: context,
       dialogType: DialogType.error,
@@ -26,5 +27,18 @@ class AlertasNew {
         Navigator.pushReplacementNamed(context, navegar);
       },
     ).show();
+  }
+
+  alertaInCorrecta(
+      BuildContext context, String mensaje, Function()? btnOkOnPress) {
+    AwesomeDialog(
+            context: context,
+            dialogType: DialogType.error,
+            animType: AnimType.rightSlide,
+            title: 'Error en la acción',
+            desc: mensaje,
+            btnOkOnPress: btnOkOnPress,
+            btnOkColor: Colors.red)
+        .show();
   }
 }

@@ -1,18 +1,20 @@
-import 'package:biblioteca_app/src/models/carreraResponse.dart';
-import 'package:biblioteca_app/src/models/libroResponse.dart';
+import 'dart:convert';
+
 import 'package:biblioteca_app/src/models/registerUpdateDeleteResponse.dart';
 import 'package:biblioteca_app/src/provider/data_provider.dart';
 import 'package:biblioteca_app/src/provider/provider.dart';
-import 'package:biblioteca_app/src/services/carrera_services.dart';
+
 import 'package:biblioteca_app/src/services/libros_services.dart';
-import 'package:biblioteca_app/src/ui/alertOperacional.dart';
+
+import 'package:biblioteca_app/src/ui/alertas_new.dart';
 import 'package:biblioteca_app/src/ui/input_decoration.dart';
 import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart' as Provider;
+import 'package:provider/provider.dart' as provider;
 
 class RegisterEditPage extends StatelessWidget {
   final String? url = null;
@@ -20,8 +22,8 @@ class RegisterEditPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final libroServices = Provider.Provider.of<LibroServices>(context);
-    return Provider.ChangeNotifierProvider(
+    final libroServices = provider.Provider.of<LibroServices>(context);
+    return provider.ChangeNotifierProvider(
         create: (_) => LibroFormProvider(libroServices.selectedLibro),
         child: _LibroScreenBody(libroServices: libroServices));
   }
@@ -37,7 +39,7 @@ class _LibroScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final libroForm = Provider.Provider.of<LibroFormProvider>(context);
+    final libroForm = provider.Provider.of<LibroFormProvider>(context);
     return Scaffold(
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -66,10 +68,8 @@ class _LibroScreenBody extends StatelessWidget {
                             source: ImageSource.gallery, imageQuality: 100);
 
                         if (pickeFile == null) {
-                          print('No selecciono nada');
                           return;
                         }
-                        print('Tenemos imagen ${pickeFile.path}');
 
                         libroServices
                             .updateSelectedProductImage(pickeFile.path);
@@ -92,7 +92,6 @@ class _LibroScreenBody extends StatelessWidget {
           onPressed: libroForm.isSaving
               ? null
               : () async {
-                  print('${libroForm.isValidFrom()}');
                   if (!libroForm.isValidFrom()) return;
 
                   final String? imageUrl = await libroServices.uploadImage();
@@ -103,26 +102,14 @@ class _LibroScreenBody extends StatelessWidget {
                   libroResponse =
                       await libroServices.saveOrCreate(libroForm.libro);
 
-                  if (!context.mounted) return;
-                  if (!libroResponse.error) {
-                    //! CUANDO ESTEMOS CON EL PERFIL ADMIN CAMBIAR ESTA ALERTA
-                    mostrarAlertaOperacional(
-                        context,
-                        libroResponse.mensaje,
-                        const Icon(
-                          FontAwesomeIcons.circleExclamation,
-                          color: Colors.amber,
-                          size: 40,
-                        ));
-                  } else {
-                    mostrarAlertaOperacional(
-                        context,
-                        libroResponse.mensaje,
-                        const Icon(
-                          FontAwesomeIcons.circleXmark,
-                          color: Colors.red,
-                          size: 40,
-                        ));
+                  if (context.mounted) {
+                    if (!libroResponse.error) {
+                      AlertasNew().alertaCorrectaNavegatoria(
+                          context, libroResponse.mensaje, 'books_list');
+                    } else {
+                      AlertasNew().alertaCorrectaNavegatoria(
+                          context, libroResponse.mensaje, 'books_list');
+                    }
                   }
                 },
           child: libroForm.isSaving
@@ -135,7 +122,7 @@ class _LibroScreenBody extends StatelessWidget {
 class _ProducrForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final libroForm = Provider.Provider.of<LibroFormProvider>(context);
+    final libroForm = provider.Provider.of<LibroFormProvider>(context);
     final libro = libroForm.libro;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -189,6 +176,26 @@ class _ProducrForm extends StatelessWidget {
                       hintText: 'Autor del Libro', labelText: 'Autor'),
                 ),
                 const SizedBox(height: 30),
+                TextFormField(
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.number,
+                  initialValue: libro.cantidad.toString(),
+                  onChanged: (value) {
+                    if (value == '') {
+                      libro.cantidad = 0;
+                    } else {
+                      libro.cantidad = int.parse(value);
+                    }
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'La cantidad es obligatoria';
+                    }
+                  },
+                  decoration: InputDecorations.authInputDecoration(
+                      hintText: 'Cantidad Libro', labelText: 'Cantidad'),
+                ),
+                const SizedBox(height: 30),
               ],
             )),
       ),
@@ -215,11 +222,12 @@ class _ListCarreras extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final refcarreras = ref.watch(carreraDataProvider).value;
-    final libroForm = Provider.Provider.of<LibroFormProvider>(context);
+    final libroForm = provider.Provider.of<LibroFormProvider>(context);
+    final isEdit = provider.Provider.of<FilterListProvider>(context);
     final libro = libroForm.libro;
     return DropdownButtonFormField(
-      value: refcarreras!.carreras.first.nombre,
-      items: refcarreras.carreras
+      value: isEdit.isEdit ? libro.carrera : refcarreras!.carreras.first.nombre,
+      items: refcarreras?.carreras
           .map(
             (e) => DropdownMenuItem(
               value: e.nombre,
