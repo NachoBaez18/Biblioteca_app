@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../models/accionLibroResponse.dart';
+
 class FilterListProvider with ChangeNotifier {
   int _filter = 0;
   bool _fadeInLeft = true;
@@ -9,7 +11,23 @@ class FilterListProvider with ChangeNotifier {
   String _password = '';
   String _passwordNew = '';
   String _passwordNewRepit = '';
-  bool _isEdit = false;
+  bool _isEdit = true;
+  late AccionLibroResponse _librosPendientes;
+  bool _isDetalle = false;
+
+  bool get isDetalle => _isDetalle;
+
+  set isDetalle(bool valor) {
+    _isDetalle = valor;
+    notifyListeners();
+  }
+
+  AccionLibroResponse get librosPendientes => _librosPendientes;
+
+  set librosPendientes(AccionLibroResponse valor) {
+    _librosPendientes = valor;
+    notifyListeners();
+  }
 
   bool get isEdit => _isEdit;
 

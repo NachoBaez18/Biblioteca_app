@@ -105,14 +105,16 @@ class _CardPrimario extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            if (user.admin) {
-              provider.isEdit = true;
-              envio.selectedLibro = libro;
-              Navigator.pushNamed(context, 'book_register_edit');
-            } else {
-              provider.hero = true;
-              Navigator.pushNamed(context, 'book_detail',
-                  arguments: {libro: libro});
+            if (provider.isDetalle) {
+              if (user.admin) {
+                provider.isEdit = true;
+                envio.selectedLibro = libro;
+                Navigator.pushNamed(context, 'book_register_edit');
+              } else {
+                provider.hero = true;
+                Navigator.pushNamed(context, 'book_detail',
+                    arguments: {libro: libro});
+              }
             }
           },
           child: Hero(

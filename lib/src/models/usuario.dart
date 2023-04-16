@@ -37,7 +37,7 @@ class Usuario {
         carrera: json["carrera"],
         semestre: json["semestre"],
         online: json["online"],
-        uid: json["uid"],
+        uid: json["uid"] ?? json["_id"],
       );
 
   Map<String, dynamic> toMap() => {

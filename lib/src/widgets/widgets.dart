@@ -1,3 +1,7 @@
+export 'package:biblioteca_app/src/widgets/alumno_list_widget.dart';
+
+export 'package:biblioteca_app/src/widgets/data_alumno_widget.dart';
+
 export 'package:biblioteca_app/src/widgets/filter_list_widget.dart';
 
 export 'package:biblioteca_app/src/widgets/list_books_widget.dart';

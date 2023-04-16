@@ -26,24 +26,24 @@ class LibroServices with ChangeNotifier {
   bool isSaving = false;
   File? newPictureFile;
 
-  Future<LibroResponse?> gets() async {
+  Future<AccionLibroResponse> gets() async {
     final token = await _storage.read(key: 'token');
 
     if (token != null) {
-      final uri = Uri.parse('${Enviroment.apiUrl}/libros/');
-      final resp = await http.get(uri, headers: {
+      final uri = Uri.parse('${Enviroment.apiUrl}/accionLibro/');
+      final resp = await http.post(uri, headers: {
         'Content-Type': 'application/json',
         'x-token': token,
       });
-
       if (resp.statusCode == 200) {
-        libro = libroResponseFromMap(resp.body);
-        return libro;
+        final AccionLibroResponse accion =
+            accionLibroResponseFromMap(resp.body);
+        return accion;
       } else {
         throw Exception(resp.reasonPhrase);
       }
     }
-    return null;
+    throw Exception('Ingrese sus credenciales');
   }
 
   Future<LibroResponse> get(Carrera carrera) async {

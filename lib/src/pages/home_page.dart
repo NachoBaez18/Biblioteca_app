@@ -1,5 +1,7 @@
+import 'package:biblioteca_app/src/models/accionLibroResponse.dart';
 import 'package:biblioteca_app/src/models/carreraResponse.dart';
 import 'package:biblioteca_app/src/services/auth_services.dart';
+import 'package:biblioteca_app/src/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -12,6 +14,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:provider/provider.dart' as provider;
 
+import '../provider/ListView/filter_provider.dart';
 import '../provider/data_provider.dart';
 
 class ItemBoton {
@@ -45,13 +48,6 @@ class HomePage extends ConsumerWidget {
         ref.read(botonReserva.notifier).state = true;
         Navigator.pushNamed(context, 'books_list');
       }),
-      // ItemBoton(
-      //   FontAwesomeIcons.clockRotateLeft,
-      //   'Historial de libros ',
-      //   const Color(0xff66A9F2),
-      //   const Color(0xff536CF6),
-      //   onpress: () {},
-      // ),
       if (!auhtService.admin)
         ItemBoton(
           FontAwesomeIcons.bell,
@@ -93,7 +89,14 @@ class HomePage extends ConsumerWidget {
           'Devolucion/Entrega',
           const Color(0xff317183),
           const Color(0xff46997D),
-          onpress: () async {},
+          onpress: () async {
+            print('estamos aqui');
+            final valor = provider.Provider.of<FilterListProvider>(context,
+                listen: false);
+            valor.librosPendientes =
+                AccionLibroResponse(error: false, accionesDeLibros: []);
+            Navigator.pushNamed(context, 'accion_alumno');
+          },
         ),
       if (auhtService.admin)
         ItemBoton(
@@ -101,7 +104,14 @@ class HomePage extends ConsumerWidget {
           'Fecha Expirada',
           const Color(0xFFFFCCCB), // Color del lado izquierdo del gradiente
           const Color.fromARGB(255, 218, 56, 56),
-          onpress: () async {},
+          onpress: () async {
+            final valor = provider.Provider.of<FilterListProvider>(context,
+                listen: false);
+            valor.librosPendientes = await LibroServices().gets();
+            if (context.mounted) {
+              Navigator.pushNamed(context, 'alumnos_expirados');
+            }
+          },
         ),
     ];
 
