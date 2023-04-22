@@ -1,3 +1,4 @@
+import 'package:biblioteca_app/src/provider/ListView/filter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,7 @@ class BooksListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AuthServices>(context);
+    final circular = Provider.of<FilterListProvider>(context);
     return Scaffold(
       body: WillPopScope(
         onWillPop: () async {
@@ -21,19 +23,23 @@ class BooksListPage extends StatelessWidget {
           return false;
         },
         child: SafeArea(
-          child: Column(
-            children: const [
-              SizedBox(height: 15),
-              HeaderList(
-                titulo: 'Navegador',
-                subtitulo: 'Recomendadas',
-                search: true,
-              ),
-              SizedBox(height: 15),
-              FilterListWidget(),
-              ListBooks()
-            ],
-          ),
+          child: circular.isCircularProgress
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Column(
+                  children: const [
+                    SizedBox(height: 15),
+                    HeaderList(
+                      titulo: 'Navegador',
+                      subtitulo: 'Recomendadas',
+                      search: true,
+                    ),
+                    SizedBox(height: 15),
+                    FilterListWidget(),
+                    ListBooks()
+                  ],
+                ),
         ),
       ),
       floatingActionButton: Visibility(

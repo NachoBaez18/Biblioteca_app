@@ -4,7 +4,6 @@ import 'package:biblioteca_app/src/services/services.dart';
 import 'package:biblioteca_app/src/ui/alertas_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../models/carreraResponse.dart';
 import '../models/usuario.dart';
@@ -38,6 +37,7 @@ class AlumnoList extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           itemCount: libroPendientes!.accionesDeLibros.length,
           itemBuilder: (_, i) {
+            print(libroPendientes!.accionesDeLibros[i].accion);
             final Usuario? usuario =
                 libroPendientes!.accionesDeLibros[i].usuario;
             return GestureDetector(
@@ -48,7 +48,7 @@ class AlumnoList extends StatelessWidget {
                       'reservado') {
                     accionPost = 'entregado';
                   } else {
-                    accionPost = 'cancelado';
+                    accionPost = 'devuelto';
                   }
                   final libroServices = LibroServices();
                   print(libroPendientes!.accionesDeLibros[i].uid!);
@@ -91,14 +91,6 @@ class AlumnoList extends StatelessWidget {
               ),
             );
           },
-        ),
-      ),
-      floatingActionButton: Visibility(
-        visible: qr,
-        child: FloatingActionButton(
-          backgroundColor: const Color(0xff317183),
-          onPressed: () {},
-          child: const Icon(FontAwesomeIcons.qrcode),
         ),
       ),
     );

@@ -1,3 +1,5 @@
+import 'package:biblioteca_app/src/models/libro.dart';
+import 'package:biblioteca_app/src/models/libroResponse.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/accionLibroResponse.dart';
@@ -13,8 +15,24 @@ class FilterListProvider with ChangeNotifier {
   String _passwordNewRepit = '';
   bool _isEdit = true;
   late AccionLibroResponse _librosPendientes;
-  bool _isDetalle = false;
+  bool _isDetalle = true;
   Map<String, String> _reservaDevolucionTitulo = {};
+  bool _isCircularProgress = false;
+  late LibroResponse _librosSearch;
+
+  LibroResponse get librosSearch => _librosSearch;
+
+  set librosSearch(LibroResponse valor) {
+    _librosSearch = valor;
+    notifyListeners();
+  }
+
+  bool get isCircularProgress => _isCircularProgress;
+
+  set isCircularProgress(bool valor) {
+    _isCircularProgress = valor;
+    notifyListeners();
+  }
 
   Map<String, String> get reservaDevolucionTitulo => _reservaDevolucionTitulo;
 

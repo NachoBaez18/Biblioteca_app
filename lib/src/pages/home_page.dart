@@ -79,6 +79,7 @@ class HomePage extends ConsumerWidget {
                 provider.Provider.of<AuthServices>(context, listen: false);
             final titulo = provider.Provider.of<FilterListProvider>(context,
                 listen: false);
+            titulo.isDetalle = false;
             titulo.reservaDevolucionTitulo
                 .addAll({'titulo': 'Reservas', 'subTitulo': 'a generar'});
             ref.read(botonReserva.notifier).state = false;
@@ -96,6 +97,7 @@ class HomePage extends ConsumerWidget {
           onpress: () async {
             final titulo = provider.Provider.of<FilterListProvider>(context,
                 listen: false);
+            titulo.isDetalle = false;
             titulo.reservaDevolucionTitulo
                 .addAll({'titulo': 'Pendiente', 'subTitulo': 'a entregar'});
             final usuario =
@@ -113,7 +115,6 @@ class HomePage extends ConsumerWidget {
           const Color(0xff317183),
           const Color(0xff46997D),
           onpress: () async {
-            print('estamos aqui');
             final valor = provider.Provider.of<FilterListProvider>(context,
                 listen: false);
             valor.librosPendientes =

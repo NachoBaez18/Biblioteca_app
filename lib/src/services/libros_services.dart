@@ -46,6 +46,25 @@ class LibroServices with ChangeNotifier {
     throw Exception('Ingrese sus credenciales');
   }
 
+  Future<LibroResponse> getsLibros() async {
+    final token = await _storage.read(key: 'token');
+
+    if (token != null) {
+      final uri = Uri.parse('${Enviroment.apiUrl}/libros/');
+      final resp = await http.post(uri, headers: {
+        'Content-Type': 'application/json',
+        'x-token': token,
+      });
+      if (resp.statusCode == 200) {
+        final LibroResponse libroResponse = libroResponseFromMap(resp.body);
+        return libroResponse;
+      } else {
+        throw Exception(resp.reasonPhrase);
+      }
+    }
+    throw Exception('Ingrese sus credenciales');
+  }
+
   Future<LibroResponse> get(Carrera carrera) async {
     final token = await _storage.read(key: 'token');
     final LibroResponse libros;
@@ -244,7 +263,8 @@ class LibroServices with ChangeNotifier {
     try {
       if (datafiltro.nombre == 'reservado' ||
           datafiltro.nombre == 'entregado' ||
-          datafiltro.nombre == 'cancelado') {
+          datafiltro.nombre == 'devolucion') {
+        print(datafiltro.uid);
         final response = await accionLibrosXusuario(datafiltro);
 
         if (response.accionesDeLibros.isNotEmpty) {

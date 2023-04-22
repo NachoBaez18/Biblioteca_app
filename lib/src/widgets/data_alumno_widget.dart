@@ -66,13 +66,13 @@ class DataAlumno extends StatelessWidget {
                   style: TextStyle(fontSize: 16, color: Colors.black45)),
               const SizedBox(height: 5),
               RichText(
-                text: const TextSpan(
-                  style: TextStyle(fontSize: 16.0, color: Colors.black45),
+                text: TextSpan(
+                  style: const TextStyle(fontSize: 16.0, color: Colors.black45),
                   children: [
-                    TextSpan(text: 'Accion a realizar: '),
+                    const TextSpan(text: 'Accion a realizar: '),
                     TextSpan(
-                        text: 'Entrega ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                        text: accion,
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
                   ],
                 ),
               )
