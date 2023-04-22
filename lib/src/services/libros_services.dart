@@ -91,6 +91,31 @@ class LibroServices with ChangeNotifier {
     return null;
   }
 
+  Future<Map<dynamic, dynamic>> accionRealizada(
+      String accion, String uid) async {
+    final token = await _storage.read(key: 'token');
+    isSaving = true;
+    if (token != null) {
+      final data = {'accion': accion, 'uid': uid};
+      final uri = Uri.parse('${Enviroment.apiUrl}/accionLibro/editar');
+      final resp = await http.post(
+        uri,
+        body: jsonEncode(data),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': token,
+        },
+      );
+
+      if (resp.statusCode == 200) {
+        return jsonDecode(resp.body);
+      } else {
+        throw Exception(resp.reasonPhrase);
+      }
+    }
+    throw Exception('Autentiquese');
+  }
+
   Future<OperationResponse?> editar(Libro libro) async {
     final token = await _storage.read(key: 'token');
 
@@ -219,7 +244,7 @@ class LibroServices with ChangeNotifier {
     try {
       if (datafiltro.nombre == 'reservado' ||
           datafiltro.nombre == 'entregado' ||
-          datafiltro.nombre == 'entregado') {
+          datafiltro.nombre == 'cancelado') {
         final response = await accionLibrosXusuario(datafiltro);
 
         if (response.accionesDeLibros.isNotEmpty) {

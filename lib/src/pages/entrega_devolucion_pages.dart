@@ -14,7 +14,7 @@ class EntregaDevolucion extends ConsumerWidget {
     final provider = p.Provider.of<FilterListProvider>(context);
     final AccionLibroResponse libroPendientes = provider.librosPendientes;
     return AlumnoList(
-        qr: false,
+        qr: true,
         ref: ref,
         titleAppbar: 'Libros Acciones',
         colorAppbar: const [

@@ -22,7 +22,7 @@ class DetallePendiente extends ConsumerWidget {
             children: const [
               HeaderList(
                 titulo: 'Pendientes',
-                subtitulo: 'A entregar',
+                subtitulo: 'A realizar accion',
                 search: false,
               ),
               ListBooks()

@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:biblioteca_app/src/provider/provider.dart';
 import 'package:biblioteca_app/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:provider/provider.dart' as p;
 
 import '../provider/data_provider.dart';
 
@@ -14,6 +16,7 @@ class ReservasPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final libros = ref.watch(libroDataProvider);
+    final valores = p.Provider.of<FilterListProvider>(context);
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushReplacementNamed(context, 'home');
@@ -22,13 +25,13 @@ class ReservasPage extends ConsumerWidget {
       child: Scaffold(
         body: SafeArea(
             child: Column(
-          children: const [
+          children: [
             HeaderList(
-              titulo: 'Reservas',
-              subtitulo: 'A generar',
+              titulo: valores.reservaDevolucionTitulo['titulo']!,
+              subtitulo: valores.reservaDevolucionTitulo['subTitulo']!,
               search: false,
             ),
-            ListBooks()
+            const ListBooks()
           ],
         )),
         floatingActionButton: FloatingActionButton(

@@ -14,6 +14,14 @@ class FilterListProvider with ChangeNotifier {
   bool _isEdit = true;
   late AccionLibroResponse _librosPendientes;
   bool _isDetalle = false;
+  Map<String, String> _reservaDevolucionTitulo = {};
+
+  Map<String, String> get reservaDevolucionTitulo => _reservaDevolucionTitulo;
+
+  set reservaDevolucionTitulo(Map<String, String> valor) {
+    _reservaDevolucionTitulo = valor;
+    notifyListeners();
+  }
 
   bool get isDetalle => _isDetalle;
 

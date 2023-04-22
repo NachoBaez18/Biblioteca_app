@@ -16,5 +16,6 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'reservas': (_) => const ReservasPage(),
   'alumnos_expirados': (_) => const AlumnosExpirado(),
   'detalle_alumno': (_) => const DetallePendiente(),
-  'accion_alumno': (_) => const EntregaDevolucion()
+  'accion_alumno': (_) => const EntregaDevolucion(),
+  'qrScanner': (_) => const QrScanner()
 };

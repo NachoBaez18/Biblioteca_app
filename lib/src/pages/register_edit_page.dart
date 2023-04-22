@@ -16,6 +16,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart' as provider;
 
+import '../models/carreraResponse.dart';
+
 class RegisterEditPage extends StatelessWidget {
   final String? url = null;
   const RegisterEditPage({super.key});

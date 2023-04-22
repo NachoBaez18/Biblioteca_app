@@ -49,6 +49,7 @@ dependencies:
   socket_io_client: ^2.0.1
   firebase_messaging: ^14.4.0
   firebase_core: ^2.9.0
+  qr_code_scanner: ^1.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

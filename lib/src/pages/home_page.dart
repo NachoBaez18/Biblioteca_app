@@ -77,9 +77,32 @@ class HomePage extends ConsumerWidget {
           onpress: () async {
             final usuario =
                 provider.Provider.of<AuthServices>(context, listen: false);
+            final titulo = provider.Provider.of<FilterListProvider>(context,
+                listen: false);
+            titulo.reservaDevolucionTitulo
+                .addAll({'titulo': 'Reservas', 'subTitulo': 'a generar'});
             ref.read(botonReserva.notifier).state = false;
             ref.read(carreraFilterProvider.notifier).update((state) =>
                 Carrera(nombre: 'reservado', uid: usuario.usuario.uid!));
+            Navigator.pushReplacementNamed(context, 'reservas');
+          },
+        ),
+      if (!auhtService.admin)
+        ItemBoton(
+          FontAwesomeIcons.qrcode,
+          'Devolucion',
+          const Color(0xff94be75),
+          const Color(0xff7caabf),
+          onpress: () async {
+            final titulo = provider.Provider.of<FilterListProvider>(context,
+                listen: false);
+            titulo.reservaDevolucionTitulo
+                .addAll({'titulo': 'Pendiente', 'subTitulo': 'a entregar'});
+            final usuario =
+                provider.Provider.of<AuthServices>(context, listen: false);
+            ref.read(botonReserva.notifier).state = false;
+            ref.read(carreraFilterProvider.notifier).update((state) =>
+                Carrera(nombre: 'entregado', uid: usuario.usuario.uid!));
             Navigator.pushReplacementNamed(context, 'reservas');
           },
         ),
@@ -95,7 +118,7 @@ class HomePage extends ConsumerWidget {
                 listen: false);
             valor.librosPendientes =
                 AccionLibroResponse(error: false, accionesDeLibros: []);
-            Navigator.pushNamed(context, 'accion_alumno');
+            Navigator.pushNamed(context, 'qrScanner');
           },
         ),
       if (auhtService.admin)

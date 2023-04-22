@@ -4,14 +4,15 @@ import '../models/usuario.dart';
 
 class DataAlumno extends StatelessWidget {
   final Usuario usuario;
-  const DataAlumno({super.key, required this.usuario});
+  final String accion;
+  const DataAlumno({super.key, required this.usuario, required this.accion});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       width: double.infinity,
-      height: 100,
+      height: 120,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -44,7 +45,7 @@ class DataAlumno extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 20),
+          const SizedBox(width: 50),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -62,7 +63,19 @@ class DataAlumno extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               const Text('Sede Caacupe',
-                  style: TextStyle(fontSize: 16, color: Colors.black45))
+                  style: TextStyle(fontSize: 16, color: Colors.black45)),
+              const SizedBox(height: 5),
+              RichText(
+                text: const TextSpan(
+                  style: TextStyle(fontSize: 16.0, color: Colors.black45),
+                  children: [
+                    TextSpan(text: 'Accion a realizar: '),
+                    TextSpan(
+                        text: 'Entrega ',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              )
             ],
           )
         ],
