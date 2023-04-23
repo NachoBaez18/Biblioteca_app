@@ -260,16 +260,15 @@ class LibroServices with ChangeNotifier {
 
   Future<AccionLibroResponse> libroDinamico(Carrera datafiltro) async {
     final AccionesDeLibro dataArmado;
+
     try {
       if (datafiltro.nombre == 'reservado' ||
           datafiltro.nombre == 'entregado' ||
           datafiltro.nombre == 'devolucion') {
-        print(datafiltro.uid);
         final response = await accionLibrosXusuario(datafiltro);
 
         if (response.accionesDeLibros.isNotEmpty) {
           reservado = response.accionesDeLibros[0].uid ?? '';
-
           return response;
         } else {
           final data = AccionLibroResponse(
@@ -335,6 +334,43 @@ class LibroServices with ChangeNotifier {
         'Content-Type': 'application/json',
         'x-token': token,
       });
+      if (resp.statusCode == 200) {
+        return jsonDecode(resp.body);
+      } else {
+        throw Exception(resp.reasonPhrase);
+      }
+    }
+    throw Exception('Favor vuelva a ingresar sus credenciales');
+  }
+
+  Future likeLibro(String uid, String usuario) async {
+    final token = await _storage.read(key: 'token');
+    if (token != null) {
+      final data = {'uid': uid, 'usuario': usuario};
+      final uri = Uri.parse('${Enviroment.apiUrl}/libros/editarLibroCorazon');
+      final resp = await http.post(uri, body: jsonEncode(data), headers: {
+        'Content-Type': 'application/json',
+        'x-token': token,
+      });
+      if (resp.statusCode == 200) {
+        return jsonDecode(resp.body);
+      } else {
+        throw Exception(resp.reasonPhrase);
+      }
+    }
+    throw Exception('Favor vuelva a ingresar sus credenciales');
+  }
+
+  Future vistoLibro(String uid, String usuario) async {
+    final token = await _storage.read(key: 'token');
+    if (token != null) {
+      final data = {'uid': uid, 'usuario': usuario};
+      final uri = Uri.parse('${Enviroment.apiUrl}/libros/vistoLibro');
+      final resp = await http.post(uri, body: jsonEncode(data), headers: {
+        'Content-Type': 'application/json',
+        'x-token': token,
+      });
+      print(resp.body);
       if (resp.statusCode == 200) {
         return jsonDecode(resp.body);
       } else {

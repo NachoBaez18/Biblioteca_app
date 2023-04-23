@@ -185,6 +185,11 @@ class _CardSecuandario extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final porcentaje = libro.vistos!.isNotEmpty && libro.like!.isNotEmpty
+        ? (libro.vistos!.length / libro.like!.length) * 100
+        : 0;
+    final double stars = (porcentaje * 5) / 100;
+
     final provider = Provider.of<FilterListProvider>(context);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
@@ -226,12 +231,12 @@ class _CardSecuandario extends StatelessWidget {
                   textAlign: TextAlign.start,
                 ),
                 const SizedBox(height: 25),
-                const StarIcons(3),
+                StarIcons(stars),
                 const SizedBox(height: 30),
                 Row(
                   children: [
                     Text(
-                      '${libro.vistos}',
+                      '${libro.vistos!.length}',
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w900,

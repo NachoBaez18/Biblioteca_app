@@ -19,7 +19,6 @@ class ReservasPage extends ConsumerWidget {
     final libros = ref.watch(libroDataProvider);
     final valores = p.Provider.of<FilterListProvider>(context);
     final usuario = p.Provider.of<AuthServices>(context);
-    print(usuario.admin);
     return WillPopScope(
       onWillPop: () async {
         valores.isDetalle = true;

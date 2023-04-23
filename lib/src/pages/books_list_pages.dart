@@ -55,8 +55,8 @@ class BooksListPage extends StatelessWidget {
                 carrera: '',
                 descripcion: '',
                 imagen: '',
-                vistos: 0,
-                like: 0,
+                vistos: [],
+                like: [],
                 cantidad: 0,
                 uid: '');
 

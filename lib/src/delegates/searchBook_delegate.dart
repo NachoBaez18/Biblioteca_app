@@ -1,22 +1,12 @@
 import 'package:biblioteca_app/src/models/libroResponse.dart';
 import 'package:biblioteca_app/src/services/services.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../models/libro.dart';
 
 class SearchBook extends SearchDelegate {
   @override
   String get searchFieldLabel => 'Buscar Libro';
-
-  List<String> books = [
-    'Libro 1',
-    'Libro 2',
-    'Libro 3',
-    'Libro 4',
-    'Libro 5',
-    'Libro 6',
-  ];
 
   Future<LibroResponse> _getBooks() async {
     final libroServices = LibroServices();

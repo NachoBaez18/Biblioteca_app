@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:biblioteca_app/src/services/services.dart';
 import 'package:biblioteca_app/src/ui/alertas_new.dart';
 import 'package:flutter/material.dart';
@@ -23,23 +24,25 @@ class PerfilUser extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              SizedBox(
-                width: double.infinity,
-                height: 300,
-                child: Stack(
-                  children: const [
-                    _Header(),
-                    _IconUserRedondeado(),
-                    _ButtonRegresar(),
-                  ],
+        body: FadeInDown(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  height: 300,
+                  child: Stack(
+                    children: const [
+                      _Header(),
+                      _IconUserRedondeado(),
+                      _ButtonRegresar(),
+                    ],
+                  ),
                 ),
-              ),
-              const _FromPerfil()
-            ],
+                const _FromPerfil()
+              ],
+            ),
           ),
         ),
       ),

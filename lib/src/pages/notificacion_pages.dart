@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:biblioteca_app/src/provider/ListView/filter_provider.dart';
 import 'package:biblioteca_app/src/services/notifications_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,11 +23,10 @@ class Notificaciones extends ConsumerWidget {
             return true;
           },
           child: Scaffold(
-            appBar: AppBar(
-              title: const Text('Notificaciones'),
-              centerTitle: true,
-              elevation: 0,
-            ),
+            appBar: _appBarDesing('Notificaciones', [
+              const Color(0xffF2D572),
+              const Color(0xffE06AA3),
+            ]),
             body: FadeInLeft(
               child: Container(
                   margin:
@@ -102,4 +102,23 @@ class Notificaciones extends ConsumerWidget {
 
     await notifcationServices.editarNotificacion(uid!);
   }
+}
+
+AppBar _appBarDesing(titleAppbar, colorAppbar) {
+  return AppBar(
+      elevation: 0,
+      title: Text(
+        titleAppbar,
+        textAlign: TextAlign.center,
+      ),
+      centerTitle: true,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: colorAppbar,
+            begin: Alignment.bottomLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+      ));
 }

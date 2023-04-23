@@ -1,3 +1,4 @@
+import 'package:animated_icon_button/animated_icon_button.dart';
 import 'package:flutter/material.dart';
 //Todo: Importaciones de terceros
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -24,128 +25,176 @@ class BookDetailPage extends ConsumerWidget {
     final Map<Libro, Libro> mapa =
         ModalRoute.of(context)!.settings.arguments as Map<Libro, Libro>;
     final Libro libro = mapa.values.first;
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.chevron_left,
-                      size: 40,
+    final user = provider.Provider.of<AuthServices>(context);
+    return WillPopScope(
+      onWillPop: () async {
+        final libroServices = LibroServices();
+
+        await libroServices.vistoLibro(libro.uid, user.usuario.uid!);
+        ref.refresh(libroDataProvider);
+        return true;
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      onPressed: () async {
+                        final libroServices = LibroServices();
+                        await libroServices.vistoLibro(
+                            libro.uid, user.usuario.uid!);
+                        if (context.mounted) {
+                          ref.refresh(libroDataProvider);
+                          Navigator.pop(context);
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.chevron_left,
+                        size: 40,
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      final Color colorReserva =
-                          libro.cantidad > 0 ? Colors.green : Colors.grey;
-                      mostrarAlerta(
-                          context,
-                          'Opciones a realizar',
-                          SizedBox(
-                            height: 60,
-                            child: Column(
+                    IconButton(
+                      onPressed: () {
+                        final Color colorReserva =
+                            libro.cantidad > 0 ? Colors.green : Colors.grey;
+                        mostrarAlerta(
+                            context,
+                            'Opciones a realizar',
+                            SizedBox(
+                              height: 60,
+                              child: Column(
+                                children: [
+                                  ButtonRedondeado(
+                                    onpreess: () async {
+                                      if (libro.cantidad > 0) {
+                                        await _reservarOrEliminar(
+                                            context, ref, libro.uid);
+                                      }
+                                    },
+                                    texto: reserva
+                                        ? 'Realizar reserva'
+                                        : 'Eliminar reserva',
+                                    color: reserva ? colorReserva : Colors.red,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            'Cancelar',
+                            '',
+                            () {});
+                      },
+                      icon: const Icon(
+                        FontAwesomeIcons.barsStaggered,
+                        size: 25,
+                      ),
+                    ),
+                  ],
+                ),
+                Stack(
+                  children: [
+                    _NombreYalgoMasBook(libro),
+                    _ImageBook(libro),
+                    Positioned(
+                      left: 60,
+                      top: 300,
+                      right: 15,
+                      child: SizedBox(
+                        height: 450,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                               children: [
-                                ButtonRedondeado(
-                                  onpreess: () async {
-                                    if (libro.cantidad > 0) {
-                                      await _reservarOrEliminar(
-                                          context, ref, libro.uid);
-                                    }
+                                IconButton(
+                                  onPressed: () async {
+                                    await Share.share(libro.nombre,
+                                        subject: 'No se que seria');
                                   },
-                                  texto: reserva
-                                      ? 'Realizar reserva'
-                                      : 'Eliminar reserva',
-                                  color: reserva ? colorReserva : Colors.red,
+                                  icon: const Icon(Icons.share),
+                                  color: Colors.black26,
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await Share.share(libro.nombre,
+                                        subject: 'No se que seria');
+                                  },
+                                  child: const Text(
+                                    'Compartir',
+                                    style: TextStyle(color: Colors.black26),
+                                  ),
+                                ),
+                                const SizedBox(width: 20),
+                                AnimatedIconButton(
+                                  size: 25,
+                                  onPressed: () async {
+                                    _accionLike(context, libro);
+                                  },
+                                  duration: const Duration(milliseconds: 500),
+                                  splashColor: Colors.transparent,
+                                  icons: libro.like!.contains(user.usuario.uid)
+                                      ? const <AnimatedIconItem>[
+                                          AnimatedIconItem(
+                                            icon: Icon(
+                                                FontAwesomeIcons.solidHeart,
+                                                color: Colors.red),
+                                          ),
+                                          AnimatedIconItem(
+                                            icon: Icon(
+                                                FontAwesomeIcons.solidHeart,
+                                                color: Colors.grey),
+                                          ),
+                                        ]
+                                      : const <AnimatedIconItem>[
+                                          AnimatedIconItem(
+                                            icon: Icon(
+                                                FontAwesomeIcons.solidHeart,
+                                                color: Colors.grey),
+                                          ),
+                                          AnimatedIconItem(
+                                            icon: Icon(
+                                                FontAwesomeIcons.solidHeart,
+                                                color: Colors.red),
+                                          ),
+                                        ],
+                                ),
+                                const Text(
+                                  'Me gusta',
+                                  style: TextStyle(color: Colors.black26),
                                 ),
                               ],
                             ),
-                          ),
-                          'Cancelar',
-                          '',
-                          () {});
-                    },
-                    icon: const Icon(
-                      FontAwesomeIcons.barsStaggered,
-                      size: 25,
-                    ),
-                  ),
-                ],
-              ),
-              Stack(
-                children: [
-                  _NombreYalgoMasBook(libro),
-                  _ImageBook(libro),
-                  Positioned(
-                    left: 60,
-                    top: 300,
-                    right: 15,
-                    child: SizedBox(
-                      height: 450,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              IconButton(
-                                onPressed: () async {
-                                  await Share.share(libro.nombre,
-                                      subject: 'No se que seria');
-                                },
-                                icon: const Icon(Icons.share),
-                                color: Colors.black26,
-                              ),
-                              const Text(
-                                'Compartir',
-                                style: TextStyle(color: Colors.black26),
-                              ),
-                              const SizedBox(width: 20),
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  FontAwesomeIcons.solidHeart,
-                                  color: Colors.black26,
-                                ),
-                              ),
-                              const Text(
-                                'Me gusta',
-                                style: TextStyle(color: Colors.black26),
-                              ),
-                            ],
-                          ),
-                          Container(
-                            height: 2,
-                            width: 340,
-                            color: Colors.grey[300],
-                          ),
-                          const SizedBox(height: 30),
-                          const Text(
-                            'Descripcion Libro',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 15),
-                          Text(
-                            libro.descripcion,
-                            style: const TextStyle(
-                              color: Colors.black26,
-                              fontWeight: FontWeight.bold,
+                            Container(
+                              height: 2,
+                              width: 340,
+                              color: Colors.grey[300],
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 30),
+                            const Text(
+                              'Descripcion Libro',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 15),
+                            Text(
+                              libro.descripcion,
+                              style: const TextStyle(
+                                color: Colors.black26,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              )
-            ],
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -203,6 +252,13 @@ class BookDetailPage extends ConsumerWidget {
     ref.read(carreraFilterProvider.notifier).update(
         (state) => Carrera(nombre: 'reservado', uid: usuario.usuario.uid!));
   }
+
+  _accionLike(BuildContext context, Libro libro) async {
+    final user = provider.Provider.of<AuthServices>(context, listen: false);
+    final libroServices = LibroServices();
+
+    await libroServices.likeLibro(libro.uid, user.usuario.uid!);
+  }
 }
 
 class _ImageBook extends StatelessWidget {
@@ -244,6 +300,10 @@ class _NombreYalgoMasBook extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final porcentaje = libro.vistos!.isNotEmpty && libro.like!.isNotEmpty
+        ? (libro.vistos!.length / libro.like!.length) * 100
+        : 0;
+    final double stars = (porcentaje * 5) / 100;
     return Container(
       margin: const EdgeInsets.only(left: 42, top: 70),
       height: MediaQuery.of(context).size.height * 0.82,
@@ -269,7 +329,7 @@ class _NombreYalgoMasBook extends StatelessWidget {
               textAlign: TextAlign.start,
             ),
             const SizedBox(height: 20),
-            const StarIcons(3),
+            StarIcons(stars),
           ],
         ),
       ),

@@ -15,8 +15,8 @@ class Libro {
     required this.creador,
     required this.descripcion,
     required this.imagen,
-    required this.vistos,
-    required this.like,
+    this.vistos,
+    this.like,
     required this.cantidad,
     required this.uid,
   });
@@ -26,8 +26,8 @@ class Libro {
   String creador;
   String descripcion;
   String imagen;
-  int vistos;
-  int like;
+  List? vistos;
+  List? like;
   int cantidad;
   String uid;
 
