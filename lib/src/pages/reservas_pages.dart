@@ -38,7 +38,7 @@ class ReservasPage extends ConsumerWidget {
           ],
         )),
         floatingActionButton: Visibility(
-          visible: !usuario.admin,
+          visible: !usuario.admin && valores.isDetalle,
           child: FloatingActionButton(
             backgroundColor: Colors.blueAccent,
             onPressed: () {

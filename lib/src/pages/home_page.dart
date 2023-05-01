@@ -79,7 +79,7 @@ class HomePage extends ConsumerWidget {
                 provider.Provider.of<AuthServices>(context, listen: false);
             final titulo = provider.Provider.of<FilterListProvider>(context,
                 listen: false);
-            titulo.isDetalle = false;
+            titulo.isDetalle = true;
             titulo.reservaDevolucionTitulo
                 .addAll({'titulo': 'Reservas', 'subTitulo': 'a generar'});
             ref.read(botonReserva.notifier).state = false;
