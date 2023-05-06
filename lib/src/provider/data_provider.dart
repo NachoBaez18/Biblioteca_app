@@ -3,14 +3,28 @@ import 'package:biblioteca_app/src/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../models/usuarioResponse.dart';
 import '../services/notifications_services.dart';
 
-final carreraDataProvider = FutureProvider<CarreraResponse?>((ref) async {
+//?obtenemos los usuarios
+
+final usuarioDataProvider = FutureProvider<UsuarioResponse>((ref) async {
+  return ref.watch(usuarioProvider).usuarios();
+});
+//?obtenemos las carreras
+final carreraDataProvider = FutureProvider<CarreraResponse>((ref) async {
   return ref.watch(carreraProvider).carreras();
 });
 
 final carreraFilterProvider = StateProvider<Carrera>((ref) {
-  return Carrera(nombre: 'Informatica', uid: '11111111111');
+  final carreras = ref.watch(carreraDataProvider).value;
+  if (carreras != null) {
+    return Carrera(
+        nombre: carreras.carreras.first.nombre,
+        uid: carreras.carreras.first.uid);
+  } else {
+    return Carrera(nombre: '', uid: '');
+  }
 });
 
 final libroDataProvider = FutureProvider((ref) async {

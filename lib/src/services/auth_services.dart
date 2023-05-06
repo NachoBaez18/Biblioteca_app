@@ -153,7 +153,7 @@ class AuthServices with ChangeNotifier {
             'x-token': token,
           },
         );
-
+        print(resp.body);
         if (resp.statusCode == 200) {
           final UsuarioEdicionResponse updateResponse =
               usuarioEdicionResponseFromMap(resp.body);

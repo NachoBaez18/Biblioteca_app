@@ -48,6 +48,7 @@ class LoadingPage extends StatelessWidget {
 
     const storage = FlutterSecureStorage();
     final token = await storage.read(key: 'token');
+
     if (!context.mounted) return;
     Provider.of<FilterListProvider>(context, listen: false).opacity = 1;
 

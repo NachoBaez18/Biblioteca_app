@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -25,55 +26,63 @@ class InputLoginWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
-          margin: const EdgeInsets.only(right: 40, left: 40, top: 10),
-          height: 50,
-          width: double.infinity,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blue.withOpacity(0.1),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: const Offset(0, 4), // changes position of shadow
-                ),
-              ]),
+        FadeIn(
           child: Container(
-            margin: const EdgeInsets.only(left: 85, right: 15),
-            child: TextField(
-              enabled: enable,
-              controller: textController,
-              autocorrect: false,
-              obscureText: isPassword,
-              keyboardType: keyboardype,
-              decoration: InputDecoration(
-                  focusedBorder: InputBorder.none,
-                  border: InputBorder.none,
-                  hintText: placeholder),
+            margin: const EdgeInsets.only(right: 40, left: 40, top: 10),
+            height: 50,
+            width: double.infinity,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.blue.withOpacity(0.1),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(0, 4), // changes position of shadow
+                  ),
+                ]),
+            child: FadeInRight(
+              child: Container(
+                margin: const EdgeInsets.only(left: 85, right: 15),
+                child: TextField(
+                  enabled: enable,
+                  controller: textController,
+                  autocorrect: false,
+                  obscureText: isPassword,
+                  keyboardType: keyboardype,
+                  decoration: InputDecoration(
+                      focusedBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      hintText: placeholder),
+                ),
+              ),
             ),
           ),
         ),
-        Container(
-          margin: const EdgeInsets.only(left: 40),
-          width: 70,
-          height: 70,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(100),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blue.withOpacity(0.1),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: const Offset(0, 4), // changes position of shadow
-                ),
-              ]),
-          child: Icon(
-            icon,
-            size: 30,
-            color: Colors.blue[300],
+        Bounce(
+          from: 8,
+          delay: const Duration(seconds: 1),
+          child: Container(
+            margin: const EdgeInsets.only(left: 40),
+            width: 70,
+            height: 70,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(100),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.blue.withOpacity(0.1),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(0, 4), // changes position of shadow
+                  ),
+                ]),
+            child: Icon(
+              icon,
+              size: 30,
+              color: Colors.blue[300],
+            ),
           ),
         ),
         if (iconSecundario!)

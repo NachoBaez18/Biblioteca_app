@@ -11,11 +11,12 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'book_detail': (_) => const BookDetailPage(),
   'book_register_edit': (_) => const RegisterEditPage(),
   'home': (_) => const HomePage(),
-  'perfil': (_) => const PerfilUser(),
+  'perfil': (_) => PerfilUser(),
   'notificaciones': (_) => const Notificaciones(),
   'reservas': (_) => const ReservasPage(),
   'alumnos_expirados': (_) => const AlumnosExpirado(),
   'detalle_alumno': (_) => const DetallePendiente(),
   'accion_alumno': (_) => const EntregaDevolucion(),
-  'qrScanner': (_) => const QrScanner()
+  'qrScanner': (_) => const QrScanner(),
+  'mantenimiento': (_) => const MatenimientoPage()
 };

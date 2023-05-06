@@ -137,6 +137,21 @@ class HomePage extends ConsumerWidget {
             }
           },
         ),
+      if (auhtService.admin)
+        ItemBoton(
+          FontAwesomeIcons.gear,
+          'Mantenimiento',
+          const Color(0xFFd6da9e), // Color del lado izquierdo del gradiente
+          const Color(0xFFadb039),
+          onpress: () async {
+            final valor = provider.Provider.of<FilterListProvider>(context,
+                listen: false);
+            valor.rotate = true;
+            if (context.mounted) {
+              Navigator.pushNamed(context, 'mantenimiento');
+            }
+          },
+        ),
     ];
 
     List<Widget> itemMap = items

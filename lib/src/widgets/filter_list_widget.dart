@@ -21,7 +21,7 @@ class FilterListWidget extends ConsumerWidget {
           child: ListView.builder(
               physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemCount: carreras!.carreras.length,
+              itemCount: carreras.carreras.length,
               itemBuilder: (_, int i) {
                 return GestureDetector(
                   onTap: () {

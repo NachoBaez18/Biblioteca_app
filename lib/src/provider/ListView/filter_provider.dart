@@ -20,9 +20,22 @@ class FilterListProvider with ChangeNotifier {
   bool _isCircularProgress = false;
   late LibroResponse _librosSearch;
   bool _isCorazon = false;
+  late List<dynamic> _usuarios;
+  late List<dynamic> _carreras;
+
+  List<dynamic> get carreras => _carreras;
+  set carreras(List<dynamic> valor) {
+    _carreras = valor;
+    notifyListeners();
+  }
+
+  List<dynamic> get usuarios => _usuarios;
+  set usuarios(List<dynamic> valor) {
+    _usuarios = valor;
+    notifyListeners();
+  }
 
   bool get isCorazon => _isCorazon;
-
   set isCorazon(bool valor) {
     _isCorazon = valor;
     notifyListeners();

@@ -18,20 +18,24 @@ class AlumnoList extends StatelessWidget {
   final AccionLibroResponse? libroPendientes;
   final WidgetRef ref;
   final bool qr;
+  final bool isSearch;
+  final Function()? searchOnPress;
   const AlumnoList(
       {super.key,
       required this.titleAppbar,
       required this.colorAppbar,
       required this.libroPendientes,
       required this.ref,
-      required this.qr});
+      required this.qr,
+      this.isSearch = false,
+      this.searchOnPress});
 
   @override
   Widget build(BuildContext context) {
     final provider = p.Provider.of<FilterListProvider>(context);
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      appBar: _appBarDesing(titleAppbar, colorAppbar),
+      appBar: appBarDesing(titleAppbar, colorAppbar, isSearch, searchOnPress),
       body: FadeInLeft(
         child: ListView.builder(
           physics: const BouncingScrollPhysics(),
@@ -97,8 +101,18 @@ class AlumnoList extends StatelessWidget {
   }
 }
 
-AppBar _appBarDesing(titleAppbar, colorAppbar) {
+AppBar appBarDesing(titleAppbar, colorAppbar, isSearch, searchOnPress) {
   return AppBar(
+      actions: [
+        isSearch
+            ? IconButton(
+                onPressed: searchOnPress,
+                icon: const Icon(
+                  Icons.search,
+                  size: 30,
+                ))
+            : Container()
+      ],
       elevation: 0,
       title: Text(
         titleAppbar,
