@@ -186,9 +186,13 @@ class _CardSecuandario extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final porcentaje = libro.vistos!.isNotEmpty && libro.like!.isNotEmpty
-        ? (libro.vistos!.length / libro.like!.length) * 100
+        ? (libro.like!.length / libro.vistos!.length) * 100
         : 0;
+    print(libro.vistos!.length);
+    print(libro.like!.length);
+    print(porcentaje);
     final double stars = (porcentaje * 5) / 100;
+    print(stars);
 
     final provider = Provider.of<FilterListProvider>(context);
     return Container(

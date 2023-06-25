@@ -27,7 +27,7 @@ class StarIcons extends StatelessWidget {
           delay: const Duration(seconds: 1),
           from: 8,
           child: Text(
-            '$cantidad',
+            '${cantidad.ceil()}.0',
             style: const TextStyle(
                 color: Colors.amber, fontWeight: FontWeight.w900),
           ),
