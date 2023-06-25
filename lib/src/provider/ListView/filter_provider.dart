@@ -1,4 +1,3 @@
-import 'package:biblioteca_app/src/models/libro.dart';
 import 'package:biblioteca_app/src/models/libroResponse.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +7,7 @@ class FilterListProvider with ChangeNotifier {
   int _filter = 0;
   bool _fadeInLeft = true;
   bool _rotate = false;
+  bool _isSelectedM = false;
   late double _opacity = 0;
   bool _hero = false;
   String _password = '';
@@ -22,6 +22,12 @@ class FilterListProvider with ChangeNotifier {
   bool _isCorazon = false;
   late List<dynamic> _usuarios;
   late List<dynamic> _carreras;
+
+  bool get isSelectedM => _isSelectedM;
+  set isSelectedM(bool valor) {
+    _isSelectedM = valor;
+    notifyListeners();
+  }
 
   List<dynamic> get carreras => _carreras;
   set carreras(List<dynamic> valor) {

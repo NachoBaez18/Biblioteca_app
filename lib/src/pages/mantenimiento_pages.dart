@@ -20,7 +20,7 @@ class MatenimientoPage extends StatelessWidget {
             const Color(0xFFadb039),
           ],
           true, () {
-        if (provider.rotate) {
+        if (provider.isSelectedM) {
           showSearch(context: context, delegate: SearchAlumnos());
         } else {
           showSearch(context: context, delegate: SearchCarreras());
@@ -33,20 +33,20 @@ class MatenimientoPage extends StatelessWidget {
               _Selector(
                   titulo: 'Usuario',
                   onTap: () {
-                    provider.rotate = true;
+                    provider.isSelectedM = true;
                   },
-                  isSelect: provider.rotate),
+                  isSelect: provider.isSelectedM),
               _Selector(
                   titulo: 'Carrera',
                   onTap: () {
-                    provider.rotate = false;
+                    provider.isSelectedM = false;
                   },
-                  isSelect: !provider.rotate)
+                  isSelect: !provider.isSelectedM)
             ],
           ),
           Expanded(
               child: ListMantenimiento(
-            isView: provider.rotate,
+            isView: provider.isSelectedM,
           ))
         ],
       ),

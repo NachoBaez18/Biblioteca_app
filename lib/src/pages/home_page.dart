@@ -146,7 +146,7 @@ class HomePage extends ConsumerWidget {
           onpress: () async {
             final valor = provider.Provider.of<FilterListProvider>(context,
                 listen: false);
-            valor.rotate = true;
+            valor.isSelectedM = true;
             if (context.mounted) {
               Navigator.pushNamed(context, 'mantenimiento');
             }

@@ -151,7 +151,7 @@ class _ProducrForm extends StatelessWidget {
                       hintText: 'Nombre del Libro', labelText: 'Libro'),
                 ),
                 const SizedBox(height: 30),
-                const _ListCarreras(),
+                // const _ListCarreras(),
                 const SizedBox(height: 30),
                 TextFormField(
                   initialValue: libro.nombre,
