@@ -47,7 +47,6 @@ class AuthServices with ChangeNotifier {
       'password': password,
       'divice': PushNotificationService.tokenDivice
     };
-    print('entramos aqui');
     final uri = Uri.parse('${Enviroment.apiUrl}/login');
     final resp = await http.post(
       uri,
@@ -55,7 +54,6 @@ class AuthServices with ChangeNotifier {
       headers: {'Content-Type': 'application/json'},
     );
     autenticando = false;
-    print(resp.body);
     if (resp.statusCode == 200) {
       final loginResponse = loginResponseFromMap(resp.body);
       usuario = loginResponse.usuario;

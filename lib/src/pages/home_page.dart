@@ -144,6 +144,8 @@ class HomePage extends ConsumerWidget {
           const Color(0xFFd6da9e), // Color del lado izquierdo del gradiente
           const Color(0xFFadb039),
           onpress: () async {
+            ref.refresh(usuarioDataProvider);
+            ref.refresh(carreraDataProvider);
             final valor = provider.Provider.of<FilterListProvider>(context,
                 listen: false);
             valor.isSelectedM = true;

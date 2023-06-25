@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:animate_do/animate_do.dart';
+import 'package:biblioteca_app/src/models/usuario.dart';
+import 'package:biblioteca_app/src/services/services.dart';
+import 'package:biblioteca_app/src/ui/alertas_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -71,7 +76,9 @@ class LisAlumnoWidget extends StatelessWidget {
                 itemBuilder: (context, i) {
                   return GestureDetector(
                     onTap: () {},
-                    onDoubleTap: () {},
+                    onDoubleTap: () {
+                      eliminar(context, i);
+                    },
                     child: Column(
                       children: [
                         ListTile(
@@ -95,13 +102,34 @@ class LisAlumnoWidget extends StatelessWidget {
                   delay: const Duration(seconds: 1),
                   child: FloatingActionButton(
                     backgroundColor: const Color(0xFFadb039),
-                    onPressed: () {},
+                    onPressed: () {
+                      print('presionamos floa');
+                    },
                     child: const Icon(FontAwesomeIcons.plus),
                   ),
                 ),
               ),
             ),
           );
+  }
+
+  void eliminar(BuildContext context, int i) {
+    AlertasNew().alertaEliminacion(
+        context, 'Eliminación', '¿Realmente deseas eliminar el usuario?',
+        () async {
+      final usuario = UsuarioServices();
+      final Map<String, dynamic> response =
+          await usuario.eliminar(usuarios[i].uid);
+      if (context.mounted) {
+        if (!response['error']) {
+          AlertasNew()
+              .alertaCorrectaNavegatoria(context, response['mensaje'], 'home');
+        } else {
+          AlertasNew().alertaInCorrectaNavegatoria(
+              context, response['mensaje'], 'home');
+        }
+      }
+    }, () {});
   }
 }
 
@@ -158,7 +186,9 @@ class ListCarreraWidget extends StatelessWidget {
                 itemBuilder: (context, i) {
                   return GestureDetector(
                     onTap: () {},
-                    onDoubleTap: () {},
+                    onDoubleTap: () {
+                      eliminar(context, i);
+                    },
                     child: Column(
                       children: [
                         ListTile(
@@ -188,6 +218,25 @@ class ListCarreraWidget extends StatelessWidget {
               ),
             ),
           );
+  }
+
+  void eliminar(BuildContext context, int i) {
+    AlertasNew().alertaEliminacion(
+        context, 'Eliminación', '¿Realmente deseas eliminar la carrera?',
+        () async {
+      final carrera = CarreraServices();
+      final Map<String, dynamic> response =
+          await carrera.eliminar(carreras.carreras[i].uid);
+      if (context.mounted) {
+        if (!response['error']) {
+          AlertasNew()
+              .alertaCorrectaNavegatoria(context, response['mensaje'], 'home');
+        } else {
+          AlertasNew().alertaInCorrectaNavegatoria(
+              context, response['mensaje'], 'home');
+        }
+      }
+    }, () {});
   }
 }
 

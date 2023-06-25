@@ -41,4 +41,18 @@ class AlertasNew {
             btnOkColor: Colors.red)
         .show();
   }
+
+  alertaEliminacion(BuildContext context, String titulo, String mensaje,
+      Function() btnOk, Function()? btnCancel) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.infoReverse,
+      animType: AnimType.rightSlide,
+      title: titulo,
+      desc: mensaje,
+      btnOkOnPress: btnOk,
+      btnCancelOnPress: btnCancel,
+      btnCancelText: 'Cancelar',
+    ).show();
+  }
 }
