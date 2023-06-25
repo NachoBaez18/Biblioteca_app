@@ -46,6 +46,7 @@ class BooksListPage extends StatelessWidget {
         visible: provider.admin,
         child: FloatingActionButton(
           onPressed: () {
+            circular.isEdit = false;
             final libroServices =
                 Provider.of<LibroServices>(context, listen: false);
 

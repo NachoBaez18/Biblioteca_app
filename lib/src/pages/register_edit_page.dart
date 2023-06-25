@@ -151,7 +151,7 @@ class _ProducrForm extends StatelessWidget {
                       hintText: 'Nombre del Libro', labelText: 'Libro'),
                 ),
                 const SizedBox(height: 30),
-                // const _ListCarreras(),
+                const _ListCarreras(),
                 const SizedBox(height: 30),
                 TextFormField(
                   initialValue: libro.nombre,
@@ -217,9 +217,7 @@ class _ProducrForm extends StatelessWidget {
 }
 
 class _ListCarreras extends ConsumerWidget {
-  const _ListCarreras({
-    super.key,
-  });
+  const _ListCarreras();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -227,12 +225,14 @@ class _ListCarreras extends ConsumerWidget {
     final libroForm = provider.Provider.of<LibroFormProvider>(context);
     final isEdit = provider.Provider.of<FilterListProvider>(context);
     final libro = libroForm.libro;
+    final String valor = refcarreras!.carreras.first.nombre;
+
     return DropdownButtonFormField(
-      value: isEdit.isEdit ? libro.carrera : refcarreras!.carreras.first.nombre,
-      items: refcarreras?.carreras
+      value: isEdit.isEdit ? libro.carrera : valor,
+      items: refcarreras.carreras
           .map(
             (e) => DropdownMenuItem(
-              value: e.nombre,
+              value: e.nombre.toString(),
               child: Text(e.nombre),
             ),
           )
