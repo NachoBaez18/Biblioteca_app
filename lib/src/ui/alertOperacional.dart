@@ -1,3 +1,4 @@
+import 'package:biblioteca_app/src/widgets/progress_indicator_widget.dart';
 import 'package:flutter/material.dart';
 
 mostrarAlertaOperacional(BuildContext context, String titulo, Widget child) {
@@ -10,4 +11,9 @@ mostrarAlertaOperacional(BuildContext context, String titulo, Widget child) {
       content: child,
     ),
   );
+}
+
+progresIndicatorModal(BuildContext context) {
+  return showDialog(
+      context: context, builder: (_) => const ProgresIndicatorMe());
 }

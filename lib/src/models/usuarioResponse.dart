@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:biblioteca_app/src/models/usuario.dart';
+
 UsuarioResponse usuarioResponseFromMap(String str) =>
     UsuarioResponse.fromMap(json.decode(str));
 
@@ -30,50 +32,50 @@ class UsuarioResponse {
       };
 }
 
-class Usuario {
-  String nombre;
-  String email;
-  String tipo;
-  String carrera;
-  String semestre;
-  bool online;
-  String telefono;
-  String dispositivo;
-  String uid;
+// class Usuario {
+//   String nombre;
+//   String email;
+//   String tipo;
+//   String carrera;
+//   String semestre;
+//   bool online;
+//   String telefono;
+//   String? dispositivo;
+//   String uid;
 
-  Usuario({
-    required this.nombre,
-    required this.email,
-    required this.tipo,
-    required this.carrera,
-    required this.semestre,
-    required this.online,
-    required this.telefono,
-    required this.dispositivo,
-    required this.uid,
-  });
+//   Usuario({
+//     required this.nombre,
+//     required this.email,
+//     required this.tipo,
+//     required this.carrera,
+//     required this.semestre,
+//     required this.online,
+//     required this.telefono,
+//     required this.dispositivo,
+//     required this.uid,
+//   });
 
-  factory Usuario.fromMap(Map<String, dynamic> json) => Usuario(
-        nombre: json["nombre"],
-        email: json["email"],
-        tipo: json["tipo"],
-        carrera: json["carrera"],
-        semestre: json["semestre"],
-        online: json["online"],
-        telefono: json["telefono"],
-        dispositivo: json["dispositivo"],
-        uid: json["uid"],
-      );
+//   factory Usuario.fromMap(Map<String, dynamic> json) => Usuario(
+//         nombre: json["nombre"],
+//         email: json["email"],
+//         tipo: json["tipo"],
+//         carrera: json["carrera"],
+//         semestre: json["semestre"],
+//         online: json["online"],
+//         telefono: json["telefono"],
+//         dispositivo: json["dispositivo"] ?? '',
+//         uid: json["uid"],
+//       );
 
-  Map<String, dynamic> toMap() => {
-        "nombre": nombre,
-        "email": email,
-        "tipo": tipo,
-        "carrera": carrera,
-        "semestre": semestre,
-        "online": online,
-        "telefono": telefono,
-        "dispositivo": dispositivo,
-        "uid": uid,
-      };
-}
+//   Map<String, dynamic> toMap() => {
+//         "nombre": nombre,
+//         "email": email,
+//         "tipo": tipo,
+//         "carrera": carrera,
+//         "semestre": semestre,
+//         "online": online,
+//         "telefono": telefono,
+//         "dispositivo": dispositivo,
+//         "uid": uid,
+//       };
+// }

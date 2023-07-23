@@ -1,6 +1,7 @@
 import 'package:biblioteca_app/src/models/usuarioResponse.dart';
 import 'package:biblioteca_app/src/services/services.dart';
 import 'package:flutter/material.dart';
+import '../models/usuario.dart';
 import '../widgets/widgets.dart';
 
 class SearchAlumnos extends SearchDelegate {
@@ -49,7 +50,7 @@ class SearchAlumnos extends SearchDelegate {
             final List<Usuario> allUsers = snapshot.data!.usuarios!;
             final List<Usuario> filteredUser = allUsers
                 .where((user) =>
-                    user.nombre.toLowerCase().contains(query.toLowerCase()))
+                    user.nombre!.toLowerCase().contains(query.toLowerCase()))
                 .toList();
 
             if (filteredUser.isEmpty) {
@@ -80,7 +81,7 @@ class SearchAlumnos extends SearchDelegate {
             final List<Usuario> allUsers = snapshot.data!.usuarios!;
             final List<Usuario> filteredUser = allUsers
                 .where((user) =>
-                    user.nombre.toLowerCase().contains(query.toLowerCase()))
+                    user.nombre!.toLowerCase().contains(query.toLowerCase()))
                 .toList();
 
             if (filteredUser.isEmpty) {

@@ -45,6 +45,7 @@ class HomePage extends ConsumerWidget {
           const Color(0xff6989F5), const Color(0xff906EF5), onpress: () {
         ref.read(carreraFilterProvider.notifier).update(
             (state) => Carrera(nombre: 'Informatica', uid: '11111111111'));
+        ref.refresh(carreraDataProvider);
         ref.read(botonReserva.notifier).state = true;
         Navigator.pushNamed(context, 'books_list');
       }),

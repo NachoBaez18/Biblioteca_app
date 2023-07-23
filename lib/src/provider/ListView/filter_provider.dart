@@ -22,6 +22,22 @@ class FilterListProvider with ChangeNotifier {
   bool _isCorazon = false;
   late List<dynamic> _usuarios;
   late List<dynamic> _carreras;
+  String _tipo = '';
+  String _carrera = 'Seleccione una carrera';
+
+  String get carrera => _carrera;
+
+  set carrera(String valor) {
+    _carrera = valor;
+    notifyListeners();
+  }
+
+  String get tipo => _tipo;
+
+  set tipo(String valor) {
+    _tipo = valor;
+    notifyListeners();
+  }
 
   bool get isSelectedM => _isSelectedM;
   set isSelectedM(bool valor) {

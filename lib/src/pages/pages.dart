@@ -1,3 +1,5 @@
+export 'package:biblioteca_app/src/pages/register_edit_mantenimiento.dart';
+
 export 'package:biblioteca_app/src/pages/mantenimiento_pages.dart';
 
 export 'package:biblioteca_app/src/pages/scanner_qr_pages.dart';

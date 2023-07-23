@@ -1,15 +1,16 @@
-import 'dart:convert';
-
 import 'package:animate_do/animate_do.dart';
 import 'package:biblioteca_app/src/models/usuario.dart';
+import 'package:biblioteca_app/src/provider/ListView/filter_provider.dart';
 import 'package:biblioteca_app/src/services/services.dart';
 import 'package:biblioteca_app/src/ui/alertas_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../models/carreraResponse.dart';
 import '../provider/data_provider.dart';
-//import 'package:provider/provider.dart' as p;
+import '../ui/alertOperacional.dart';
+import 'package:provider/provider.dart' as p;
 
 class ListMantenimiento extends StatelessWidget {
   final bool isView;
@@ -40,21 +41,21 @@ class ListAlumnos extends ConsumerWidget {
   }
 }
 
-class LisAlumnoWidget extends StatelessWidget {
-  final dynamic usuarios;
+class LisAlumnoWidget extends ConsumerWidget {
+  final List<Usuario>? usuarios;
   final bool isFloating;
   const LisAlumnoWidget({super.key, this.usuarios, required this.isFloating});
 
   @override
-  Widget build(BuildContext context) {
-    return usuarios!.isEmpty
-        ? Scaffold(
-            body: FadeInLeft(
-              child: Center(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      body: FadeInLeft(
+        child: usuarios!.isEmpty
+            ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    SizedBox(height: 200),
+                    // SizedBox(height: 200),
                     Text(
                       'No existen datos',
                       style: TextStyle(
@@ -65,24 +66,45 @@ class LisAlumnoWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-            ),
-          )
-        : Scaffold(
-            body: FadeInLeft(
-              child: ListView.builder(
+              )
+            : ListView.builder(
                 physics: const BouncingScrollPhysics(),
                 itemCount: usuarios!.length,
                 itemBuilder: (context, i) {
+                  final provider =
+                      p.Provider.of<FilterListProvider>(context, listen: false);
                   return GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      final refcarreras = ref.watch(carreraDataProvider).value;
+                      refcarreras!.carreras.last.nombre =
+                          'Seleccione una carrera';
+                      if (refcarreras.carreras.last.nombre !=
+                          'Seleccione una carrera') {
+                        refcarreras.carreras.add(Carrera(
+                            nombre: 'Seleccione una carrera', uid: '-1'));
+                      }
+                      provider.carrera = usuarios![i].carrera!;
+                      provider.tipo = usuarios![i].tipo! == 'administrador'
+                          ? 'administrador'
+                          : 'alumno';
+                      final value = {
+                        'usuario': usuarios![i],
+                        'carrera': refcarreras,
+                      };
+
+                      Navigator.pushNamed(
+                        context,
+                        'registerEditUser',
+                        arguments: value,
+                      );
+                    },
                     onDoubleTap: () {
                       eliminar(context, i);
                     },
                     child: Column(
                       children: [
                         ListTile(
-                          title: Text(usuarios![i].nombre),
+                          title: Text(usuarios![i].nombre!),
                           trailing: ElasticIn(
                               delay: const Duration(seconds: 1),
                               child: const Icon(Icons.arrow_forward_ios)),
@@ -93,34 +115,55 @@ class LisAlumnoWidget extends StatelessWidget {
                   );
                 },
               ),
+      ),
+      floatingActionButton: Visibility(
+        visible: isFloating,
+        child: FadeInLeft(
+          child: Bounce(
+            from: 8,
+            delay: const Duration(seconds: 1),
+            child: FloatingActionButton(
+              backgroundColor: const Color(0xFFadb039),
+              onPressed: () {
+                final provider =
+                    p.Provider.of<FilterListProvider>(context, listen: false);
+                final refcarreras = ref.watch(carreraDataProvider).value;
+                refcarreras!.carreras.last.nombre = 'Seleccione una carrera';
+                if (refcarreras.carreras.last.nombre !=
+                    'Seleccione una carrera') {
+                  refcarreras.carreras.add(
+                      Carrera(nombre: 'Seleccione una carrera', uid: '-1'));
+                }
+                provider.carrera = 'Seleccione una carrera';
+                provider.tipo = '';
+
+                final value = {
+                  'usuario': Usuario(),
+                  'carrera': refcarreras,
+                };
+
+                Navigator.pushNamed(context, 'registerEditUser',
+                    arguments: value);
+              },
+              child: const Icon(FontAwesomeIcons.plus),
             ),
-            floatingActionButton: Visibility(
-              visible: isFloating,
-              child: FadeInLeft(
-                child: Bounce(
-                  from: 8,
-                  delay: const Duration(seconds: 1),
-                  child: FloatingActionButton(
-                    backgroundColor: const Color(0xFFadb039),
-                    onPressed: () {
-                      print('presionamos floa');
-                    },
-                    child: const Icon(FontAwesomeIcons.plus),
-                  ),
-                ),
-              ),
-            ),
-          );
+          ),
+        ),
+      ),
+    );
   }
 
   void eliminar(BuildContext context, int i) {
     AlertasNew().alertaEliminacion(
         context, 'Eliminación', '¿Realmente deseas eliminar el usuario?',
         () async {
+      progresIndicatorModal(context);
+      final navigator = Navigator.of(context);
       final usuario = UsuarioServices();
       final Map<String, dynamic> response =
-          await usuario.eliminar(usuarios[i].uid);
+          await usuario.eliminar(usuarios![i].uid!);
       if (context.mounted) {
+        navigator.pop();
         if (!response['error']) {
           AlertasNew()
               .alertaCorrectaNavegatoria(context, response['mensaje'], 'home');
@@ -142,6 +185,7 @@ class ListCarreras extends ConsumerWidget {
 
     return carreras.when(
         data: (carreras) {
+          // ref.refresh(carreraDataProvider);
           return ListCarreraWidget(
             carreras: carreras,
           );
@@ -185,7 +229,11 @@ class ListCarreraWidget extends StatelessWidget {
                 itemCount: carreras.carreras.length,
                 itemBuilder: (context, i) {
                   return GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      final data = {'carrera': carreras.carreras[i]};
+                      Navigator.pushNamed(context, 'registerEditCarrera',
+                          arguments: data);
+                    },
                     onDoubleTap: () {
                       eliminar(context, i);
                     },
@@ -210,7 +258,11 @@ class ListCarreraWidget extends StatelessWidget {
                 delay: const Duration(seconds: 1),
                 child: FloatingActionButton(
                   backgroundColor: const Color(0xFFadb039),
-                  onPressed: () {},
+                  onPressed: () {
+                    final data = {'carrera': Carrera(nombre: '', uid: '')};
+                    Navigator.pushNamed(context, 'registerEditCarrera',
+                        arguments: data);
+                  },
                   child: const Icon(
                     FontAwesomeIcons.plus,
                   ),

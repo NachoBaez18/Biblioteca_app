@@ -1,3 +1,4 @@
+import 'package:biblioteca_app/src/pages/register_edit_carrera.dart';
 import 'package:flutter/material.dart';
 
 //? Mis importaciones
@@ -18,5 +19,7 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'detalle_alumno': (_) => const DetallePendiente(),
   'accion_alumno': (_) => const EntregaDevolucion(),
   'qrScanner': (_) => const QrScanner(),
-  'mantenimiento': (_) => const MatenimientoPage()
+  'mantenimiento': (_) => const MatenimientoPage(),
+  'registerEditUser': (_) => const RegisterEditUser(),
+  'registerEditCarrera': (_) => const RegisterEditCarrera()
 };

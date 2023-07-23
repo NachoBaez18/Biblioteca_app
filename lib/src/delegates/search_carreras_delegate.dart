@@ -56,10 +56,7 @@ class SearchCarreras extends SearchDelegate {
             if (filteredCarreras.isEmpty) {
               return const Center(child: Text('No se encontraron resultados'));
             } else {
-              return LisAlumnoWidget(
-                isFloating: false,
-                usuarios: filteredCarreras,
-              );
+              return const ListCarreraWidget();
             }
           }
         } else {
@@ -88,10 +85,7 @@ class SearchCarreras extends SearchDelegate {
             if (filteredCarreras.isEmpty) {
               return const Center(child: Text('No se encontraron resultados'));
             } else {
-              return LisAlumnoWidget(
-                isFloating: false,
-                usuarios: filteredCarreras,
-              );
+              return const ListCarreraWidget();
             }
           }
         } else {

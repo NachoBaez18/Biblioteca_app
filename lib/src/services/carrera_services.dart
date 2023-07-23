@@ -59,6 +59,61 @@ class CarreraServices {
       return {'error': true, 'mensaje': 'Ocurrio un error inesperado'};
     }
   }
+
+  Future<Map<String, dynamic>> registrar(String nombre) async {
+    final token = await _storage.read(key: 'token');
+
+    try {
+      if (token != null) {
+        final uri = Uri.parse('${Enviroment.apiUrl}/carreras/registrar');
+        final resp = await http.post(uri,
+            body: jsonEncode({
+              'nombre': nombre,
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+              'x-token': token,
+            });
+        print('response carrera${resp.body}');
+        if (resp.statusCode == 200) {
+          return jsonDecode(resp.body);
+        } else {
+          return {'error': true, 'mensaje': 'Ocurrio un error inesperado'};
+        }
+      }
+      return {'error': true, 'mensaje': 'Ocurrio un error inesperado'};
+    } catch (e) {
+      return {'error': true, 'mensaje': 'Ocurrio un error inesperado'};
+    }
+  }
+
+  Future<Map<String, dynamic>> editar(String uid, String nombre) async {
+    final token = await _storage.read(key: 'token');
+
+    try {
+      if (token != null) {
+        final uri = Uri.parse('${Enviroment.apiUrl}/carreras/editar');
+        final resp = await http.post(uri,
+            body: jsonEncode({
+              'uid': uid,
+              'nombre': nombre,
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+              'x-token': token,
+            });
+        print('response carrera${resp.body}');
+        if (resp.statusCode == 200) {
+          return jsonDecode(resp.body);
+        } else {
+          return {'error': true, 'mensaje': 'Ocurrio un error inesperado'};
+        }
+      }
+      return {'error': true, 'mensaje': 'Ocurrio un error inesperado'};
+    } catch (e) {
+      return {'error': true, 'mensaje': 'Ocurrio un error inesperado'};
+    }
+  }
 }
 
 final carreraProvider = Provider<CarreraServices>((ref) => CarreraServices());
