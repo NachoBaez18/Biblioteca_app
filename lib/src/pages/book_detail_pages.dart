@@ -208,6 +208,7 @@ class BookDetailPage extends ConsumerWidget {
     final String navegar;
 
     if (reserva) {
+      print('presionamos reservar');
       //editar or registrar reserva
       navegar = 'books_list';
       final response = await providerD.realizarAccion(libro, context);

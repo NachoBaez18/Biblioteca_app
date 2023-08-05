@@ -5,12 +5,13 @@ import '../widgets/widgets.dart';
 
 class SearchCarreras extends SearchDelegate {
   @override
-  String get searchFieldLabel => 'Buscar Usuario';
+  String get searchFieldLabel => 'Buscar Carrera';
 
   Future<CarreraResponse> _getCarreras() async {
     final carrerasServices = CarreraServices();
 
     final response = await carrerasServices.carreras();
+    print(response.toMap());
 
     return response;
   }
@@ -56,7 +57,10 @@ class SearchCarreras extends SearchDelegate {
             if (filteredCarreras.isEmpty) {
               return const Center(child: Text('No se encontraron resultados'));
             } else {
-              return const ListCarreraWidget();
+              return ListCarreraWidget(
+                carreras:
+                    CarreraResponse(error: false, carreras: filteredCarreras),
+              );
             }
           }
         } else {
@@ -85,7 +89,10 @@ class SearchCarreras extends SearchDelegate {
             if (filteredCarreras.isEmpty) {
               return const Center(child: Text('No se encontraron resultados'));
             } else {
-              return const ListCarreraWidget();
+              return ListCarreraWidget(
+                carreras:
+                    CarreraResponse(error: false, carreras: filteredCarreras),
+              );
             }
           }
         } else {

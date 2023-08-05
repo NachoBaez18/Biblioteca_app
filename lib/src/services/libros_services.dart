@@ -300,6 +300,7 @@ class LibroServices with ChangeNotifier {
   }
 
   Future<dynamic> realizarAccion(String libro, context) async {
+    print('Entramos en el servicio');
     final Usuario usuario =
         Provider.of<AuthServices>(context, listen: false).usuario;
     final token = await _storage.read(key: 'token');

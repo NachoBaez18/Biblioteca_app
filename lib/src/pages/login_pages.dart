@@ -13,27 +13,32 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/fondo_login.jpg'),
-            opacity: 0.1,
-            fit: BoxFit.cover,
+      body: Center(
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/fondo_login.jpg'),
+              opacity: 0.1,
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              children: const [
-                _LogoInicio(),
-                SizedBox(height: 50),
-                _FormLogin(),
-                SizedBox(height: 50),
-                SizedBox(height: 150),
-              ],
+          child: SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    _LogoInicio(),
+                    SizedBox(height: 50),
+                    _FormLogin(),
+                    SizedBox(height: 50),
+                    SizedBox(height: 150),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
