@@ -257,7 +257,7 @@ class _IconUserRedondeado extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       top: 150,
-      left: 190,
+      left: 140,
       child: Container(
         height: 120,
         width: 120,
