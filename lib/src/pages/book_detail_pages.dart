@@ -208,7 +208,6 @@ class BookDetailPage extends ConsumerWidget {
     final String navegar;
 
     if (reserva) {
-      print('presionamos reservar');
       //editar or registrar reserva
       navegar = 'books_list';
       final response = await providerD.realizarAccion(libro, context);
@@ -302,7 +301,7 @@ class _NombreYalgoMasBook extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final porcentaje = libro.vistos!.isNotEmpty && libro.like!.isNotEmpty
-        ? (libro.vistos!.length / libro.like!.length) * 100
+        ? (libro.like!.length / libro.vistos!.length) * 100
         : 0;
     final double stars = (porcentaje * 5) / 100;
     return Container(
@@ -311,7 +310,7 @@ class _NombreYalgoMasBook extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.9,
       color: Colors.grey[100],
       child: Container(
-        margin: const EdgeInsets.only(left: 160, top: 70, right: 70),
+        margin: const EdgeInsets.only(left: 160, top: 70, right: 60),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

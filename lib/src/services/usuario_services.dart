@@ -56,7 +56,6 @@ class UsuarioServices {
         return respuesta;
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }
@@ -93,7 +92,6 @@ class UsuarioServices {
         return respuesta;
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }
@@ -129,7 +127,6 @@ class UsuarioServices {
         return respuesta;
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }

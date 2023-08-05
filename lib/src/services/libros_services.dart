@@ -300,7 +300,6 @@ class LibroServices with ChangeNotifier {
   }
 
   Future<dynamic> realizarAccion(String libro, context) async {
-    print('Entramos en el servicio');
     final Usuario usuario =
         Provider.of<AuthServices>(context, listen: false).usuario;
     final token = await _storage.read(key: 'token');
@@ -371,7 +370,6 @@ class LibroServices with ChangeNotifier {
         'Content-Type': 'application/json',
         'x-token': token,
       });
-      print(resp.body);
       if (resp.statusCode == 200) {
         return jsonDecode(resp.body);
       } else {

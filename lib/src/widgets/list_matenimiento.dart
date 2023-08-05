@@ -201,8 +201,7 @@ class ListCarreraWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('queremos ver carreras');
-    print(carreras);
+    ;
     return carreras.carreras.isEmpty
         ? Scaffold(
             body: FadeInRight(

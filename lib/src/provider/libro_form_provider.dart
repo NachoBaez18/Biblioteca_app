@@ -9,7 +9,6 @@ class LibroFormProvider extends ChangeNotifier {
   LibroFormProvider(this.libro);
 
   bool isValidFrom() {
-    print(formKey.currentState?.validate().toString());
     return formKey.currentState?.validate() ?? false;
   }
 }

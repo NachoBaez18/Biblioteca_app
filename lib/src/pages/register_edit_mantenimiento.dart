@@ -168,8 +168,6 @@ class _RegisterEditUserState extends State<RegisterEditUser> {
                       isExpanded: true,
                       value: provider.carrera,
                       onChanged: (newValue) {
-                        print(newValue);
-
                         provider.carrera = newValue!.toString();
                       },
                       items: carrera.carreras.map((e) {
@@ -266,9 +264,6 @@ class _RegisterEditUserState extends State<RegisterEditUser> {
     if (_formKey.currentState!.validate()) {
       final navigator = Navigator.of(context);
       progresIndicatorModal(context);
-      print(provider.carrera);
-      // print(
-      //     '$uid, $_nombre, $_telefono, $_selectedCarrera, $_selectedTipo, $_correo');
       final response = await UsuarioServices().editar(
           uid,
           _nombreController.text,
@@ -277,7 +272,6 @@ class _RegisterEditUserState extends State<RegisterEditUser> {
           provider.tipo,
           _correoController.text);
       navigator.pop();
-      print(response);
       if (!response['error']) {
         if (context.mounted) {
           AlertasNew().alertaCorrectaNavegatoria(

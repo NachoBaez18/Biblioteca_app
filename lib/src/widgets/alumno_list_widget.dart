@@ -41,7 +41,6 @@ class AlumnoList extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           itemCount: libroPendientes!.accionesDeLibros.length,
           itemBuilder: (_, i) {
-            print(libroPendientes!.accionesDeLibros[i].accion);
             final Usuario? usuario =
                 libroPendientes!.accionesDeLibros[i].usuario;
             return GestureDetector(
@@ -55,7 +54,6 @@ class AlumnoList extends StatelessWidget {
                     accionPost = 'devuelto';
                   }
                   final libroServices = LibroServices();
-                  print(libroPendientes!.accionesDeLibros[i].uid!);
                   final response = await libroServices.accionRealizada(
                       accionPost, libroPendientes!.accionesDeLibros[i].uid!);
                   if (!response['error']) {

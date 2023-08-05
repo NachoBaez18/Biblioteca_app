@@ -108,7 +108,6 @@ class AuthServices with ChangeNotifier {
             'x-token': token,
           },
         );
-        print(resp.body);
         if (resp.statusCode == 200) {
           final loginResponse = loginResponseFromMap(resp.body);
           usuario = loginResponse.usuario;
@@ -152,7 +151,6 @@ class AuthServices with ChangeNotifier {
             'x-token': token,
           },
         );
-        print(resp.body);
         if (resp.statusCode == 200) {
           final UsuarioEdicionResponse updateResponse =
               usuarioEdicionResponseFromMap(resp.body);
@@ -188,12 +186,9 @@ class AuthServices with ChangeNotifier {
             'x-token': token,
           },
         );
-        print(resp.body);
         if (resp.statusCode == 200) {
-          print('estado 200');
           final UsuarioEdicionResponse updateResponse =
               usuarioEdicionResponseFromMap(resp.body);
-          print('aqui puede ser');
           return updateResponse;
         } else {
           throw Exception('Error al actualizar usuario');

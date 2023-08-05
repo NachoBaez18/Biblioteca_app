@@ -11,7 +11,6 @@ class SearchCarreras extends SearchDelegate {
     final carrerasServices = CarreraServices();
 
     final response = await carrerasServices.carreras();
-    print(response.toMap());
 
     return response;
   }

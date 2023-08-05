@@ -22,7 +22,6 @@ class CarreraServices {
         'Content-Type': 'application/json',
         'x-token': token,
       });
-      print('response carrera${resp.body}');
       if (resp.statusCode == 200) {
         carrera = carreraResponseFromMap(resp.body);
         return carrera;
@@ -47,7 +46,6 @@ class CarreraServices {
               'Content-Type': 'application/json',
               'x-token': token,
             });
-        print('response carrera${resp.body}');
         if (resp.statusCode == 200) {
           return jsonDecode(resp.body);
         } else {
@@ -74,7 +72,6 @@ class CarreraServices {
               'Content-Type': 'application/json',
               'x-token': token,
             });
-        print('response carrera${resp.body}');
         if (resp.statusCode == 200) {
           return jsonDecode(resp.body);
         } else {
@@ -102,7 +99,6 @@ class CarreraServices {
               'Content-Type': 'application/json',
               'x-token': token,
             });
-        print('response carrera${resp.body}');
         if (resp.statusCode == 200) {
           return jsonDecode(resp.body);
         } else {

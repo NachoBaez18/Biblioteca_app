@@ -69,7 +69,6 @@ class _QrScannerState extends State<QrScanner> {
     });
 
     controller.scannedDataStream.listen((barcode) {
-      print(barcode.code);
       provider.librosPendientes = accionLibroResponseFromMap(barcode.code!);
       if (barcode.code != '' || barcode.code != null) {
         Navigator.pushReplacementNamed(context, 'accion_alumno');

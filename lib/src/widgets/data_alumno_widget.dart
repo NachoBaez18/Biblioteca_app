@@ -45,38 +45,42 @@ class DataAlumno extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 50),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                usuario.nombre!,
-                style: const TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                '${usuario.carrera} ---- ${usuario.semestre} Semestre',
-                style: const TextStyle(fontSize: 16, color: Colors.black45),
-              ),
-              const SizedBox(height: 5),
-              const Text('Sede Caacupe',
-                  style: TextStyle(fontSize: 16, color: Colors.black45)),
-              const SizedBox(height: 5),
-              RichText(
-                text: TextSpan(
-                  style: const TextStyle(fontSize: 16.0, color: Colors.black45),
-                  children: [
-                    const TextSpan(text: 'Accion a realizar: '),
-                    TextSpan(
-                        text: accion,
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                  ],
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  usuario.nombre!,
+                  style: const TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey),
                 ),
-              )
-            ],
+                const SizedBox(height: 5),
+                Text(
+                  '${usuario.carrera} ---- ${usuario.semestre}',
+                  style: const TextStyle(fontSize: 16, color: Colors.black45),
+                ),
+                const SizedBox(height: 5),
+                const Text('Sede Caacupe',
+                    style: TextStyle(fontSize: 16, color: Colors.black45)),
+                const SizedBox(height: 5),
+                RichText(
+                  text: TextSpan(
+                    style:
+                        const TextStyle(fontSize: 16.0, color: Colors.black45),
+                    children: [
+                      const TextSpan(text: 'Accion a realizar: '),
+                      TextSpan(
+                          text: accion,
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                )
+              ],
+            ),
           )
         ],
       ),

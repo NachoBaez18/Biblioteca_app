@@ -153,14 +153,11 @@ class _RegisterEditCarreraState extends State<RegisterEditCarrera> {
     if (_formKey.currentState!.validate()) {
       final navigator = Navigator.of(context);
       progresIndicatorModal(context);
-      // print(
-      //     '$uid, $_nombre, $_telefono, $_selectedCarrera, $_selectedTipo, $_correo');
       final response = await CarreraServices().editar(
         uid,
         _nombreController.text,
       );
       navigator.pop();
-      print(response);
       if (!response['error']) {
         if (context.mounted) {
           AlertasNew().alertaCorrectaNavegatoria(
