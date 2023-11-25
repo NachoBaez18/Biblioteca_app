@@ -1,5 +1,6 @@
 import 'package:biblioteca_app/src/models/accionLibroResponse.dart';
 import 'package:biblioteca_app/src/models/carreraResponse.dart';
+import 'package:biblioteca_app/src/pages/login_pages.dart';
 import 'package:biblioteca_app/src/services/auth_services.dart';
 import 'package:biblioteca_app/src/services/services.dart';
 import 'package:flutter/material.dart';
@@ -218,7 +219,12 @@ class _Encabezado extends StatelessWidget {
                 // final socketService =
                 //     provider.Provider.of<SocketService>(context, listen: false);
                 // socketService.disconnect();
-                Navigator.pushReplacementNamed(context, 'login');
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                  (Route<dynamic> route) =>
+                      false, // Eliminar todas las rutas anteriores
+                );
                 const storage = FlutterSecureStorage();
                 await storage.delete(key: 'token');
               },

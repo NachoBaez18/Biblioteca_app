@@ -76,13 +76,16 @@ class LisAlumnoWidget extends ConsumerWidget {
                   return GestureDetector(
                     onTap: () {
                       final refcarreras = ref.watch(carreraDataProvider).value;
-                      refcarreras!.carreras.last.nombre =
-                          'Seleccione una carrera';
-                      if (refcarreras.carreras.last.nombre !=
-                          'Seleccione una carrera') {
-                        refcarreras.carreras.add(Carrera(
-                            nombre: 'Seleccione una carrera', uid: '-1'));
-                      }
+                      // refcarreras!.carreras.last.nombre =
+                      //     'Seleccione una carrera';
+                      // if (refcarreras.carreras.last.nombre !=
+                      //     'Seleccione una carrera') {
+                      //   refcarreras.carreras.add(Carrera(
+                      //       nombre: 'Seleccione una carrera', uid: '-1'));
+                      // }
+                      // (refcarreras.carreras.map((element) {
+                      //   print(element);
+                      // }));
                       provider.carrera = usuarios![i].carrera!;
                       provider.tipo = usuarios![i].tipo! == 'administrador'
                           ? 'administrador'
@@ -128,14 +131,17 @@ class LisAlumnoWidget extends ConsumerWidget {
                 final provider =
                     p.Provider.of<FilterListProvider>(context, listen: false);
                 final refcarreras = ref.watch(carreraDataProvider).value;
-                refcarreras!.carreras.last.nombre = 'Seleccione una carrera';
-                if (refcarreras.carreras.last.nombre !=
-                    'Seleccione una carrera') {
-                  refcarreras.carreras.add(
-                      Carrera(nombre: 'Seleccione una carrera', uid: '-1'));
-                }
+                // refcarreras!.carreras.last.nombre = 'Seleccione una carrera';
+                // if (refcarreras.carreras.last.nombre !=
+                //     'Seleccione una carrera') {
+                //   refcarreras.carreras.add(
+                //       Carrera(nombre: 'Seleccione una carrera', uid: '-1'));
+                // }
                 provider.carrera = 'Seleccione una carrera';
                 provider.tipo = '';
+                // (refcarreras.carreras.map((element) {
+                //   print(element);
+                // }));
 
                 final value = {
                   'usuario': Usuario(),

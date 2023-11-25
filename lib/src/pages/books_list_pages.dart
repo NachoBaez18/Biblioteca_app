@@ -49,6 +49,10 @@ class BooksListPage extends StatelessWidget {
             circular.isEdit = false;
             final libroServices =
                 Provider.of<LibroServices>(context, listen: false);
+            final provider =
+                Provider.of<FilterListProvider>(context, listen: false);
+            provider.carrera = 'Seleccione una carrera';
+            provider.tipo = '';
 
             libroServices.selectedLibro = Libro(
                 nombre: '',

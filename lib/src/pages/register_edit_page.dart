@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:biblioteca_app/src/models/registerUpdateDeleteResponse.dart';
 import 'package:biblioteca_app/src/provider/data_provider.dart';
 import 'package:biblioteca_app/src/provider/provider.dart';
@@ -16,7 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart' as provider;
 
-import '../models/carreraResponse.dart';
+import '../ui/alertOperacional.dart';
 
 class RegisterEditPage extends StatelessWidget {
   final String? url = null;
@@ -31,7 +29,7 @@ class RegisterEditPage extends StatelessWidget {
   }
 }
 
-class _LibroScreenBody extends StatelessWidget {
+class _LibroScreenBody extends ConsumerWidget {
   const _LibroScreenBody({
     super.key,
     required this.libroServices,
@@ -40,7 +38,7 @@ class _LibroScreenBody extends StatelessWidget {
   final LibroServices libroServices;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final libroForm = provider.Provider.of<LibroFormProvider>(context);
     return Scaffold(
         body: SingleChildScrollView(
@@ -67,7 +65,7 @@ class _LibroScreenBody extends StatelessWidget {
                       onPressed: () async {
                         final picker = ImagePicker();
                         final PickedFile? pickeFile = await picker.getImage(
-                            source: ImageSource.gallery, imageQuality: 100);
+                            source: ImageSource.camera, imageQuality: 100);
 
                         if (pickeFile == null) {
                           return;
@@ -96,7 +94,12 @@ class _LibroScreenBody extends StatelessWidget {
               : () async {
                   if (!libroForm.isValidFrom()) return;
 
+                  final navigator = Navigator.of(context);
+                  progresIndicatorModal(context);
+
                   final String? imageUrl = await libroServices.uploadImage();
+                  print('Url imagen');
+                  print(imageUrl);
 
                   if (imageUrl != null) libroForm.libro.imagen = imageUrl;
                   final OperationResponse libroResponse;
@@ -106,9 +109,12 @@ class _LibroScreenBody extends StatelessWidget {
 
                   if (context.mounted) {
                     if (!libroResponse.error) {
+                      navigator.pop();
+                      ref.refresh(libroDataProvider);
                       AlertasNew().alertaCorrectaNavegatoria(
                           context, libroResponse.mensaje, 'books_list');
                     } else {
+                      navigator.pop();
                       AlertasNew().alertaCorrectaNavegatoria(
                           context, libroResponse.mensaje, 'books_list');
                     }
@@ -159,6 +165,8 @@ class _ProducrForm extends StatelessWidget {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'La descripcion es obligatoria';
+                    } else {
+                      return null;
                     }
                   },
                   decoration: InputDecorations.authInputDecoration(
@@ -172,6 +180,8 @@ class _ProducrForm extends StatelessWidget {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'El autor es obligatoria';
+                    } else {
+                      return null;
                     }
                   },
                   decoration: InputDecorations.authInputDecoration(
@@ -192,6 +202,8 @@ class _ProducrForm extends StatelessWidget {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'La cantidad es obligatoria';
+                    } else {
+                      return null;
                     }
                   },
                   decoration: InputDecorations.authInputDecoration(
@@ -225,11 +237,11 @@ class _ListCarreras extends ConsumerWidget {
     final libroForm = provider.Provider.of<LibroFormProvider>(context);
     final isEdit = provider.Provider.of<FilterListProvider>(context);
     final libro = libroForm.libro;
-    final String valor = refcarreras!.carreras.first.nombre;
+    final String valor = isEdit.carrera;
 
     return DropdownButtonFormField(
       value: isEdit.isEdit ? libro.carrera : valor,
-      items: refcarreras.carreras
+      items: refcarreras!.carreras
           .map(
             (e) => DropdownMenuItem(
               value: e.nombre.toString(),
@@ -237,6 +249,13 @@ class _ListCarreras extends ConsumerWidget {
             ),
           )
           .toList(),
+      validator: (value) {
+        if (value!.isEmpty || value == 'Seleccione una carrera') {
+          return 'Seleccione una opcion';
+        } else {
+          return null;
+        }
+      },
       onChanged: (value) {
         libro.carrera = value!;
       },

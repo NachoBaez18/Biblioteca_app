@@ -214,6 +214,7 @@ class LibroServices with ChangeNotifier {
         'https://api.cloudinary.com/v1_1/dytahi5v6/image/upload?upload_preset=st0yazrf');
 
     final imageUploadRequest = http.MultipartRequest('POST', url);
+    print(imageUploadRequest);
 
     final file =
         await http.MultipartFile.fromPath('file', newPictureFile!.path);
