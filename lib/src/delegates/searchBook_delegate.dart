@@ -1,8 +1,10 @@
 import 'package:biblioteca_app/src/models/libroResponse.dart';
 import 'package:biblioteca_app/src/services/services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/libro.dart';
+import '../provider/ListView/filter_provider.dart';
 
 class SearchBook extends SearchDelegate {
   @override
@@ -40,6 +42,9 @@ class SearchBook extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+    final provider = Provider.of<FilterListProvider>(context);
+    final user = Provider.of<AuthServices>(context);
+    final envio = Provider.of<LibroServices>(context);
     return FutureBuilder<LibroResponse>(
       future: _getBooks(), // función asincrónica para cargar todos los libros
       builder: (context, snapshot) {
@@ -61,13 +66,26 @@ class SearchBook extends SearchDelegate {
                 itemBuilder: (context, index) {
                   final Libro book = filteredBooks[index];
                   return ListTile(
-                    title: Text(book.nombre),
-                    leading: Image(image: NetworkImage(book.imagen)),
-                    onTap: () {
-                      Navigator.pushNamed(context, 'book_detail',
-                          arguments: {book: book});
-                    },
-                  );
+                      title: Text(book.nombre),
+                      leading: Image(image: NetworkImage(book.imagen)),
+                      onTap: () {
+                        if (provider.isDetalle) {
+                          if (user.admin) {
+                            provider.isEdit = true;
+                            envio.selectedLibro = book;
+                            Navigator.pushNamed(context, 'book_register_edit');
+                          } else {
+                            provider.hero = true;
+                            Navigator.pushNamed(context, 'book_detail',
+                                arguments: {book: book});
+                          }
+                        }
+                      }
+                      // () {
+                      //   Navigator.pushNamed(context, 'book_detail',
+                      //       arguments: {book: book});
+                      // },
+                      );
                 },
               );
             }
@@ -81,6 +99,9 @@ class SearchBook extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    final provider = Provider.of<FilterListProvider>(context);
+    final user = Provider.of<AuthServices>(context);
+    final envio = Provider.of<LibroServices>(context);
     return FutureBuilder<LibroResponse>(
       future: _getBooks(),
       builder: (context, snapshot) {
@@ -100,9 +121,22 @@ class SearchBook extends SearchDelegate {
               itemBuilder: (context, i) {
                 return GestureDetector(
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, 'book_detail',
-                        arguments: {matchQuery[i]: matchQuery[i]});
+                    if (provider.isDetalle) {
+                      if (user.admin) {
+                        provider.isEdit = true;
+                        envio.selectedLibro = matchQuery[i];
+                        Navigator.pushNamed(context, 'book_register_edit');
+                      } else {
+                        provider.hero = true;
+                        Navigator.pushNamed(context, 'book_detail',
+                            arguments: {matchQuery[i]: matchQuery[i]});
+                      }
+                    }
                   },
+                  // () {
+                  //   Navigator.pushReplacementNamed(context, 'book_detail',
+                  //       arguments: {matchQuery[i]: matchQuery[i]});
+                  // },
                   child: ListTile(
                     leading: Image(image: NetworkImage(matchQuery[i].imagen)),
                     title: Text(matchQuery[i].nombre),
