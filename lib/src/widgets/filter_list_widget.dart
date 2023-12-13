@@ -64,24 +64,28 @@ class _ItemFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     final filteSelected =
         provider_status.Provider.of<FilterListProvider>(context);
-    return Align(
-      alignment: Alignment.topLeft,
-      child: Container(
-        margin: const EdgeInsets.only(left: 10),
-        height: 30,
-        width: item.length * 10.0,
-        decoration: BoxDecoration(
-          color: filteSelected.filter == i ? Colors.blue : Colors.grey[300],
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Center(
-            child: Text(
-          item,
-          style: TextStyle(
-              color: filteSelected.filter == i ? Colors.white : Colors.grey,
-              fontWeight: FontWeight.bold),
-        )),
-      ),
-    );
+    return item != 'Seleccione una carrera'
+        ? Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              margin: const EdgeInsets.only(left: 10),
+              height: 30,
+              width: item.length * 10.0,
+              decoration: BoxDecoration(
+                color:
+                    filteSelected.filter == i ? Colors.blue : Colors.grey[300],
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Center(
+                  child: Text(
+                item,
+                style: TextStyle(
+                    color:
+                        filteSelected.filter == i ? Colors.white : Colors.grey,
+                    fontWeight: FontWeight.bold),
+              )),
+            ),
+          )
+        : Container();
   }
 }

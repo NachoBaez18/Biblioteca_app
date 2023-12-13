@@ -9,6 +9,7 @@ import '../models/carreraResponse.dart';
 import '../models/usuario.dart';
 import '../provider/ListView/filter_provider.dart';
 import '../provider/data_provider.dart';
+import '../ui/alertOperacional.dart';
 import 'data_alumno_widget.dart';
 import 'package:provider/provider.dart' as p;
 
@@ -53,15 +54,19 @@ class AlumnoList extends StatelessWidget {
                   } else {
                     accionPost = 'devuelto';
                   }
+                  final navigator = Navigator.of(context);
+                  progresIndicatorModal(context);
                   final libroServices = LibroServices();
                   final response = await libroServices.accionRealizada(
                       accionPost, libroPendientes!.accionesDeLibros[i].uid!);
                   if (!response['error']) {
                     if (context.mounted) {
+                      navigator.pop();
                       AlertasNew().alertaCorrectaNavegatoria(
                           context, response['mensaje'], 'home');
                     }
                   } else {
+                    navigator.pop();
                     if (context.mounted) {
                       AlertasNew().alertaInCorrectaNavegatoria(
                           context, response['mensaje'], 'home');

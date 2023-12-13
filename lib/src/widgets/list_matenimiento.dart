@@ -76,16 +76,6 @@ class LisAlumnoWidget extends ConsumerWidget {
                   return GestureDetector(
                     onTap: () {
                       final refcarreras = ref.watch(carreraDataProvider).value;
-                      // refcarreras!.carreras.last.nombre =
-                      //     'Seleccione una carrera';
-                      // if (refcarreras.carreras.last.nombre !=
-                      //     'Seleccione una carrera') {
-                      //   refcarreras.carreras.add(Carrera(
-                      //       nombre: 'Seleccione una carrera', uid: '-1'));
-                      // }
-                      // (refcarreras.carreras.map((element) {
-                      //   print(element);
-                      // }));
                       provider.carrera = usuarios![i].carrera!;
                       provider.tipo = usuarios![i].tipo! == 'administrador'
                           ? 'administrador'
@@ -207,7 +197,6 @@ class ListCarreraWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ;
     return carreras.carreras.isEmpty
         ? Scaffold(
             body: FadeInRight(
@@ -246,12 +235,16 @@ class ListCarreraWidget extends StatelessWidget {
                     },
                     child: Column(
                       children: [
-                        ListTile(
-                          title: Text(carreras.carreras[i].nombre),
-                          trailing: ElasticIn(
-                              delay: const Duration(seconds: 1),
-                              child: const Icon(Icons.arrow_forward_ios)),
-                        ),
+                        if (carreras.carreras[i].nombre ==
+                            'Seleccione una carrera')
+                          Container()
+                        else
+                          ListTile(
+                            title: Text(carreras.carreras[i].nombre),
+                            trailing: ElasticIn(
+                                delay: const Duration(seconds: 1),
+                                child: const Icon(Icons.arrow_forward_ios)),
+                          ),
                         const CustomDivider()
                       ],
                     ),
